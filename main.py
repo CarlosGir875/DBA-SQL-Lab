@@ -85,21 +85,26 @@ seleccion = st.sidebar.selectbox("¿Qué módulo quieres dominar?", opciones_men
 
 lista_preguntas = []
 # --- LÓGICA DE SELECCIÓN CON NIVELES ---
+# --- LÓGICA DE SELECCIÓN CON NIVELES ---
 if seleccion != "🏠 Inicio":
-    # 1. Verificamos qué tipo de estructura tiene el tema
-    contenido = temas[seleccion]
+    # 1. Abrimos la 'caja' (lista) que contiene tus niveles
+    contenido_tema = temas[seleccion]
     
-    if isinstance(contenido, dict):
-        # Si tiene niveles (como SQL), mostramos el selector
-        nivel_elegido = st.radio("Dificultad:", list(contenido.keys()), horizontal=True)
-        lista_preguntas = contenido[nivel_elegido]
+    if isinstance(contenido_tema, list) and len(contenido_tema) > 0:
+        # 2. Sacamos el diccionario de niveles que vi en tu preguntas.py
+        diccionario_niveles = contenido_tema[0]
+        
+        # 3. Creamos los botones con tus llaves: '1. Básico', etc.
+        opciones_niveles = list(diccionario_niveles.keys())
+        nivel_elegido = st.radio("Selecciona Dificultad:", opciones_niveles, horizontal=True)
+        
+        lista_preguntas = diccionario_niveles[nivel_elegido]
         id_actual = f"{seleccion}_{nivel_elegido}"
     else:
-        # Si es una lista directa (como tus Verbos), la usamos de una
-        lista_preguntas = contenido
+        lista_preguntas = []
         id_actual = seleccion
 
-    # 2. Reiniciar variables si cambia el tema o nivel
+    # 4. Reinicio automático al cambiar de tema o dificultad
     if st.session_state.get("id_final") != id_actual:
         st.session_state.lista_mezclada = lista_preguntas.copy()
         random.shuffle(st.session_state.lista_mezclada)
