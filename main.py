@@ -87,17 +87,19 @@ lista_preguntas = []
 # --- LÓGICA DE SELECCIÓN CON NIVELES ---
 if seleccion != "🏠 Inicio":
     # 1. Selector de Nivel
-    nivel_elegido = st.radio("Dificultad:", ["Básico", "Intermedio", "Avanzado"], horizontal=True)
+   # 1. Selector de Nivel (Solo se muestra si el tema tiene niveles)
+    if isinstance(temas[seleccion], dict):
+        nivel_elegido = st.radio("Dificultad:", list(temas[seleccion].keys()), horizontal=True)
+        preguntas_finales = temas[seleccion][nivel_elegido]
+        id_actual = f"{seleccion}_{nivel_elegido}"
+    else:
+        # Si es una lista vieja (sin niveles), lo usa directo
+        preguntas_finales = temas[seleccion]
+        id_actual = seleccion
 
-    # 2. Variable única para saber si cambió el tema o el nivel
-    id_actual = f"{seleccion}_{nivel_elegido}"
-
-    # 3. Si cambió algo, reiniciamos las preguntas
+    # 2. Reiniciamos si cambió el tema o el nivel
     if st.session_state.get("id_final") != id_actual:
-        # AQUÍ ESTÁ EL TRUCO: Accedemos al tema y LUEGO al nivel
-        preguntas_del_nivel = temas[seleccion][nivel_elegido]
-        
-        st.session_state.lista_mezclada = preguntas_del_nivel.copy()
+        st.session_state.lista_mezclada = preguntas_finales.copy()
         random.shuffle(st.session_state.lista_mezclada)
         st.session_state.id_final = id_actual
         st.session_state.indice = 0
