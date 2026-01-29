@@ -73,7 +73,7 @@ if 'tema_actual' not in st.session_state:
 st.sidebar.title("🎮 Panel de Control")
 
 # Tu orden lógico de estudio
-orden_logico = ["Verbos Irregulares", "Verbos Regulares", "Presente Continuo", "SQL Questions"]
+orden_logico = ["Verbo To Be", "Verbos Irregulares", "Verbos Regulares", "Presente Continuo", "SQL Questions"]
 
 opciones_menu = ["🏠 Inicio"] + [t for t in orden_logico if t in temas]
 for t in temas.keys():
