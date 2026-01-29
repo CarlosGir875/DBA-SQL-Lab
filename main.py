@@ -84,22 +84,22 @@ for t in temas.keys():
 seleccion = st.sidebar.selectbox("¿Qué módulo quieres dominar?", opciones_menu)
 
 lista_preguntas = []
+# --- LÓGICA DE SELECCIÓN CON NIVELES ---
 if seleccion != "🏠 Inicio":
-    # 1. Verificamos si el tema tiene sub-niveles (como SQL o Inglés nuevo)
-    if isinstance(temas[seleccion], dict):
-        sub_nivel = st.sidebar.radio("Selecciona Nivel:", list(temas[seleccion].keys()))
-        lista_preguntas = temas[seleccion][sub_nivel]
-        id_final = f"{seleccion}_{sub_nivel}"
-    else:
-        # 2. Si es una lista simple (como tus módulos de verbos)
-        lista_preguntas = temas[seleccion]
-        id_final = seleccion
+    # 1. Selector de Nivel
+    nivel_elegido = st.radio("Dificultad:", ["Básico", "Intermedio", "Avanzado"], horizontal=True)
 
-    # 3. Reinicio de variables para que no se trabe al cambiar de tema
-    if st.session_state.tema_actual != id_final:
-        st.session_state.lista_mezclada = lista_preguntas.copy()
+    # 2. Variable única para saber si cambió el tema o el nivel
+    id_actual = f"{seleccion}_{nivel_elegido}"
+
+    # 3. Si cambió algo, reiniciamos las preguntas
+    if st.session_state.get("id_final") != id_actual:
+        # AQUÍ ESTÁ EL TRUCO: Accedemos al tema y LUEGO al nivel
+        preguntas_del_nivel = temas[seleccion][nivel_elegido]
+        
+        st.session_state.lista_mezclada = preguntas_del_nivel.copy()
         random.shuffle(st.session_state.lista_mezclada)
-        st.session_state.tema_actual = id_final
+        st.session_state.id_final = id_actual
         st.session_state.indice = 0
         st.session_state.vidas = 3
 
