@@ -86,24 +86,34 @@ seleccion = st.sidebar.selectbox("¿Qué módulo quieres dominar?", opciones_men
 lista_preguntas = []
 # --- LÓGICA DE SELECCIÓN CON NIVELES ---
 if seleccion != "🏠 Inicio":
-    # 1. Selector de Nivel
-   # 1. Selector de Nivel (Solo se muestra si el tema tiene niveles)
-    if isinstance(temas[seleccion], dict):
-        nivel_elegido = st.radio("Dificultad:", list(temas[seleccion].keys()), horizontal=True)
-        preguntas_finales = temas[seleccion][nivel_elegido]
+    # 1. Verificamos qué tipo de estructura tiene el tema
+    contenido = temas[seleccion]
+    
+    if isinstance(contenido, dict):
+        # Si tiene niveles (como SQL), mostramos el selector
+        nivel_elegido = st.radio("Dificultad:", list(contenido.keys()), horizontal=True)
+        lista_preguntas = contenido[nivel_elegido]
         id_actual = f"{seleccion}_{nivel_elegido}"
     else:
-        # Si es una lista vieja (sin niveles), lo usa directo
-        preguntas_finales = temas[seleccion]
+        # Si es una lista directa (como tus Verbos), la usamos de una
+        lista_preguntas = contenido
         id_actual = seleccion
 
-    # 2. Reiniciamos si cambió el tema o el nivel
+    # 2. Reiniciar variables si cambia el tema o nivel
     if st.session_state.get("id_final") != id_actual:
-        st.session_state.lista_mezclada = preguntas_finales.copy()
+        st.session_state.lista_mezclada = lista_preguntas.copy()
         random.shuffle(st.session_state.lista_mezclada)
         st.session_state.id_final = id_actual
         st.session_state.indice = 0
         st.session_state.vidas = 3
+
+    # 3. MOSTRAR PREGUNTA (Aquí es donde fallaba la línea 158)
+    if st.session_state.indice < len(st.session_state.lista_mezclada):
+        pregunta_actual = st.session_state.lista_mezclada[st.session_state.indice]
+        
+        # Usamos .get() para que NUNCA más tire error rojo si falta una llave
+        texto_pregunta = pregunta_actual.get('pregunta', 'Pregunta no encontrada')
+        st.markdown(f"### {texto_pregunta}")
 
 # --- BUSCADOR ACTUALIZADO (Para encontrar preguntas en los niveles) ---
 st.sidebar.divider()
