@@ -46,29 +46,32 @@ for t in temas.keys():
 seleccion = st.sidebar.selectbox("¿Qué módulo quieres dominar?", opciones_menu)
 
 # --- 5. LÓGICA DE SELECCIÓN DE NIVELES (EL MOTOR) ---
+# --- LÓGICA DE SELECCIÓN (EL MOTOR BLINDADO) ---
 if seleccion != "🏠 Inicio":
-    contenido = temas[seleccion]
+    contenido = temas.get(seleccion, [])
     
-    # Si el tema viene en una lista como [{'1. Básico': [...]}]
+    # 1. Si el tema tiene niveles (Como SQL, Verbo To Be, etc.)
     if isinstance(contenido, list) and len(contenido) > 0 and isinstance(contenido[0], dict):
         diccionario_niveles = contenido[0]
         opciones_niveles = list(diccionario_niveles.keys())
-        # index=0 para que cargue Básico automático y no tire error rojo
         nivel_elegido = st.sidebar.radio("Selecciona Nivel:", opciones_niveles, index=0)
-        lista_preguntas = diccionario_niveles[nivel_elegido]
+        lista_preguntas = diccionario_niveles.get(nivel_elegido, [])
         id_actual = f"{seleccion}_{nivel_elegido}"
     else:
-        # Si es una lista simple
+        # 2. Si es una lista simple (Verbos Regulares/Irregulares)
         lista_preguntas = contenido
         id_actual = seleccion
 
-    # Reinicio si cambia el tema
-    if st.session_state.id_final != id_actual:
-        st.session_state.lista_mezclada = lista_preguntas.copy()
-        random.shuffle(st.session_state.lista_mezclada)
-        st.session_state.id_final = id_actual
-        st.session_state.indice = 0
-        st.session_state.vidas = 3
+    # 3. CARGA SEGURA: Solo si hay preguntas, inicializamos
+    if st.session_state.get('id_final') != id_actual:
+        if lista_preguntas: # <-- ESTA LÍNEA ES EL CLAVE
+            st.session_state.lista_mezclada = lista_preguntas.copy()
+            random.shuffle(st.session_state.lista_mezclada)
+            st.session_state.id_final = id_actual
+            st.session_state.indice = 0
+            st.session_state.vidas = 3
+        else:
+            st.session_state.lista_mezclada = []
 
 # --- 6. BUSCADOR (INTACTO) ---
 st.sidebar.divider()
