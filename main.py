@@ -83,27 +83,34 @@ seleccion = st.sidebar.selectbox("📚 Módulo de aprendizaje:", opciones_menu)
 # =================================================================
 # 5. MOTOR DE CARGA (LOADER_LOGIC) - ¡AQUÍ ESTÁ EL TRUCO DEL AVANZADO!
 # =================================================================
+# =================================================================
+# 5. MOTOR DE CARGA (LOADER_LOGIC) - ¡REPARADO PARA EL AVANZADO!
+# =================================================================
 if seleccion != "🏠 Inicio":
-    # Selector de nivel
     nivel_sel = st.sidebar.radio("🎯 Selecciona Nivel:", ["1. Básico", "2. Intermedio", "3. Avanzado"])
     
     contenido = temas.get(seleccion, [])
     lista_preguntas_final = []
     id_unico_actual = f"{seleccion}_{nivel_sel}"
 
-    # REGLA DE ORO: Si el contenido es una lista (Como tu preguntas.py)
+    # --- ESCÁNER DE NIVELES ---
     if isinstance(contenido, list) and len(contenido) > 0:
-        # Entramos al primer elemento de la lista (el diccionario de niveles)
-        primer_item = contenido[0]
-        if isinstance(primer_item, dict):
-            # Aquí obligamos a leer el nivel (Básico, Intermedio o Avanzado)
-            lista_preguntas_final = primer_item.get(nivel_sel, [])
-    
-    # REGLA SECUNDARIA: Por si el tema es un diccionario directo
+        # 1. Buscamos en el diccionario normal (Básico e Intermedio)
+        if isinstance(contenido[0], dict):
+            lista_preguntas_final = contenido[0].get(nivel_sel, [])
+            
+        # 2. SI SIGUE VACÍO: Buscamos el nivel "suelto" (Tu Avanzado de SQL)
+        if not lista_preguntas_final and len(contenido) > 1:
+            for item in contenido:
+                if isinstance(item, dict) and nivel_sel in item:
+                    lista_preguntas_final = item[nivel_sel]
+                    break
+                    
+    # 3. CASO PARA SQL O DICCIONARIOS DIRECTOS
     elif isinstance(contenido, dict):
         lista_preguntas_final = contenido.get(nivel_sel, [])
 
-    # Lógica de Mezcla y Reinicio
+    # Lógica de Mezcla (Solo si la lista NO está vacía)
     if st.session_state.id_final != id_unico_actual:
         if lista_preguntas_final:
             st.session_state.lista_mezclada = random.sample(lista_preguntas_final, len(lista_preguntas_final))
@@ -111,6 +118,7 @@ if seleccion != "🏠 Inicio":
             st.session_state.indice = 0
             st.session_state.vidas = 3
         else:
+            # Si el nivel no existe en el archivo preguntas.py
             st.session_state.lista_mezclada = []
 
 # Navegación secundaria
