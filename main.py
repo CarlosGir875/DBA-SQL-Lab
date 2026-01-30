@@ -168,7 +168,7 @@ with st.sidebar:
     st.markdown(f"""
         <div class="user-profile">
             <div style="font-size: 0.8rem; color: #8B949E;">OPERATOR IDENTIFIED</div>
-            <div style="font-weight: bold; color: #00FFAA; letter-spacing: 1px;">CARLOS GIRON</div>
+            <div style="font-weight: bold; color: #00FFAA; letter-spacing: 1px;">Developer SY</div>
             <div style="font-size: 0.7rem; margin-top:5px;">
                 <span class="status-blink"></span> <span style="color: #00FFAA;">SYSTEM ONLINE</span>
             </div>
