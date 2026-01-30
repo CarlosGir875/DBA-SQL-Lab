@@ -9,7 +9,7 @@ from preguntas import temas
 # =================================================================
 st.set_page_config(page_title="DBA English & SQL Lab 2026", page_icon="⚡", layout="wide")
 
-# CSS PERSONALIZADO - CONTROL TOTAL DE CURSOR
+# CSS PERSONALIZADO - DECORACIÓN EXTREMA DEL MENÚ (Líneas 14 - 105)
 st.markdown("""
 <style>
     .stApp { background-color: #0F1116; color: #E0E0E0; font-family: 'Segoe UI', sans-serif; }
@@ -21,20 +21,59 @@ st.markdown("""
         cursor: pointer !important; 
     }
     
-    /* EXCEPCIÓN: SOLO EN CAJAS DE TEXTO APARECE EL CURSOR DE ESCRITURA */
+    /* EXCEPCIÓN: CAJAS DE TEXTO */
     input[type="text"], textarea, [data-testid="stSidebar"] input[type="text"], .stTextArea textarea { 
         user-select: text !important; 
         caret-color: #00FFAA !important; 
         cursor: text !important; 
     }
 
-    /* Sidebar con efecto de cristal y reflector neón */
+    /* SIDEBAR DECORADO (CYBERPUNK STYLE) */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #161920 0%, #0E1117 100%);
-        border-right: 2px solid #00FFAA33;
+        background: linear-gradient(180deg, #0A0C10 0%, #161920 100%) !important;
+        border-right: 2px solid #00FFAA22;
     }
 
-    /* Botones Pro con Reflector y Animación */
+    /* CARD DE USUARIO EN EL MENÚ */
+    .user-profile {
+        padding: 15px;
+        background: rgba(0, 255, 170, 0.05);
+        border: 1px solid #00FFAA33;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* INDICADOR DE STATUS PARPADEANTE */
+    .status-blink {
+        width: 10px;
+        height: 10px;
+        background-color: #00FFAA;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+        animation: blink 1.5s infinite;
+        box-shadow: 0 0 10px #00FFAA;
+    }
+    @keyframes blink {
+        0% { opacity: 0.2; }
+        50% { opacity: 1; }
+        100% { opacity: 0.2; }
+    }
+
+    /* ETIQUETAS DE SECCIÓN EN MENÚ */
+    .menu-label {
+        color: #00FFAA;
+        font-size: 0.7rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        opacity: 0.8;
+    }
+
+    /* BOTONES CON REFLECTOR Y ANIMACIÓN */
     .stButton>button {
         border-radius: 8px;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -43,6 +82,7 @@ st.markdown("""
         color: #C9D1D9;
         font-weight: 700;
         height: 3em;
+        width: 100%;
     }
     .stButton>button:hover {
         border-color: #00FFAA;
@@ -51,7 +91,7 @@ st.markdown("""
         transform: scale(1.02);
     }
 
-    /* Consola de Logs Estilo Hacker */
+    /* CONSOLA DE LOGS */
     .log-container {
         background-color: #010409;
         border: 1px solid #00FFAA22;
@@ -63,16 +103,12 @@ st.markdown("""
         box-shadow: inset 0 0 15px #000;
         overflow-y: auto;
         height: 150px;
+        border-left: 4px solid #00FFAA;
     }
 
-    /* Tarjetas de Módulos */
-    .module-card {
-        background: rgba(22, 25, 32, 0.6);
-        padding: 20px;
-        border-radius: 15px;
-        border: 1px solid #30363D;
-        margin-bottom: 10px;
-    }
+    /* REMOVER DECORACIÓN POR DEFECTO */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -81,7 +117,6 @@ st.markdown("""
 # =================================================================
 @st.cache_data
 def cargar_base_datos():
-    # Simulamos una tabla robusta de 300 registros
     nombres = ["Carlos Giron", "Juan Perez", "Maria Lopez", "Ana Garcia", "Luis Martinez", "Elena Rodriguez", "Diego Sosa", "Carmen Ruiz", "Pablo Duarte", "Lucia Mendez"]
     paises = ['Guatemala', 'Mexico', 'USA', 'España', 'El Salvador', 'Honduras', 'Colombia', 'Argentina']
     roles = ['DBA', 'DevOps', 'Data Scientist', 'Security Analyst', 'Manager', 'QA Engineer']
@@ -118,49 +153,68 @@ def add_log(msg):
     if len(st.session_state.logs) > 8: st.session_state.logs.pop(0)
 
 # =================================================================
-# 4. SIDEBAR - CONTROL DE NAVEGACIÓN
+# 4. SIDEBAR - CONTROL DE NAVEGACIÓN Y DECORACIÓN (Líneas 165 - 235)
 # =================================================================
-st.sidebar.image("https://cdn-icons-png.flaticon.com/512/2721/2721614.png", width=80)
-st.sidebar.title("ADMIN PANEL")
+with st.sidebar:
+    # NUEVO LOGO INNOVADOR
+    st.markdown("""
+        <div style='text-align: center; padding: 10px;'>
+            <img src='https://cdn-icons-png.flaticon.com/512/2312/2312676.png' width='100' style='filter: drop-shadow(0 0 10px #00FFAA);'>
+            <h1 style='color: white; font-size: 1.2rem; margin-top: 10px;'>DBA CORE 2026</h1>
+        </div>
+    """, unsafe_allow_html=True)
 
-opciones_menu = ["🏠 Inicio"] + list(temas.keys())
-seleccion = st.sidebar.selectbox("📂 Módulo Actual:", opciones_menu)
+    # USER PROFILE CARD
+    st.markdown(f"""
+        <div class="user-profile">
+            <div style="font-size: 0.8rem; color: #8B949E;">OPERATOR IDENTIFIED</div>
+            <div style="font-weight: bold; color: #00FFAA; letter-spacing: 1px;">CARLOS GIRON</div>
+            <div style="font-size: 0.7rem; margin-top:5px;">
+                <span class="status-blink"></span> <span style="color: #00FFAA;">SYSTEM ONLINE</span>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
-# MOTOR DE CARGA CON LÓGICA DE DICCIONARIO REFORZADA
-if seleccion != "🏠 Inicio":
-    nivel_sel = st.sidebar.radio("🎯 Nivel de Acceso:", ["1. Básico", "2. Intermedio", "3. Avanzado"])
-    
-    contenido = temas.get(seleccion, [])
-    lista_final = []
-    id_actual = f"{seleccion}_{nivel_sel}"
+    st.markdown('<div class="menu-label">Explorador de Datos</div>', unsafe_allow_html=True)
+    opciones_menu = ["🏠 Inicio"] + list(temas.keys())
+    seleccion = st.selectbox("📂 Módulo Actual:", opciones_menu, label_visibility="collapsed")
 
-    if isinstance(contenido, list):
-        for bloque in contenido:
-            if isinstance(bloque, dict):
-                for llave in bloque.keys():
-                    if nivel_sel.split(". ")[-1] in llave or llave in nivel_sel:
-                        lista_final = bloque[llave]
-                        break
+    # MOTOR DE CARGA REFORZADO
+    if seleccion != "🏠 Inicio":
+        st.markdown('<div class="menu-label">Nivel de Seguridad</div>', unsafe_allow_html=True)
+        nivel_sel = st.radio("🎯 Nivel de Acceso:", ["1. Básico", "2. Intermedio", "3. Avanzado"], label_visibility="collapsed")
+        
+        contenido = temas.get(seleccion, [])
+        lista_final = []
+        id_actual = f"{seleccion}_{nivel_sel}"
 
-    if st.session_state.id_final != id_actual:
-        if lista_final:
-            st.session_state.lista_mezclada = random.sample(lista_final, len(lista_final))
-            st.session_state.id_final = id_actual
-            st.session_state.indice = 0
-            st.session_state.vidas = 3
-            add_log(f"Load: {seleccion} Level {nivel_sel}")
-        else:
-            st.session_state.lista_mezclada = []
-            st.session_state.id_final = id_actual
+        if isinstance(contenido, list):
+            for bloque in contenido:
+                if isinstance(bloque, dict):
+                    for llave in bloque.keys():
+                        if nivel_sel.split(". ")[-1] in llave or llave in nivel_sel:
+                            lista_final = bloque[llave]
+                            break
 
-st.sidebar.divider()
-nav_path = st.sidebar.radio("🧭 Módulos de Sistema:", 
-                             ["📚 Training Mode", "🗄️ SQL Studio Pro", "📟 Terminal Auditor", "📊 Performance"])
+        if st.session_state.id_final != id_actual:
+            if lista_final:
+                st.session_state.lista_mezclada = random.sample(lista_final, len(lista_final))
+                st.session_state.id_final = id_actual
+                st.session_state.indice = 0
+                st.session_state.vidas = 3
+                add_log(f"Load: {seleccion} {nivel_sel}")
+            else:
+                st.session_state.lista_mezclada = []
+                st.session_state.id_final = id_actual
 
-# Dashboard de Logs
-st.sidebar.markdown("### 🖥️ Live System Logs")
-log_text = "".join([f"<div>{l}</div>" for l in st.session_state.logs])
-st.sidebar.markdown(f'<div class="log-container">{log_text}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="menu-label">Módulos de Sistema</div>', unsafe_allow_html=True)
+    nav_path = st.radio("🧭 Navegación:", 
+                         ["📚 Training Mode", "🗄️ SQL Studio Pro", "📟 Terminal Auditor", "📊 Performance"], label_visibility="collapsed")
+
+    # Dashboard de Logs en Sidebar
+    st.markdown('<div class="menu-label">System Telemetry</div>', unsafe_allow_html=True)
+    log_text = "".join([f"<div style='margin-bottom:2px;'>{l}</div>" for l in st.session_state.logs])
+    st.markdown(f'<div class="log-container">{log_text}</div>', unsafe_allow_html=True)
 
 # =================================================================
 # 5. TRAINING MODE (QUIZ ENGINE)
@@ -168,12 +222,11 @@ st.sidebar.markdown(f'<div class="log-container">{log_text}</div>', unsafe_allow
 if nav_path == "📚 Training Mode":
     if seleccion == "🏠 Inicio":
         st.title("🛡️ DBA English & SQL Lab")
-        st.write("Bienvenido, Administrador Carlos. Selecciona una unidad para comenzar la auditoría de conocimientos.")
-        st.image("https://streamlit.io/images/brand/streamlit-logo-secondary-colormark-darktext.png", width=150)
+        st.write("Welcome to my app learning, this is my new project I mean my first project, I hope you can learn with my project!.")
+        st.image("https://cdn-icons-png.flaticon.com/512/2721/2721614.png", width=120)
     else:
         st.title(f"📖 Unidad: {seleccion}")
         
-        # STATUS BAR
         c1, c2, c3 = st.columns(3)
         c1.metric("Vidas", f"{'❤️' * st.session_state.vidas}")
         c2.metric("Puntos Ganados", f"{st.session_state.puntos} XP")
@@ -250,7 +303,6 @@ elif nav_path == "🗄️ SQL Studio Pro":
         else:
             st.info("Escribe tu código SQL para recibir feedback en tiempo real.")
 
-    # Diccionario de Datos
     with st.expander("📚 Ver Diccionario de Datos"):
         st.table(pd.DataFrame({
             "Columna": df_sql.columns,
@@ -259,14 +311,11 @@ elif nav_path == "🗄️ SQL Studio Pro":
         }))
 
 # =================================================================
-# 7. NUEVA SECCIÓN: TERMINAL AUDITOR (PARA LLEGAR A LAS 350+ LINEAS)
+# 7. TERMINAL AUDITOR (MODO CONSOLA)
 # =================================================================
 elif nav_path == "📟 Terminal Auditor":
     st.title("📟 Terminal de Auditoría de Servidor")
-    st.markdown("Comandos de consola para mantenimiento de la base de datos.")
-    
-    # Simulación de consola negra
-    st.markdown('<div style="background-color:black; color:#00FF00; padding:20px; font-family:monospace; border-radius:5px;">', unsafe_allow_html=True)
+    st.markdown('<div style="background-color:black; color:#00FF00; padding:20px; font-family:monospace; border-radius:5px; border: 1px solid #333;">', unsafe_allow_html=True)
     for line in st.session_state.terminal_output[-8:]:
         st.write(f"> {line}")
     st.markdown('</div>', unsafe_allow_html=True)
@@ -316,5 +365,5 @@ elif nav_path == "📊 Performance":
         st.success("🏆 NIVEL ELITE ALCANZADO")
 
 # =================================================================
-# FIN DEL CÓDIGO (350+ LINEAS TOTALES)
+# FIN DEL CÓDIGO (Línea 415 aproximadamente)
 # =================================================================
