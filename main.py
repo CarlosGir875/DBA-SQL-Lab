@@ -55,38 +55,39 @@ for t in todas_las_llaves:
 seleccion = st.sidebar.selectbox("Módulo de aprendizaje:", opciones_menu)
 
 # --- LÓGICA DE CARGA DE NIVELES (ESPECIAL PARA VERBO TO BE Y SQL) ---
+# --- MOTOR DE CARGA UNIVERSAL (ESTE SÍ LEE EL VERBO TO BE) ---
 if seleccion != "🏠 Inicio":
     contenido_bruto = temas.get(seleccion, [])
     
-    # Verificamos si el contenido es una lista con un diccionario (Formato niveles)
-    if isinstance(contenido_bruto, list) and len(contenido_bruto) > 0 and isinstance(contenido_bruto[0], dict):
-        diccionario_niveles = contenido_bruto[0]
-        lista_nombres_niveles = list(diccionario_niveles.keys())
+    # CASO 1: Diccionario Directo (Estructura del Verbo To Be)
+    if isinstance(contenido_bruto, dict):
+        niveles = list(contenido_bruto.keys())
+        nivel_sel = st.sidebar.radio("🎯 Selecciona Nivel:", niveles, index=0)
+        lista_preguntas_final = contenido_bruto.get(nivel_sel, [])
+        id_unico_actual = f"{seleccion}_{nivel_sel}"
         
-        st.sidebar.markdown("---")
-        nivel_seleccionado = st.sidebar.radio("🎯 Selecciona tu Nivel:", lista_nombres_niveles, index=0)
+    # CASO 2: Lista con Diccionario (Estructura de SQL Questions)
+    elif isinstance(contenido_bruto, list) and len(contenido_bruto) > 0 and isinstance(contenido_bruto[0], dict):
+        dicc_niveles = contenido_bruto[0]
+        niveles = list(dicc_niveles.keys())
+        nivel_sel = st.sidebar.radio("🎯 Selecciona Nivel:", niveles, index=0)
+        lista_preguntas_final = dicc_niveles.get(nivel_sel, [])
+        id_unico_actual = f"{seleccion}_{nivel_sel}"
         
-        lista_preguntas_final = diccionario_niveles.get(nivel_seleccionado, [])
-        id_unico_actual = f"{seleccion}_{nivel_seleccionado}"
+    # CASO 3: Lista Simple (Estructura de Verbos Regulares/Irregulares)
     else:
-        # Formato de lista simple (Verbos Regulares/Irregulares)
         lista_preguntas_final = contenido_bruto
         id_unico_actual = seleccion
 
-    # Resetear si el usuario cambia de tema o de nivel
+    # MEZCLA SEGURA (No toca tus puntos ni el resto de la app)
     if st.session_state.id_final != id_unico_actual:
-        with st.spinner('Mezclando base de datos de preguntas...'):
-            time.sleep(0.5) # Efecto visual
-            if lista_preguntas_final:
-                # Creamos una copia y la barajamos
-                shuffled_list = lista_preguntas_final.copy()
-                random.shuffle(shuffled_list)
-                st.session_state.lista_mezclada = shuffled_list
-                st.session_state.id_final = id_unico_actual
-                st.session_state.indice = 0
-                st.session_state.vidas = 3
-                st.session_state.puntos = 0
-
+        if lista_preguntas_final:
+            shuffled = lista_preguntas_final.copy()
+            random.shuffle(shuffled)
+            st.session_state.lista_mezclada = shuffled
+            st.session_state.id_final = id_unico_actual
+            st.session_state.indice = 0
+            st.session_state.vidas = 3
 # --- NAVEGACIÓN PRINCIPAL ---
 st.sidebar.divider()
 seccion_ir = st.sidebar.radio("Navegar a:", ["📚 Modo Examen", "🗄️ SQL Studio Pro", "📊 Mi Progreso"])
