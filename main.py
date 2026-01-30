@@ -113,23 +113,29 @@ def obtener_rango(xp):
 # =================================================================
 # 5. MOTOR DE CARGA (LOADER_LOGIC) - ¡NO BUGS!
 # =================================================================
+# =================================================================
+# 5. MOTOR DE CARGA (LOADER_LOGIC) - ¡EL BUSCADOR ANTIFALLOS!
+# =================================================================
 if seleccion != "🏠 Inicio":
-    nivel_sel = st.sidebar.radio("🎯 Nivel de Dificultad:", ["1. Básico", "2. Intermedio", "3. Avanzado"])
+    # El usuario elige esto en la UI
+    nivel_sel = st.sidebar.radio("🎯 Selecciona Nivel:", ["1. Básico", "2. Intermedio", "3. Avanzado"])
     
     contenido = temas.get(seleccion, [])
     lista_preguntas_final = []
     id_unico_actual = f"{seleccion}_{nivel_sel}"
 
-    # Escaneo profundo para no perder preguntas
+    # --- BUSCADOR INTELIGENTE ---
     if isinstance(contenido, list):
         for bloque in contenido:
-            if isinstance(bloque, dict) and nivel_sel in bloque:
-                lista_preguntas_final = bloque[nivel_sel]
-                break
-    elif isinstance(contenido, dict):
-        lista_preguntas_final = contenido.get(nivel_sel, [])
-
-    # Mezcla solo si cambia el nivel para no resetear por error
+            if isinstance(bloque, dict):
+                # Esto busca si la palabra "Avanzado" está en alguna llave, 
+                # no importa si dice "3. Avanzado" o "Avanzado" a secas.
+                for llave in bloque.keys():
+                    if nivel_sel.split(". ")[-1] in llave or llave in nivel_sel:
+                        lista_preguntas_final = bloque[llave]
+                        break
+    
+    # Lógica de Mezcla y Reset
     if st.session_state.id_final != id_unico_actual:
         if lista_preguntas_final:
             st.session_state.lista_mezclada = random.sample(lista_preguntas_final, len(lista_preguntas_final))
@@ -137,6 +143,7 @@ if seleccion != "🏠 Inicio":
             st.session_state.indice = 0
             st.session_state.vidas = 3
         else:
+            # Si llega aquí, es que de verdad no encontró nada
             st.session_state.lista_mezclada = []
             st.session_state.id_final = id_unico_actual
 
