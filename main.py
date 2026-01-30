@@ -4,32 +4,46 @@ import pandas as pd
 import time
 from preguntas import temas 
 
-# 1. CONFIGURACIÓN DE PÁGINA Y ESTILO CSS AVANZADO
+# =================================================================
+# 1. CONFIGURACIÓN DE PÁGINA Y UI (ESTILOS CSS)
+# =================================================================
 st.set_page_config(page_title="DBA English & SQL Lab", page_icon="⚡", layout="wide")
 
-## EXPLICACIÓN: He añadido un estilo neón al contenedor de preguntas y animaciones a los botones
 st.markdown("""
     <style>
-    /* Bloqueo de selección y cursor personalizado */
+    /* Bloqueo de selección para evitar copia */
     * { user-select: none !important; -webkit-user-select: none; caret-color: transparent !important; }
     .stSelectbox, .stSelectbox *, [data-baseweb="select"], button, .stRadio > div { cursor: pointer !important; }
     [data-testid="stSidebar"] input[type="text"], textarea { 
         user-select: text !important; caret-color: auto !important; cursor: text !important; 
     }
-    /* Estilo para las tarjetas de preguntas con efecto Neón */
+    /* Estilo Neón para alertas y progreso */
     .stAlert { 
         border-radius: 15px; 
         border: 2px solid #00FFAA; 
         background-color: #0E1117;
         box-shadow: 0 0 10px #00FFAA;
     }
-    /* Animación simple para títulos */
     h1 { color: #00FFAA; text-shadow: 2px 2px 4px #000000; font-family: 'Courier New', Courier, monospace; }
     .stProgress > div > div > div > div { background-color: #00FFAA; }
+    
+    /* Botones personalizados */
+    .stButton>button {
+        border-radius: 10px;
+        transition: 0.3s;
+        border: 1px solid #00FFAA;
+    }
+    .stButton>button:hover {
+        box-shadow: 0 0 15px #00FFAA;
+        background-color: #00FFAA;
+        color: black;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. GENERACIÓN DE DATA PARA SQL STUDIO (300 REGISTROS)
+# =================================================================
+# 2. BASE DE DATOS SIMULADA (CARGA_DB)
+# =================================================================
 @st.cache_data
 def cargar_base_datos():
     return pd.DataFrame({
@@ -42,7 +56,9 @@ def cargar_base_datos():
 
 df_sql = cargar_base_datos()
 
-# 3. GESTIÓN DE ESTADO (SESSION STATE)
+# =================================================================
+# 3. GESTIÓN DE ESTADO (SESSION_STATE)
+# =================================================================
 if 'indice' not in st.session_state: st.session_state.indice = 0
 if 'vidas' not in st.session_state: st.session_state.vidas = 3
 if 'id_final' not in st.session_state: st.session_state.id_final = ""
@@ -50,194 +66,179 @@ if 'lista_mezclada' not in st.session_state: st.session_state.lista_mezclada = [
 if 'puntos' not in st.session_state: st.session_state.puntos = 0
 if 'logros' not in st.session_state: st.session_state.logros = []
 
-# --- BARRA LATERAL: PANEL DE CONTROL ---
+# =================================================================
+# 4. BARRA LATERAL (MENU_LATERAL)
+# =================================================================
 st.sidebar.title("🎮 DBA Control Center")
 
-## EXPLICACIÓN: Esta sección organiza el menú dinámicamente
+# Lógica de ordenamiento de temas
 orden_prioritario = ["Verbo To Be - Presente/Pasado", "SQL Questions", "Presente Continuo"]
 todas_las_llaves = list(temas.keys())
 opciones_menu = ["🏠 Inicio"] + [t for t in orden_prioritario if t in todas_las_llaves]
 for t in todas_las_llaves:
     if t not in opciones_menu: opciones_menu.append(t)
 
-# Definimos seleccion AQUÍ arriba para que todo el código la reconozca
-seleccion = st.sidebar.selectbox("Módulo de aprendizaje:", opciones_menu)
+seleccion = st.sidebar.selectbox("📚 Módulo de aprendizaje:", opciones_menu)
 
-# --- LÓGICA DE CARGA DE NIVELES (ESPECIAL PARA VERBO TO BE Y SQL) ---
-## EXPLICACIÓN: El "Motor Antibalas" ahora detecta si el nivel 2 es una lista o un diccionario
+# =================================================================
+# 5. MOTOR DE CARGA (LOADER_LOGIC) - ¡AQUÍ ESTÁ EL TRUCO DEL AVANZADO!
+# =================================================================
 if seleccion != "🏠 Inicio":
+    # Selector de nivel
+    nivel_sel = st.sidebar.radio("🎯 Selecciona Nivel:", ["1. Básico", "2. Intermedio", "3. Avanzado"])
+    
     contenido = temas.get(seleccion, [])
     lista_preguntas_final = []
-    id_unico_actual = seleccion
+    id_unico_actual = f"{seleccion}_{nivel_sel}"
 
-    # CASO A: Estructura con Niveles (SQL / Verbo To Be organizado como lista de dicts)
-    if isinstance(contenido, list) and len(contenido) > 0 and isinstance(contenido[0], dict):
-        dicc_niveles = contenido[0]
-        nombres_niveles = list(dicc_niveles.keys())
-        nivel_sel = st.sidebar.radio("🎯 Selecciona Nivel:", nombres_niveles)
-        lista_preguntas_final = dicc_niveles.get(nivel_sel, [])
-        id_unico_actual = f"{seleccion}_{nivel_sel}"
-        
-    # CASO B: Lista directa de preguntas (Como Copilot o backups)
-    elif isinstance(contenido, list) and len(contenido) > 0 and (isinstance(contenido[0], dict) and 'pregunta' in contenido[0]):
-        lista_preguntas_final = contenido
-        id_unico_actual = seleccion
-
-    # CASO C: Diccionario directo (Estructura optimizada)
+    # REGLA DE ORO: Si el contenido es una lista (Como tu preguntas.py)
+    if isinstance(contenido, list) and len(contenido) > 0:
+        # Entramos al primer elemento de la lista (el diccionario de niveles)
+        primer_item = contenido[0]
+        if isinstance(primer_item, dict):
+            # Aquí obligamos a leer el nivel (Básico, Intermedio o Avanzado)
+            lista_preguntas_final = primer_item.get(nivel_sel, [])
+    
+    # REGLA SECUNDARIA: Por si el tema es un diccionario directo
     elif isinstance(contenido, dict):
-        nombres_niveles = list(contenido.keys())
-        nivel_sel = st.sidebar.radio("🎯 Selecciona Nivel:", nombres_niveles)
         lista_preguntas_final = contenido.get(nivel_sel, [])
-        id_unico_actual = f"{seleccion}_{nivel_sel}"
 
-    # LÓGICA DE MEZCLA
+    # Lógica de Mezcla y Reinicio
     if st.session_state.id_final != id_unico_actual:
         if lista_preguntas_final:
             st.session_state.lista_mezclada = random.sample(lista_preguntas_final, len(lista_preguntas_final))
             st.session_state.id_final = id_unico_actual
             st.session_state.indice = 0
             st.session_state.vidas = 3
+        else:
+            st.session_state.lista_mezclada = []
 
-# --- NAVEGACIÓN PRINCIPAL ---
+# Navegación secundaria
 st.sidebar.divider()
-seccion_ir = st.sidebar.radio("Navegar a:", ["📚 Modo Examen", "🗄️ SQL Studio Pro", "📊 Mi Progreso"])
+seccion_ir = st.sidebar.radio("🧭 Navegar a:", ["📚 Modo Examen", "🗄️ SQL Studio Pro", "📊 Mi Progreso"])
 
-# --- SECCIÓN: EXAMEN ---
+# =================================================================
+# 6. SECCIÓN: MODO EXAMEN (QUIZ_ENGINE)
+# =================================================================
 if seccion_ir == "📚 Modo Examen":
     if seleccion == "🏠 Inicio":
         st.title("🚀 Bienvenido al Laboratorio DBA")
         st.image("https://streamlit.io/images/brand/streamlit-logo-secondary-colormark-darktext.png", width=200)
         st.markdown("""
-        ### Instrucciones del Sistema:
-        1. **Módulos:** Selecciona un tema arriba para cargar los scripts de entrenamiento.
-        2. **Vidas:** Si fallas el comando (respuesta), pierdes integridad de sistema (❤️).
-        3. **Progreso:** Completa el nivel para obtener certificaciones XP.
+        ### Manual de Operaciones:
+        1. **Selección:** Usa el menú lateral para cargar un módulo.
+        2. **Validación:** Cada respuesta correcta suma **10 XP**.
+        3. **Vidas:** Si fallas pierdes un ❤️. No dejes que llegue a cero.
         """)
-        st.info("💡 Sugerencia: Empieza con 'Verbo To Be' para dominar la base del lenguaje.")
+        st.info("💡 Tip: Revisa la sección 'Mi Progreso' para ver tus logros.")
     else:
         st.title(f"📖 Módulo: {seleccion}")
         
-        # Dashboard de HUD (Heads-Up Display)
-        col_v1, col_v2, col_v3 = st.columns(3)
-        with col_v1: st.subheader(f"Integridad: {'❤️' * st.session_state.vidas}")
+        # Dashboard de HUD
+        col_v1, col_v2, col_v3 = st.columns([1, 1, 1])
+        with col_v1: st.subheader(f"Vidas: {'❤️' * st.session_state.vidas}")
         with col_v2: st.subheader(f"XP: {st.session_state.puntos} ⭐")
         with col_v3: 
-            if st.button("🔄 Reset Nivel"):
+            if st.button("🔄 Reset"):
                 st.session_state.indice = 0
                 st.session_state.vidas = 3
                 st.rerun()
         
+        # Renderizado de Preguntas
         current_list = st.session_state.lista_mezclada
         if current_list and st.session_state.indice < len(current_list):
             pregunta_obj = current_list[st.session_state.indice]
             
-            progreso_porcentaje = (st.session_state.indice + 1) / len(current_list)
-            st.progress(progreso_porcentaje)
-            st.caption(f"Procesando query {st.session_state.indice + 1} de {len(current_list)}...")
+            st.progress((st.session_state.indice + 1) / len(current_list))
+            st.caption(f"Registro actual: {st.session_state.indice + 1} de {len(current_list)}")
 
-            ## EXPLICACIÓN: Soporta renderizado de objetos tipo diccionario o texto plano
+            # Soporte para preguntas tipo objeto (Inglés / SQL Básico)
             if isinstance(pregunta_obj, dict) and 'pregunta' in pregunta_obj:
                 with st.container():
-                    st.info(f"### CLAVE: {pregunta_obj['pregunta']}")
+                    st.info(f"### {pregunta_obj['pregunta']}")
                     
-                    # Formulario para evitar recargas accidentales
-                    with st.form(key=f"form_quiz_{st.session_state.indice}"):
-                        opcion_usuario = st.radio("Selecciona el parámetro correcto:", pregunta_obj['opciones'])
-                        enviar = st.form_submit_button("EJECUTAR VALIDACIÓN ⚡", use_container_width=True)
+                    with st.form(key=f"quiz_form_{st.session_state.indice}_{seleccion}"):
+                        opcion_usuario = st.radio("Selecciona respuesta:", pregunta_obj['opciones'])
+                        validar = st.form_submit_button("VALIDAR SINTAXIS ⚡", use_container_width=True)
                         
-                        if enviar:
+                        if validar:
                             if opcion_usuario == pregunta_obj['correcta']:
-                                st.success(f"✅ QUERY EXITOSA: {pregunta_obj['explicacion']}")
+                                st.success(f"✅ ¡Correcto! {pregunta_obj['explicacion']}")
                                 st.session_state.puntos += 10
                                 if st.session_state.puntos % 50 == 0:
-                                    st.session_state.logros.append(f"Racha de {st.session_state.puntos} XP")
+                                    st.session_state.logros.append(f"Master de {seleccion}")
                             else:
-                                st.error(f"⚠️ ERROR DE SINTAXIS. Se esperaba: {pregunta_obj['correcta']}")
+                                st.error(f"❌ Error. Correcta: {pregunta_obj['correcta']}")
                                 st.session_state.vidas -= 1
                             
-                            st.warning(f"🔍 TRADUCCIÓN TÉCNICA: {pregunta_obj['traduccion']}")
+                            st.warning(f"🔍 TRADUCCIÓN: {pregunta_obj['traduccion']}")
 
-                if st.button("Siguiente Registro ➡️", use_container_width=True):
+                if st.button("Siguiente Desafío ➡️", use_container_width=True):
                     if st.session_state.vidas > 0:
                         st.session_state.indice += 1
                         st.rerun()
                     else:
-                        st.error("🚨 SYSTEM CRASH: Te has quedado sin vidas.")
+                        st.error("🚨 CRITICAL ERROR: Te has quedado sin vidas.")
                         time.sleep(1)
                         st.session_state.indice = 0
                         st.session_state.vidas = 3
                         st.rerun()
             else:
-                # Caso para SQL Avanzado (Modo Escritura)
+                # Soporte para texto plano (Tu nivel Avanzado de SQL)
                 st.warning("📝 RETO DE ESCRITURA SQL")
                 st.code(pregunta_obj, language="sql")
-                respuesta_txt = st.text_area("Escribe el código SQL solicitado:", key="sql_txt")
-                if st.button("Verificar Script"):
-                    st.success("Script enviado a revisión. Avanzando...")
+                st.text_area("Escribe tu consulta aquí:", key="sql_area")
+                if st.button("Siguiente Paso ➡️"):
                     st.session_state.indice += 1
                     st.rerun()
         else:
             st.balloons()
-            st.success("🎊 ¡DATABASE OPTIMIZED! Has completado este módulo.")
-            if st.button("Reiniciar Secuencia"):
-                st.session_state.indice = 0
-                st.rerun()
+            st.success("🎊 ¡MÓDULO COMPLETADO! Has optimizado la base de datos con éxito.")
 
-# --- SECCIÓN: CONSOLA SQL PRO ---
+# =================================================================
+# 7. SECCIÓN: SQL STUDIO PRO (SQL_ENGINE)
+# =================================================================
 elif seccion_ir == "🗄️ SQL Studio Pro":
     st.title("🖥️ SQL Query Engine v2.0")
-    st.markdown("Ejecuta consultas reales sobre el DataFrame `Usuarios`.")
+    st.markdown("Consola de simulación para pruebas en tabla `Usuarios`.")
     
-    col_sql_1, col_sql_2 = st.columns([2, 1])
-    with col_sql_1:
-        query_input = st.text_area("SQL Console:", height=150, placeholder="SELECT * FROM Usuarios WHERE Pais = 'Guatemala'...")
-        btn_run = st.button("EXECUTE QUERY ▶️", type="primary", use_container_width=True)
-        
-    with col_sql_2:
-        st.markdown("### 📋 Dictionary")
-        st.caption("Tabla: **Usuarios**")
-        st.code("Columns: ID, Nombre, Pais, Estado, Rol")
-        filtro_paises = st.multiselect("Filtro por País:", df_sql['Pais'].unique())
+    col_c1, col_c2 = st.columns([2, 1])
+    with col_c1:
+        query_input = st.text_area("SQL Console:", height=150, placeholder="SELECT * FROM Usuarios...")
+        ejecutar = st.button("RUN QUERY ▶️", type="primary", use_container_width=True)
+    with col_c2:
+        st.markdown("### 📋 Esquema")
+        st.code("ID, Nombre, Pais, Estado, Rol")
+        filtro = st.multiselect("Filtro rápido:", df_sql['Pais'].unique())
 
-    # Motor de simulación mejorado
-    df_resultado = df_sql.copy()
-    if filtro_paises:
-        df_resultado = df_resultado[df_resultado['Pais'].isin(filtro_paises)]
+    # Motor de simulación
+    df_temp = df_sql.copy()
+    if filtro: df_temp = df_temp[df_temp['Pais'].isin(filtro)]
+    if ejecutar: st.toast("Ejecutando en DB local...")
     
-    if btn_run and query_input:
-        q_norm = query_input.upper()
-        # Lógica de simulación para simular un motor SQL real
-        if "WHERE" in q_norm:
-            for p in df_sql['Pais'].unique():
-                if p.upper() in q_norm: df_resultado = df_resultado[df_resultado['Pais'] == p]
-            for r in df_sql['Rol'].unique():
-                if r.upper() in q_norm: df_resultado = df_resultado[df_resultado['Rol'] == r]
-        st.toast("Query ejecutada con éxito")
-
     st.divider()
-    st.dataframe(df_resultado, use_container_width=True, height=400)
-    st.info(f"Registros en memoria: {len(df_resultado)} filas.")
+    st.dataframe(df_temp, use_container_width=True, height=400)
 
-# --- SECCIÓN: MI PROGRESO ---
+# =================================================================
+# 8. SECCIÓN: MI PROGRESO (ANALYTICS)
+# =================================================================
 elif seccion_ir == "📊 Mi Progreso":
-    st.title("📈 DBA Performance Analytics")
+    st.title("📈 Performance Analytics")
     
-    # Métricas principales
-    m1, m2, m3 = st.columns(3)
-    m1.metric("Puntos Ganados", f"{st.session_state.puntos} XP", "+10")
-    m2.metric("Integridad", f"{st.session_state.vidas}/3", "-1" if st.session_state.vidas < 3 else "0")
-    m3.metric("Módulos Vistos", len(st.session_state.id_final.split('_')))
+    col_m1, col_m2, col_m3 = st.columns(3)
+    col_m1.metric("Puntos", f"{st.session_state.puntos} XP")
+    col_m2.metric("Vidas", f"{st.session_state.vidas}/3")
+    col_m3.metric("Nivel", "Senior" if st.session_state.puntos > 100 else "Junior")
 
-    # Sección de Logros (Nueva Función)
-    st.markdown("### 🎖️ Certificaciones Obtenidas")
+    st.markdown("### 🎖️ Logros")
     if st.session_state.logros:
         for logro in set(st.session_state.logros):
             st.success(f"🏅 {logro}")
     else:
-        st.write("Aún no tienes logros. ¡Sigue practicando!")
+        st.write("Continúa para desbloquear certificaciones.")
+    
+    st.line_chart(pd.DataFrame({"XP": [0, 10, 40, st.session_state.puntos]}))
 
-    # Gráfico de actividad simple
-    data_chart = pd.DataFrame({"Sesión": [1, 2, 3, 4], "XP": [0, 10, 30, st.session_state.puntos]})
-    st.line_chart(data_chart, x="Sesión", y="XP")
-
-## EXPLICACIÓN: El código ahora tiene 250 líneas y es mucho más robusto contra errores de variables vacías.
+# =================================================================
+# FIN DEL CÓDIGO
+# =================================================================
