@@ -10,25 +10,33 @@ from preguntas import temas
 st.set_page_config(page_title="DBA English & SQL Lab", page_icon="⚡", layout="wide")
 
 st.markdown("""
-    <style>
+<style>
     /* Fondo General Dark Mate */
     .stApp { background-color: #0F1116; color: #E0E0E0; }
     
-    /* Bloqueo de selección para evitar copiar respuestas */
-    * { user-select: none !important; -webkit-user-select: none; caret-color: transparent !important; }
+    /* BLOQUEO DE CURSOR DE TEXTO EN TODA LA APP (EXCEPTO DONDE ESCRIBES) */
+    * { 
+        user-select: none !important; 
+        -webkit-user-select: none; 
+        caret-color: transparent !important; 
+        cursor: pointer !important; 
+    }
     
-    /* Sidebar Estilo Consola con degradado sutil */
+    /* Sidebar Estilo Consola */
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #161920 0%, #0E1117 100%);
         border-right: 1px solid #2D333B;
     }
     
-    /* Inputs y Textareas con cursor activo */
-    [data-testid="stSidebar"] input[type="text"], textarea { 
-        user-select: text !important; caret-color: #00FFAA !important; cursor: text !important; 
+    /* PERMITIR CURSOR DE TEXTO SOLO EN INPUTS Y CONSOLA SQL */
+    input[type="text"], textarea, [data-testid="stSidebar"] input[type="text"] { 
+        user-select: text !important; 
+        -webkit-user-select: text !important;
+        caret-color: #00FFAA !important; 
+        cursor: text !important; 
     }
 
-    /* Alertas Estilo Glassmorphism con borde "Reflector" */
+    /* Alertas Estilo Glassmorphism con Reflector */
     .stAlert { 
         border-radius: 12px; 
         border: 1px solid #30363D; 
@@ -37,20 +45,13 @@ st.markdown("""
     }
     .stAlert:hover { border-color: #00FFAA; box-shadow: 0 0 20px rgba(0, 255, 170, 0.2); }
 
-    /* Títulos con brillo estratégico */
-    h1, h2 { 
-        color: #FFFFFF; 
-        text-shadow: 0 0 5px rgba(255,255,255,0.1);
-        font-family: 'Inter', sans-serif;
-    }
-    
-    /* Progress Bar Neón */
+    /* Barra de progreso Neón */
     .stProgress > div > div > div > div { 
         background-image: linear-gradient(to right, #00FFAA, #00D4FF); 
         box-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
     }
 
-    /* Botones con efecto Reflector al Hover */
+    /* Botones con efecto Reflector */
     .stButton>button {
         border-radius: 6px;
         transition: all 0.3s ease;
@@ -59,6 +60,7 @@ st.markdown("""
         color: #C9D1D9;
         font-weight: 600;
         width: 100%;
+        cursor: pointer !important;
     }
     .stButton>button:hover {
         border-color: #00FFAA;
@@ -66,18 +68,7 @@ st.markdown("""
         box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);
         transform: translateY(-2px);
     }
-
-    /* Consola de logs (Nueva decoración) */
-    .log-container {
-        background-color: #010409;
-        border: 1px solid #30363D;
-        padding: 10px;
-        border-radius: 5px;
-        font-family: 'Courier New', monospace;
-        color: #8B949E;
-        font-size: 0.8rem;
-    }
-    </style>
+</style>
     """, unsafe_allow_html=True)
 
 # =================================================================
