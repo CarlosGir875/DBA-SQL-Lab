@@ -56,35 +56,31 @@ seleccion = st.sidebar.selectbox("Módulo de aprendizaje:", opciones_menu)
 
 # --- LÓGICA DE CARGA DE NIVELES (ESPECIAL PARA VERBO TO BE Y SQL) ---
 # --- MOTOR DE CARGA UNIVERSAL (ESTE SÍ LEE EL VERBO TO BE) ---
+# --- MOTOR DE CARGA UNIVERSAL (Blindado) ---
 if seleccion != "🏠 Inicio":
-    contenido_bruto = temas.get(seleccion, [])
+    contenido = temas.get(seleccion, [])
     
-    # CASO 1: Diccionario Directo (Estructura del Verbo To Be)
-    if isinstance(contenido_bruto, dict):
-        niveles = list(contenido_bruto.keys())
-        nivel_sel = st.sidebar.radio("🎯 Selecciona Nivel:", niveles, index=0)
-        lista_preguntas_final = contenido_bruto.get(nivel_sel, [])
-        id_unico_actual = f"{seleccion}_{nivel_sel}"
+    # 1. SI TIENE NIVELES (Lista con un diccionario adentro)
+    if isinstance(contenido, list) and len(contenido) > 0 and isinstance(contenido[0], dict):
+        diccionario_niveles = contenido[0]
+        nombres_niveles = list(diccionario_niveles.keys())
         
-    # CASO 2: Lista con Diccionario (Estructura de SQL Questions)
-    elif isinstance(contenido_bruto, list) and len(contenido_bruto) > 0 and isinstance(contenido_bruto[0], dict):
-        dicc_niveles = contenido_bruto[0]
-        niveles = list(dicc_niveles.keys())
-        nivel_sel = st.sidebar.radio("🎯 Selecciona Nivel:", niveles, index=0)
-        lista_preguntas_final = dicc_niveles.get(nivel_sel, [])
-        id_unico_actual = f"{seleccion}_{nivel_sel}"
+        # Selector de nivel en la barra lateral
+        nivel_seleccionado = st.sidebar.radio("🎯 Selecciona Nivel:", nombres_niveles)
+        lista_preguntas_final = diccionario_niveles.get(nivel_seleccionado, [])
+        id_unico_actual = f"{seleccion}_{nivel_seleccionado}"
         
-    # CASO 3: Lista Simple (Estructura de Verbos Regulares/Irregulares)
+    # 2. SI ES UNA LISTA SIMPLE (Verbos Regulares/Irregulares)
     else:
-        lista_preguntas_final = contenido_bruto
+        lista_preguntas_final = contenido
         id_unico_actual = seleccion
 
-    # MEZCLA SEGURA (No toca tus puntos ni el resto de la app)
+    # MEZCLA SEGURA: Solo mezcla si cambias de tema o nivel
     if st.session_state.id_final != id_unico_actual:
         if lista_preguntas_final:
-            shuffled = lista_preguntas_final.copy()
-            random.shuffle(shuffled)
-            st.session_state.lista_mezclada = shuffled
+            temp_list = lista_preguntas_final.copy()
+            random.shuffle(temp_list)
+            st.session_state.lista_mezclada = temp_list
             st.session_state.id_final = id_unico_actual
             st.session_state.indice = 0
             st.session_state.vidas = 3
