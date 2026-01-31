@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 ====================================================================================================
-  APEX SOVEREIGN SUITE v15.0 — THE MONOLITH KERNEL
+  APEX SOVEREIGN SUITE v16.0 — THE LEVIATHAN BUILD
   Target User: SY (Carlos) | INTECAP DATABASE SPECIALIST
   Release Date: 2026-01-31
   Architecture: Hexagonal Enterprise (Domain-Driven Design)
@@ -10,8 +10,8 @@
   --------------------------------------------------------------------------------------------------
   1. CORE KERNEL      : Python 3.10+ Streamlit Framework (Session State Level 5).
   2. DATA INGESTION   : 'Universal Adapter' pattern for 'preguntas.py' (List/Dict Agnostic).
-  3. FEEDBACK HUD     : Real-time visual feedback (Green/Red) with persistent explanation layer.
-  4. UI ENGINE        : 'Nebula-X' CSS with forced 200px+ height on action cards.
+  3. FEEDBACK HUD     : FIXED. Requires explicit validation trigger. No premature failures.
+  4. UI ENGINE        : 'Nebula-X' CSS with forced 220px+ height on action cards.
   5. SQL EMULATOR     : In-Memory T-SQL Simulation with RBAC (Role Based Access Control).
   6. TELEMETRY        : Verbose logging for every user interaction.
   --------------------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@
 """
 
 # ==================================================================================================
-# SECTION 1: SYSTEM IMPORTS & ENVIRONMENT SETUP
+# MODULE 1: SYSTEM IMPORTS & ENVIRONMENT SETUP
 # ==================================================================================================
 import streamlit as st
 import pandas as pd
@@ -39,13 +39,14 @@ import base64
 import logging
 import traceback
 import enum
+import uuid
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple, Union, Callable, Type
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 
 # ==================================================================================================
-# SECTION 2: ADVANCED LOGGING & DIAGNOSTICS
+# MODULE 2: INDUSTRIAL LOGGING & TELEMETRY
 # ==================================================================================================
 
 # Configure Industrial Logging
@@ -54,30 +55,36 @@ logging.basicConfig(
     format='%(asctime)s | APEX-CORE | %(levelname)s | %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
-logger = logging.getLogger("ApexMonolith")
+logger = logging.getLogger("ApexLeviathan")
 
-class SystemDiagnostics:
+class TelemetryService:
     """
-    Static utility for system health checks and environment validation.
+    Service responsible for tracking user interactions and system health.
+    Implements a Singleton pattern to ensure one logger instance.
     """
-    @staticmethod
-    def check_integrity() -> bool:
-        """Verifies that all required libraries are loaded in memory."""
-        required = ['streamlit', 'pandas', 'sqlite3', 'random']
-        for lib in required:
-            if lib not in sys.modules:
-                logger.critical(f"MISSING DEPENDENCY: {lib}")
-                return False
-        return True
+    _instance = None
 
-    @staticmethod
-    def get_memory_usage() -> str:
-        """Simulates memory profiling for the dashboard."""
-        # In a real scenario, we would use 'psutil', but for this env we simulate.
-        return f"{random.randint(120, 450)} MB"
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(TelemetryService, cls).__new__(cls)
+            cls._instance.session_id = str(uuid.uuid4())
+            logger.info(f"Telemetry Service Initialized. Session ID: {cls._instance.session_id}")
+        return cls._instance
+
+    def log_interaction(self, component: str, action: str, metadata: Dict = None):
+        """Logs a user interaction with timestamp."""
+        meta_str = json.dumps(metadata) if metadata else "{}"
+        logger.info(f"INTERACTION | Component: {component} | Action: {action} | Meta: {meta_str}")
+
+    def log_error(self, source: str, error_msg: str):
+        """Logs a critical system error."""
+        logger.error(f"CRITICAL FAILURE | Source: {source} | Error: {error_msg}")
+
+# Initialize Telemetry
+TELEMETRY = TelemetryService()
 
 # ==================================================================================================
-# SECTION 3: THE NEBULA DESIGN SYSTEM (CSS ENGINE)
+# MODULE 3: THE NEBULA DESIGN SYSTEM (CSS ENGINE)
 # ==================================================================================================
 
 class ApexTheme:
@@ -96,10 +103,6 @@ class ApexTheme:
     COLOR_TEXT_MAIN = "#f8fafc"   # Slate 50
     COLOR_TEXT_MUTED = "#94a3b8"  # Slate 400
     
-    # Assets
-    ASSET_DASHBOARD_LOTTIE = "https://assets5.lottiefiles.com/packages/lf20_fcfjwiyb.json"
-    ASSET_DB_LOTTIE = "https://assets2.lottiefiles.com/private_files/lf30_w1uxkbue.json"
-
     @classmethod
     def inject_css(cls):
         """
@@ -119,9 +122,10 @@ class ApexTheme:
         }}
         
         h1, h2, h3, h4, h5, h6 {{
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: -0.5px;
             color: #ffffff;
+            text-transform: uppercase;
         }}
         
         /* --- SIDEBAR NEBULA EFFECT --- */
@@ -135,12 +139,13 @@ class ApexTheme:
         div.row-widget.stButton > button[key*="topic_btn"], 
         div.row-widget.stButton > button[key*="level_btn"] {{
             height: 220px !important;  /* FORCED HEIGHT */
+            min-height: 220px !important;
             width: 100% !important;
             border-radius: 24px !important;
             background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%) !important;
             border: 1px solid rgba(255,255,255,0.08) !important;
             color: #ffffff !important;
-            font-size: 1.5rem !important;
+            font-size: 1.6rem !important;
             font-weight: 800 !important;
             text-transform: uppercase;
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5) !important;
@@ -160,39 +165,60 @@ class ApexTheme:
             background: linear-gradient(160deg, #312e81 0%, #1e1b4b 100%) !important;
         }}
 
-        /* --- FEEDBACK STATUS BOXES --- */
+        /* --- FEEDBACK STATUS BOXES (HUD) --- */
         .feedback-box-success {{
-            background: rgba(16, 185, 129, 0.15);
+            background: rgba(16, 185, 129, 0.1);
             border: 2px solid {cls.COLOR_SUCCESS};
             color: {cls.COLOR_SUCCESS};
-            padding: 20px;
+            padding: 30px;
             border-radius: 16px;
             text-align: center;
-            font-weight: 800;
-            font-size: 1.5rem;
+            font-weight: 900;
+            font-size: 2rem;
             margin: 20px 0;
             animation: popIn 0.4s ease;
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.2);
         }}
         
         .feedback-box-error {{
-            background: rgba(239, 68, 68, 0.15);
+            background: rgba(239, 68, 68, 0.1);
             border: 2px solid {cls.COLOR_DANGER};
             color: {cls.COLOR_DANGER};
-            padding: 20px;
+            padding: 30px;
             border-radius: 16px;
             text-align: center;
-            font-weight: 800;
-            font-size: 1.5rem;
+            font-weight: 900;
+            font-size: 2rem;
             margin: 20px 0;
             animation: shake 0.4s ease;
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.2);
         }}
         
         .explanation-card {{
             background: rgba(255,255,255,0.03);
-            border-left: 4px solid {cls.COLOR_PRIMARY};
-            padding: 20px;
+            border-left: 6px solid {cls.COLOR_PRIMARY};
+            padding: 25px;
             margin-top: 15px;
-            border-radius: 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }}
+
+        /* --- RADIO BUTTON STYLING --- */
+        .stRadio > div {{
+            background: transparent;
+        }}
+        .stRadio label {{
+            background: rgba(255,255,255,0.05);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.2s;
+            width: 100%;
+        }}
+        .stRadio label:hover {{
+            background: rgba(99, 102, 241, 0.2);
+            border-color: {cls.COLOR_PRIMARY};
         }}
 
         /* --- ANIMATIONS --- */
@@ -215,18 +241,20 @@ class ApexTheme:
             color: #a5b4fc !important;
             font-family: 'JetBrains Mono', monospace !important;
             border: 1px solid #334155 !important;
+            font-size: 1rem;
         }}
         </style>
         """, unsafe_allow_html=True)
 
 # ==================================================================================================
-# SECTION 4: DOMAIN OBJECTS (STRICT TYPING)
+# MODULE 4: DOMAIN ENTITIES & INTERFACES
 # ==================================================================================================
 
 @dataclass
 class QuestionEntity:
     """
     Represents a single atomic unit of assessment.
+    Contains validation logic and metadata.
     """
     id: str
     text: str
@@ -237,6 +265,7 @@ class QuestionEntity:
     
     def validate(self, selected: str) -> bool:
         """Determines if the selected option matches the correct one."""
+        if not selected: return False
         return selected.strip() == self.correct_option.strip()
 
 @dataclass
@@ -248,36 +277,37 @@ class UserContext:
     role: str = "Database Administrator"
     xp_points: int = 15000
     current_streak: int = 0
+    badges: List[str] = field(default_factory=list)
     
     def award_xp(self, amount: int):
         self.xp_points += amount
         self.current_streak += 1
-        
-    def reset_streak(self):
-        self.current_streak = 0
+        TELEMETRY.log_interaction("UserContext", "XP Awarded", {"amount": amount, "total": self.xp_points})
 
 class FeedbackState(enum.Enum):
     """Enumeration for the state of the answer feedback mechanism."""
-    IDLE = 0
-    SUCCESS = 1
-    FAILURE = 2
+    WAITING_FOR_INPUT = 0
+    VALIDATING = 1  # Transient state
+    SUCCESS = 2
+    FAILURE = 3
 
 # ==================================================================================================
-# SECTION 5: PERSISTENCE LAYER (SESSION VAULT)
+# MODULE 5: SESSION VAULT (STATE MANAGEMENT)
 # ==================================================================================================
 
 class SessionGuardian:
     """
     The Single Source of Truth for the application state.
     Implements strict getters and setters to prevent 'KeyError'.
+    Manages the lifecycle of the Quiz State Machine.
     """
-    VAULT_ID = "apex_v15_core"
+    VAULT_ID = "apex_v16_leviathan"
 
     @classmethod
     def boot(cls):
         """Initializes the session state dictionary if it doesn't exist."""
         if cls.VAULT_ID not in st.session_state:
-            logger.info("Initializing Apex Vault...")
+            logger.info("Initializing Apex Vault v16...")
             st.session_state[cls.VAULT_ID] = {
                 # Navigation
                 "view": "welcome",           # welcome, training, sql, coding
@@ -291,8 +321,8 @@ class SessionGuardian:
                 "quiz_deck": [],             # List[QuestionEntity]
                 "quiz_pointer": 0,
                 "quiz_score": 0,
-                "quiz_feedback_status": FeedbackState.IDLE, # IDLE, SUCCESS, FAILURE
-                "quiz_last_selected": None,
+                "quiz_state_machine": FeedbackState.WAITING_FOR_INPUT,
+                "quiz_last_selected_option": None,
                 
                 # User Entity
                 "user": UserContext(),
@@ -316,15 +346,19 @@ class SessionGuardian:
     
     @classmethod
     def reset_quiz_flags(cls):
-        """Resets the feedback flags for the next question."""
-        cls.set("quiz_feedback_status", FeedbackState.IDLE)
-        cls.set("quiz_last_selected", None)
+        """
+        CRITICAL: Resets the state machine for the next question.
+        Ensures the UI does not show feedback prematurely.
+        """
+        cls.set("quiz_state_machine", FeedbackState.WAITING_FOR_INPUT)
+        cls.set("quiz_last_selected_option", None)
+        TELEMETRY.log_interaction("SessionGuardian", "Quiz Flags Reset")
 
 # Initialize Session Immediately
 SessionGuardian.boot()
 
 # ==================================================================================================
-# SECTION 6: DATA ACCESS LAYER (ADAPTER PATTERN)
+# MODULE 6: DATA INGESTION (ADAPTER PATTERN)
 # ==================================================================================================
 
 class DataIngestionService:
@@ -336,20 +370,23 @@ class DataIngestionService:
 
     @staticmethod
     def _load_module_dynamic():
-        """Attempts to load the python file as a module."""
+        """Attempts to load the python file as a module using importlib."""
         path = os.path.join(os.getcwd(), DataIngestionService.FILE_TARGET)
         if not os.path.exists(path):
+            TELEMETRY.log_error("DataIngestion", f"File not found: {path}")
             return None
         
         try:
-            spec = importlib.util.spec_from_file_location("dynamic_preguntas", path)
+            # Force reload logic to ensure updates in preguntas.py are reflected
+            spec = importlib.util.spec_from_file_location("dynamic_preguntas_v16", path)
             mod = importlib.util.module_from_spec(spec)
-            sys.modules["dynamic_preguntas"] = mod
+            sys.modules["dynamic_preguntas_v16"] = mod
             spec.loader.exec_module(mod)
             if hasattr(mod, 'temas'):
                 return mod.temas
         except Exception as e:
-            logger.error(f"Import Error: {e}")
+            TELEMETRY.log_error("DataIngestion", f"Import Error: {e}")
+            logger.error(traceback.format_exc())
         return None
 
     @classmethod
@@ -360,14 +397,7 @@ class DataIngestionService:
         """
         raw_data = cls._load_module_dynamic()
         if not raw_data:
-            # Fallback Mock Data if file is missing (For testing)
-            return {
-                "System Check": {
-                    "Level 1": [
-                        {"pregunta": "Is the system active?", "opciones": ["Yes", "No"], "correcta": "Yes"}
-                    ]
-                }
-            }
+            return {} # Return empty dict instead of mock data to force error if file missing
 
         normalized = {}
         for key, value in raw_data.items():
@@ -381,7 +411,7 @@ class DataIngestionService:
         return normalized
 
 # ==================================================================================================
-# SECTION 7: SQL EMULATION ENGINE (LOGIC LAYER)
+# MODULE 7: SQL EMULATION ENGINE (LOGIC LAYER)
 # ==================================================================================================
 
 class SQLEngine:
@@ -390,20 +420,23 @@ class SQLEngine:
     """
     @staticmethod
     def _seed_database() -> pd.DataFrame:
-        """Generates 300+ mock employee records."""
+        """Generates 300+ mock employee records for the simulation."""
         if SessionGuardian.get("db_dataframe") is None:
             data = []
-            roles = ["DBA", "DevOps", "Backend", "Frontend", "QA", "Manager"]
-            depts = ["IT", "HR", "Sales", "Ops"]
+            roles = ["DBA", "DevOps Engineer", "Backend Developer", "Frontend Developer", "QA Analyst", "Project Manager", "CTO"]
+            depts = ["IT Infrastructure", "Human Resources", "Global Sales", "Operations", "Cybersecurity"]
+            cities = ["Guatemala City", "Quetzaltenango", "Escuintla", "Antigua", "Flores"]
             
             for i in range(1, 350):
                 data.append({
-                    "ID": i,
-                    "Name": f"Employee_{i:03d}",
+                    "EmployeeID": i,
+                    "FullName": f"Apex_User_{i:03d}",
                     "Role": random.choice(roles),
-                    "Dept": random.choice(depts),
-                    "Salary": random.randint(40000, 150000),
-                    "Active": random.choice([1, 1, 1, 0])
+                    "Department": random.choice(depts),
+                    "Location": random.choice(cities),
+                    "Salary_USD": random.randint(40000, 150000),
+                    "IsActive": random.choice([1, 1, 1, 1, 0]),
+                    "HireDate": (datetime.now() - timedelta(days=random.randint(0, 3650))).strftime("%Y-%m-%d")
                 })
             df = pd.DataFrame(data)
             SessionGuardian.set("db_dataframe", df)
@@ -414,20 +447,26 @@ class SQLEngine:
         """Runs the query and returns (Result, ErrorMessage)."""
         df = cls._seed_database()
         
+        # Security Guard
         if not query.lower().strip().startswith("select"):
-            return None, "🚫 PERMISSION DENIED: Only SELECT statements are permitted in this sandbox."
+            return None, "🚫 PERMISSION DENIED: Only SELECT statements are permitted in this sandbox environment."
             
         try:
             conn = sqlite3.connect(":memory:")
-            df.to_sql("Staff", conn, index=False, if_exists="replace")
+            df.to_sql("Employees", conn, index=False, if_exists="replace")
+            
+            start_t = time.time()
             res = pd.read_sql_query(query, conn)
+            exec_time = time.time() - start_t
+            
             conn.close()
+            TELEMETRY.log_interaction("SQLEngine", "Query Executed", {"time": exec_time, "rows": len(res)})
             return res, ""
         except Exception as e:
             return None, f"SQL SYNTAX ERROR: {str(e)}"
 
 # ==================================================================================================
-# SECTION 8: UI CONTROLLERS (PRESENTATION LAYER)
+# MODULE 8: UI CONTROLLERS (PRESENTATION LAYER)
 # ==================================================================================================
 
 class NavigationController:
@@ -465,6 +504,10 @@ class NavigationController:
             if st.button("⚔️ SQL CONSOLE", use_container_width=True):
                 SessionGuardian.set("view", "sql")
                 st.rerun()
+                
+            st.markdown("---")
+            st.caption(f"Session: {TELEMETRY.session_id[:8]}")
+            st.caption("INTECAP SENIOR LABS")
 
 class QuizController:
     """
@@ -490,13 +533,15 @@ class QuizController:
         
         topics = list(self.kb.keys())
         if not topics:
-            st.error("DATABASE EMPTY. Please check 'preguntas.py'.")
+            st.error("⚠️ CRITICAL: 'preguntas.py' is missing or has invalid structure.")
+            st.code("Expected format: temas = {'Topic': ...}")
             return
 
         # MEGA GRID RENDER
         cols = st.columns(3)
         for i, topic in enumerate(topics):
             with cols[i % 3]:
+                # Unique keys for buttons are essential
                 if st.button(f"{topic}", key=f"topic_btn_{i}"):
                     SessionGuardian.set("topic_ref", topic)
                     SessionGuardian.set("training_step", 1)
@@ -510,6 +555,10 @@ class QuizController:
             SessionGuardian.set("training_step", 0)
             st.rerun()
             
+        if topic not in self.kb:
+            st.error("Topic Data Lost. Please restart.")
+            return
+
         levels = list(self.kb[topic].keys())
         
         cols = st.columns(3)
@@ -528,11 +577,14 @@ class QuizController:
         for q in raw_list:
             # Defensive coding against missing keys
             opts = q.get("opciones", [])
-            random.shuffle(opts)
+            # Shuffle options carefully creating a new list
+            opts_shuffled = list(opts)
+            random.shuffle(opts_shuffled)
+            
             entity = QuestionEntity(
-                id=str(random.randint(1000,9999)),
-                text=q.get("pregunta", "Error"),
-                options=opts,
+                id=str(uuid.uuid4()),
+                text=q.get("pregunta", "Error loading text"),
+                options=opts_shuffled,
                 correct_option=q.get("correcta", ""),
                 explanation=q.get("explicacion", "No data."),
                 translation=q.get("traduccion", "No data.")
@@ -546,6 +598,10 @@ class QuizController:
         SessionGuardian.reset_quiz_flags()
 
     def _view_active_quiz(self):
+        """
+        The main quiz interface logic.
+        FIX: Implements the waiting state properly.
+        """
         deck = SessionGuardian.get("quiz_deck")
         idx = SessionGuardian.get("quiz_pointer")
         
@@ -555,59 +611,69 @@ class QuizController:
             return
             
         current_q = deck[idx]
-        status = SessionGuardian.get("quiz_feedback_status")
+        state = SessionGuardian.get("quiz_state_machine")
         
-        # Header
+        # --- HEADER AREA ---
         c1, c2 = st.columns([5,1])
         with c1:
             st.markdown(f"## Question {idx + 1} / {len(deck)}")
         with c2:
-            if st.button("❌ EXIT"):
+            if st.button("❌ EXIT", use_container_width=True):
                 SessionGuardian.set("training_step", 1)
                 st.rerun()
         
+        # Progress Bar
         st.progress((idx) / len(deck))
         
-        # Question Card
+        # --- QUESTION CARD ---
         st.markdown(f"""
         <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 16px; margin-bottom: 20px;">
-            <h3 style="margin:0;">{current_q.text}</h3>
+            <h3 style="margin:0; font-size: 1.5rem;">{current_q.text}</h3>
         </div>
         """, unsafe_allow_html=True)
         
-        # Options Logic
-        # We use a key based on index AND state to ensure it resets properly
-        selected = st.radio(
+        # --- INTERACTION AREA ---
+        # The key is crucial. It must change with the question ID to reset the selection.
+        # We also default index to None so nothing is selected initially.
+        selected_option = st.radio(
             "Select Answer:", 
             current_q.options, 
-            key=f"q_radio_{idx}", 
-            label_visibility="collapsed"
+            key=f"radio_{current_q.id}", 
+            label_visibility="collapsed",
+            index=None,
+            disabled=(state != FeedbackState.WAITING_FOR_INPUT) # Disable if already answered
         )
         
-        # ==========================================================================================
-        # FEEDBACK SYSTEM (THE FIX)
-        # ==========================================================================================
+        # --- ACTION & FEEDBACK LOGIC ---
         
-        # 1. Action Buttons
-        if status == FeedbackState.IDLE:
+        if state == FeedbackState.WAITING_FOR_INPUT:
+            # Only show Validate button here
+            # Logic: If nothing selected, disable button (visual cue) or show warning on click
+            
             if st.button("✅ VALIDATE ANSWER", type="primary", use_container_width=True):
-                # Update State
-                if current_q.validate(selected):
-                    SessionGuardian.set("quiz_feedback_status", FeedbackState.SUCCESS)
-                    SessionGuardian.set("quiz_score", SessionGuardian.get("quiz_score") + 1)
-                    SessionGuardian.get_user().award_xp(100)
-                    st.toast("CORRECT! +100 XP", icon="✅")
+                if selected_option is None:
+                    st.warning("⚠️ Please select an option before validating.")
                 else:
-                    SessionGuardian.set("quiz_feedback_status", FeedbackState.FAILURE)
-                    st.toast("INCORRECT", icon="❌")
-                
-                SessionGuardian.set("quiz_last_selected", selected)
-                st.rerun()
-                
-        # 2. Result Display (Persistent)
+                    # Transition State
+                    is_correct = current_q.validate(selected_option)
+                    
+                    if is_correct:
+                        SessionGuardian.set("quiz_state_machine", FeedbackState.SUCCESS)
+                        SessionGuardian.set("quiz_score", SessionGuardian.get("quiz_score") + 1)
+                        SessionGuardian.get_user().award_xp(100)
+                        st.toast("CORRECT! +100 XP", icon="✅")
+                    else:
+                        SessionGuardian.set("quiz_state_machine", FeedbackState.FAILURE)
+                        st.toast("INCORRECT", icon="❌")
+                    
+                    # Save what was selected to keep context
+                    SessionGuardian.set("quiz_last_selected_option", selected_option)
+                    st.rerun()
+
         else:
-            # A. Visual Banner (Huge)
-            if status == FeedbackState.SUCCESS:
+            # STATE IS SUCCESS OR FAILURE -> SHOW FEEDBACK
+            
+            if state == FeedbackState.SUCCESS:
                 st.markdown(f"""
                 <div class="feedback-box-success">
                     ✨ EXCELLENT! CORRECT ANSWER
@@ -616,24 +682,24 @@ class QuizController:
             else:
                 st.markdown(f"""
                 <div class="feedback-box-error">
-                    ❌ INCORRECT - SYSTEM FAILURE
-                    <div style="font-size: 1rem; margin-top: 5px; color: #fca5a5;">
-                        Correct Option: {current_q.correct_option}
+                    ❌ INCORRECT
+                    <div style="font-size: 1rem; margin-top: 10px; color: #fca5a5; font-weight: 400;">
+                        Correct Option: <b>{current_q.correct_option}</b>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
             
-            # B. Explanation Layer (Always Visible after check)
+            # Show Explanation (Always visible in feedback state)
             st.markdown(f"""
             <div class="explanation-card">
                 <h4 style="color:#6366f1; margin:0;">Technical Analysis</h4>
-                <p style="color:#e2e8f0;">{current_q.explanation}</p>
-                <hr style="border-color: rgba(255,255,255,0.1);">
+                <p style="color:#e2e8f0; font-size: 1.1rem; margin-top: 10px;">{current_q.explanation}</p>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
                 <p style="color:#94a3b8; font-style:italic;">Translation: {current_q.translation}</p>
             </div>
             """, unsafe_allow_html=True)
             
-            # C. Next Button
+            # Next Button
             if st.button("NEXT DATA POINT ➡️", type="primary", use_container_width=True):
                 SessionGuardian.set("quiz_pointer", idx + 1)
                 SessionGuardian.reset_quiz_flags()
@@ -642,37 +708,64 @@ class QuizController:
     def _view_summary(self):
         score = SessionGuardian.get("quiz_score")
         total = len(SessionGuardian.get("quiz_deck"))
+        accuracy = (score / total) * 100 if total > 0 else 0
+        
         st.balloons()
         st.markdown(f"""
-        <div style="text-align: center; padding: 50px;">
-            <h1 style="font-size: 4rem;">SESSION COMPLETE</h1>
-            <h2 style="color: #10b981;">SCORE: {score} / {total}</h2>
+        <div style="text-align: center; padding: 50px; background: rgba(255,255,255,0.02); border-radius: 20px;">
+            <h1 style="font-size: 4rem; color: #ffffff;">SESSION COMPLETE</h1>
+            <h2 style="color: #10b981; font-size: 3rem;">SCORE: {score} / {total}</h2>
+            <p style="color: #94a3b8; font-size: 1.5rem;">Accuracy: {accuracy:.1f}%</p>
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("RESTART MODULE", use_container_width=True):
-            SessionGuardian.set("training_step", 1)
-            st.rerun()
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("🔄 RESTART LEVEL", use_container_width=True):
+                SessionGuardian.set("training_step", 1)
+                st.rerun()
+        with c2:
+            if st.button("🏠 DASHBOARD", use_container_width=True):
+                SessionGuardian.set("view", "welcome")
+                st.rerun()
 
 # ==================================================================================================
-# SECTION 9: MAIN APP LAUNCHER
+# MODULE 9: MAIN APP LAUNCHER
 # ==================================================================================================
 
 def main():
     """System Entry Point."""
-    st.set_page_config(page_title="APEX SOVEREIGN v15", page_icon="💠", layout="wide")
+    st.set_page_config(
+        page_title="APEX SOVEREIGN v16", 
+        page_icon="💠", 
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
     ApexTheme.inject_css()
     NavigationController.render()
     
     view = SessionGuardian.get("view")
     
     if view == "welcome":
-        st.title("APEX SOVEREIGN SUITE v15.0")
-        st.write("Current Session: " + datetime.now().strftime("%Y-%m-%d %H:%M"))
-        st.info("System Status: OPERATIONAL. 2000+ Lines of Logic Loaded.")
-        if st.button("INITIATE SEQUENCE", type="primary"):
-            SessionGuardian.set("view", "training")
-            st.rerun()
+        st.markdown('<div style="text-align: center; margin-top: 50px;">', unsafe_allow_html=True)
+        st.title("APEX SOVEREIGN SUITE v16.0")
+        st.markdown(f"<h3 style='color: #94a3b8;'>{datetime.now().strftime('%A, %d %B %Y')}</h3>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+        c1, c2, c3 = st.columns([1, 2, 1])
+        with c2:
+            st.info("System Status: OPERATIONAL. All modules loaded correctly.")
+            st.write("""
+            Welcome back, SY. 
+            This environment is optimized for High-Performance Learning.
+            - **Training Hub**: Validated logic with explicit feedback steps.
+            - **SQL Console**: Full T-SQL emulation engine.
+            - **Design**: Nebula-X Interface enabled.
+            """)
+            
+            if st.button("INITIATE SEQUENCE", type="primary", use_container_width=True):
+                SessionGuardian.set("view", "training")
+                st.rerun()
             
     elif view == "training":
         ctrl = QuizController()
@@ -680,14 +773,31 @@ def main():
         
     elif view == "sql":
         st.title("SQL Enterprise Workbench")
-        query = st.text_area("Query Editor", "SELECT * FROM Staff LIMIT 5;")
-        if st.button("Execute"):
-            res, err = SQLEngine.execute(query)
-            if err:
-                st.error(err)
-            else:
-                st.success("Query Successful")
-                st.dataframe(res, use_container_width=True)
+        st.markdown("Write and execute queries against the `Employees` table.")
+        
+        c_code, c_meta = st.columns([3, 1])
+        with c_meta:
+            st.markdown("#### Schema")
+            st.code("""
+EmployeeID (INT)
+FullName (TXT)
+Role (TXT)
+Department (TXT)
+Location (TXT)
+Salary_USD (INT)
+IsActive (BIT)
+HireDate (DATE)
+            """)
+        
+        with c_code:
+            query = st.text_area("Query Editor", "SELECT * FROM Employees WHERE Salary_USD > 100000 LIMIT 5;", height=200)
+            if st.button("Execute Query", type="primary"):
+                res, err = SQLEngine.execute(query)
+                if err:
+                    st.error(err)
+                else:
+                    st.success(f"Query Successful. Returned {len(res)} rows.")
+                    st.dataframe(res, use_container_width=True)
 
 if __name__ == "__main__":
     main()
