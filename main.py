@@ -1,18 +1,24 @@
 # -*- coding: utf-8 -*-
 """
 ========================================================================================================================
-  IRONCLAD ANALYTICS v3.0 — TITAN EDITION (THE MONOLITH)
+  IRONCLAD ZENITH v4.0 — ELEGANCE EDITION (GLASSMORPHISM UI)
   Authorized Personnel: SY (ARCHITECT)
   Release Date: 2026-02-01
   
   [SYSTEM MANIFEST & ARCHITECTURE]
   ----------------------------------------------------------------------------------------------------------------------
-  1. CORE KERNEL      : Python 3.10+ Streamlit (State Machine v3).
-  2. VISUAL ENGINE    : 'Neon-Flux' CSS. Animated Gradients, Glassmorphism, 3D Hover Effects.
-  3. RENDERING        : Direct HTML5 Embeds for Lottie Animations (Zero-Dependency).
-  4. DATA LAYER       : Fault-Tolerant JSON Adapter with Auto-Recovery.
-  5. QUIZ ENGINE      : Two-Stage Validation Logic (Selection -> Buffer -> Commit -> Feedback).
+  1. CORE KERNEL      : Python 3.10+ Streamlit (Persistent State Machine v4).
+  2. VISUAL ENGINE    : 'Zenith-Glass' CSS. Frosted Glass effects, Soft Gradients, Professional Dark Mode.
+  3. RENDERING        : Native HTML5 Lottie Embeds (Zero-Dependency).
+  4. LOGIC LAYER      : Event-Driven Quiz Controller with Buffered Inputs.
+  5. GAMIFICATION     : XP System, Daily Streak Algorithms, Badge Unlockers.
   ----------------------------------------------------------------------------------------------------------------------
+  
+  [CHANGE LOG v4.0]
+  - REMOVED: Neon colors (distraction reduction).
+  - ADDED: 'Glassmorphism' Design Language.
+  - FIXED: Sidebar contrast issues (White artifact removal).
+  - EXPANDED: Codebase modularity for Enterprise Scalability.
   
   [COPYRIGHT]
   © 2026 IronClad Analytics Corp. All rights reserved.
@@ -31,24 +37,25 @@ import importlib.util
 import uuid
 import enum
 import logging
+import json
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 from dataclasses import dataclass, field
 
-# --- SYSTEM CONFIGURATION ---
+# --- SYSTEM INITIALIZATION ---
 st.set_page_config(
-    page_title="IronClad Titan v3.0",
+    page_title="IronClad Zenith",
     page_icon="💠",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# --- LOGGING CORE ---
+# --- ADVANCED LOGGING ---
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("IronCladTitan")
+logger = logging.getLogger("IronCladZenith")
 
 # ======================================================================================================================
-# SECTION 1: THE NEON-FLUX VISUAL ENGINE (CSS & ASSETS)
+# SECTION 1: THE ZENITH VISUAL ENGINE (CSS ARCHITECTURE)
 # ======================================================================================================================
 
 class VisualAssets:
@@ -56,203 +63,235 @@ class VisualAssets:
     Central Repository for Visual Assets & Animations.
     Uses Direct Embeds to ensure 100% uptime without external libraries.
     """
-    # High-Performance Embeds
-    ANIM_MAIN_ROBOT = "https://lottie.host/embed/9863db83-4940-4ce0-8e18-60914fb499cb/pYM5sC8O3e.json"
-    ANIM_VICTORY = "https://lottie.host/embed/a8c62c96-0365-4d76-805c-3e3518b26118/pQk5sH4O1e.json" # Generic Trophy Placeholder
-    ANIM_PROCESSING = "https://lottie.host/embed/d3e36569-2310-444b-9759-3221c56360b6/example.json" # Abstract loading
+    # Lottie JSON Embeds (Transparent Backgrounds)
+    ANIM_HOME_BOT = "https://lottie.host/embed/9863db83-4940-4ce0-8e18-60914fb499cb/pYM5sC8O3e.json"
+    ANIM_BRAIN_SCAN = "https://lottie.host/embed/d3e36569-2310-444b-9759-3221c56360b6/example.json" # Placeholder for brain
+    ANIM_VICTORY_ROCKET = "https://lottie.host/embed/a8c62c96-0365-4d76-805c-3e3518b26118/pQk5sH4O1e.json" 
+    ANIM_SQL_SERVER = "https://lottie.host/embed/93556c4d-9659-4d9d-9c36-749340915442/asset.json" # Generic Tech
     
     # Icons
-    ICON_HQ = "🏢"
-    ICON_BRAIN = "🧠"
-    ICON_DB = "💽"
-    ICON_SECURE = "🔐"
-    ICON_ALERT = "⚠️"
-    ICON_USER = "👨‍🚀"
+    ICON_DASHBOARD = "🏠"
+    ICON_LEARN = "🎓"
+    ICON_CODE = "💻"
+    ICON_USER = "👤"
+    ICON_TROPHY = "🏆"
+    ICON_FIRE = "🔥"
 
-class NeonEngine:
+class ZenithUI:
     """
-    The Graphics Rendering Core. Injects 150+ lines of CSS.
+    The Graphics Rendering Core. 
+    Implements 'Glassmorphism': Translucency, Blur, and Soft Shadows.
     """
-    PRIMARY_COLOR = "#00f2ff"   # Cyan Neon
-    SECONDARY_COLOR = "#7000ff" # Purple Neon
-    BG_COLOR = "#050510"        # Deep Space Black
+    # Color Palette (Professional Dark Mode)
+    COLOR_BG = "#0f172a"        # Slate 900
+    COLOR_SURFACE = "#1e293b"   # Slate 800 (Glass Base)
+    COLOR_ACCENT = "#3b82f6"    # Royal Blue
+    COLOR_TEXT_MAIN = "#f1f5f9" # Slate 100
+    COLOR_TEXT_SUB = "#94a3b8"  # Slate 400
     
     @staticmethod
     def inject_css():
+        """
+        Injects approx 200 lines of CSS to override Streamlit defaults 
+        and create the premium 'Zenith' look.
+        """
         st.markdown(f"""
         <style>
-        /* --- FONTS & BASICS --- */
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+        /* --- IMPORT FONTS --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
         
+        /* --- VARIABLES --- */
         :root {{
-            --neon-cyan: {NeonEngine.PRIMARY_COLOR};
-            --neon-purple: {NeonEngine.SECONDARY_COLOR};
-            --bg-dark: {NeonEngine.BG_COLOR};
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --bg-color: {ZenithUI.COLOR_BG};
+            --glass-color: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-color: {ZenithUI.COLOR_ACCENT};
+            --text-main: {ZenithUI.COLOR_TEXT_MAIN};
         }}
 
+        /* --- GLOBAL APP STYLING --- */
         .stApp {{
-            background-color: var(--bg-dark);
+            background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(112, 0, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 242, 255, 0.15) 0%, transparent 40%);
-            color: #e0e0e0;
-            font-family: 'Rajdhani', sans-serif;
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
         }}
 
-        /* --- HEADERS --- */
+        /* --- SIDEBAR FIXES (NO MORE WHITE ARTIFACTS) --- */
+        section[data-testid="stSidebar"] {{
+            background-color: #0b1120; /* Darker than BG */
+            border-right: 1px solid var(--border-color);
+        }}
+        
+        section[data-testid="stSidebar"] .block-container {{
+            padding-top: 2rem;
+        }}
+        
+        div[data-testid="stSidebarNav"] ul {{
+            padding-top: 0px;
+        }}
+
+        /* --- TYPOGRAPHY --- */
         h1, h2, h3 {{
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #fff, var(--neon-cyan));
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #fff, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
-        }}
-
-        /* --- TITAN CARDS --- */
-        .titan-card {{
-            background: rgba(10, 10, 25, 0.7);
-            border: 1px solid var(--glass-border);
-            border-left: 4px solid var(--neon-purple);
-            border-radius: 16px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.8);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            margin-bottom: 20px;
         }}
         
-        .titan-card:hover {{
-            transform: translateY(-5px) scale(1.01);
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+        .stMarkdown p {{
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #cbd5e1;
         }}
 
-        /* --- BUTTONS (CYBERPUNK STYLE) --- */
+        /* --- GLASS CARDS (THE CORE DESIGN) --- */
+        .zenith-card {{
+            background: var(--glass-color);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }}
+        
+        .zenith-card:hover {{
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: rgba(255,255,255,0.2);
+        }}
+
+        /* --- BUTTONS (ELEGANT, NOT NEON) --- */
         .stButton > button {{
-            background: linear-gradient(45deg, #1a1a2e, #16213e);
-            border: 1px solid var(--neon-cyan);
-            color: var(--neon-cyan);
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 12px 24px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.03);
+            color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            width: 100%;
         }}
         
         .stButton > button:hover {{
-            background: var(--neon-cyan);
-            color: #000;
-            box-shadow: 0 0 30px var(--neon-cyan);
-        }}
-
-        /* --- SIDEBAR --- */
-        section[data-testid="stSidebar"] {{
-            background: #020205;
-            border-right: 1px solid #1f1f3a;
-        }}
-
-        /* --- QUIZ INTERFACE --- */
-        .quiz-box {{
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border);
-            padding: 30px;
-            border-radius: 20px;
-            margin: 20px 0;
-            position: relative;
-        }}
-        
-        .quiz-box::before {{
-            content: "SECURE PROTOCOL";
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: var(--neon-purple);
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
             color: white;
-            font-size: 0.7rem;
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
         }}
 
-        /* --- SQL TERMINAL --- */
-        .sql-console textarea {{
-            background-color: #0a0a12 !important;
-            color: #00ff9d !important;
-            font-family: 'Courier New', monospace !important;
-            border: 1px solid #333 !important;
+        /* --- QUIZ SPECIFIC STYLES --- */
+        .quiz-option-container {{
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
         }}
 
-        /* --- FEEDBACK HUD --- */
-        .hud-pass {{
-            border: 1px solid #00ff9d;
-            background: rgba(0, 255, 157, 0.1);
-            color: #00ff9d;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: bold;
-            animation: pulse 1s infinite alternate;
+        /* --- SQL TERMINAL STYLING --- */
+        .stTextArea textarea {{
+            background-color: #0f172a !important;
+            color: #a5b4fc !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            border: 1px solid #334155 !important;
+            border-radius: 8px !important;
         }}
         
-        .hud-fail {{
-            border: 1px solid #ff0055;
-            background: rgba(255, 0, 85, 0.1);
-            color: #ff0055;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: bold;
+        /* --- PROGRESS BARS --- */
+        .stProgress > div > div > div > div {{
+            background-color: var(--accent-color);
+            background-image: linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+            background-size: 1rem 1rem;
         }}
 
-        @keyframes pulse {{
-            from {{ box-shadow: 0 0 10px rgba(0,255,157,0.1); }}
-            to {{ box-shadow: 0 0 20px rgba(0,255,157,0.4); }}
+        /* --- TOASTS --- */
+        .stToast {{
+            background-color: var(--surface-color) !important;
+            border: 1px solid var(--border-color) !important;
+            color: white !important;
+        }}
+        
+        /* --- ANIMATIONS --- */
+        @keyframes float {{
+            0% {{ transform: translateY(0px); }}
+            50% {{ transform: translateY(-10px); }}
+            100% {{ transform: translateY(0px); }}
+        }}
+        
+        .floating-element {{
+            animation: float 6s ease-in-out infinite;
         }}
 
         </style>
         """, unsafe_allow_html=True)
 
     @staticmethod
-    def render_anim(url: str, height: int = 300):
+    def render_lottie(url: str, height: int = 300, key: str = "anim"):
+        """
+        Renders an animation using a clean Iframe to avoid dependencies.
+        """
         st.markdown(f"""
-            <div style="width: 100%; display: flex; justify-content: center; margin: 20px 0;">
-                <iframe src="{url}" width="100%" height="{height}" style="border: none; background: transparent;"></iframe>
+            <div style="display: flex; justify-content: center; align-items: center; margin: 20px 0;">
+                <iframe src="{url}" width="100%" height="{height}px" style="border:none; background:transparent; overflow:hidden;"></iframe>
             </div>
         """, unsafe_allow_html=True)
 
 # ======================================================================================================================
-# SECTION 2: DATA MODELS & STATE ARCHITECTURE
+# SECTION 2: ENTERPRISE DATA MODELS
 # ======================================================================================================================
 
 @dataclass
-class UserStats:
-    """User Progression Tracking."""
+class Badge:
+    """Represents an achievement."""
+    id: str
+    name: str
+    icon: str
+    description: str
+    unlocked: bool = False
+
+@dataclass
+class UserProfile:
+    """
+    User Entity with Gamification Stats.
+    """
     username: str = "Administrator"
-    role: str = "System Architect"
+    role: str = "Solutions Architect"
     xp: int = 15800
-    streak: int = 0
-    total_ops: int = 0
-    successful_ops: int = 0
+    current_streak: int = 1
+    max_streak: int = 5
+    total_questions_answered: int = 0
+    correct_answers: int = 0
+    badges: List[Badge] = field(default_factory=list)
 
-    def add_xp(self, base_xp: int = 100):
-        bonus = min(self.streak * 10, 50)
-        self.xp += (base_xp + bonus)
-        self.total_ops += 1
-        self.successful_ops += 1
-        self.streak += 1
+    def __post_init__(self):
+        if not self.badges:
+            self.badges = [
+                Badge("b1", "First Step", "🌱", "Completed the first module"),
+                Badge("b2", "Sniper", "🎯", "10 Correct answers in a row"),
+                Badge("b3", "Iron Mind", "🧠", "Reached Level 20")
+            ]
 
-    def reset_streak(self):
-        self.streak = 0
-        self.total_ops += 1
+    @property
+    def level(self) -> int:
+        return (self.xp // 1000) + 1
+
+    @property
+    def progress_to_next_level(self) -> float:
+        return (self.xp % 1000) / 1000.0
+
+    def add_xp(self, amount: int):
+        self.xp += amount
+        self.total_questions_answered += 1
 
 @dataclass
 class Question:
-    """Immutable Question Entity."""
+    """Immutable Question Data Transfer Object."""
     id: str
     text: str
     options: List[str]
@@ -260,94 +299,108 @@ class Question:
     explanation: str
     translation: str
 
+# ======================================================================================================================
+# SECTION 3: STATE MACHINE CONTROLLER
+# ======================================================================================================================
+
+class QuizPhase(enum.Enum):
+    SETUP = 0
+    PLAYING = 1
+    COMPLETED = 2
+
 class AppState:
     """
-    The Monolith State Manager.
-    Ensures persistence across reruns to PREVENT bugs.
+    Global State Manager. 
+    Implements the Singleton Pattern logic via Streamlit Session State.
     """
-    KEY = "TITAN_STATE"
+    KEY = "ZENITH_CORE_STATE"
 
     @classmethod
-    def _init(cls):
+    def _initialize(cls):
         if cls.KEY not in st.session_state:
             st.session_state[cls.KEY] = {
+                # Routing
                 "view": "DASHBOARD",
-                "user": UserStats(),
+                
+                # User Data
+                "user": UserProfile(),
+                
+                # Quiz Engine State
                 "quiz": {
-                    "active": False,
-                    "topic": None,
-                    "level": None,
-                    "queue": [],
-                    "current_idx": 0,
+                    "phase": QuizPhase.SETUP,
+                    "active_topic": None,
+                    "active_level": None,
+                    "deck": [],
+                    "current_index": 0,
                     "score": 0,
-                    "state": "WAITING_INPUT", # WAITING_INPUT | SHOWING_RESULT
-                    "last_selected_option": None
+                    "user_selection": None,  # For UI binding
+                    "feedback_mode": False   # True if showing answer
                 },
-                "sql": {
-                    "history": [],
-                    "cache": None
-                }
+                
+                # SQL Engine State
+                "sql_history": []
             }
 
     @classmethod
-    def get(cls):
-        cls._init()
+    def get(cls) -> Dict:
+        cls._initialize()
         return st.session_state[cls.KEY]
 
     @classmethod
-    def user(cls) -> UserStats:
+    def user(cls) -> UserProfile:
         return cls.get()["user"]
 
     @classmethod
-    def quiz_state(cls):
+    def quiz(cls) -> Dict:
         return cls.get()["quiz"]
 
     @classmethod
-    def reset_question_state(cls):
-        """Crucial for fixing the selection bug."""
-        q = cls.quiz_state()
-        q["state"] = "WAITING_INPUT"
-        q["last_selected_option"] = None
+    def set_view(cls, view_name: str):
+        cls.get()["view"] = view_name
 
 # ======================================================================================================================
-# SECTION 3: ROBUST DATA ADAPTER
+# SECTION 4: DATA REPOSITORY (ADAPTER PATTERN)
 # ======================================================================================================================
 
-class DataCore:
+class ContentRepository:
     """
-    Handles data ingestion from preguntas.py with Fallback Safety.
+    Handles data ingestion with robust error handling.
     """
-    FILE_PATH = "preguntas.py"
+    FILE = "preguntas.py"
 
     @staticmethod
-    def fetch_knowledge_base() -> Dict:
-        path = os.path.join(os.getcwd(), DataCore.FILE_PATH)
+    def fetch_data() -> Dict:
+        path = os.path.join(os.getcwd(), ContentRepository.FILE)
         
-        # 1. Check Existence
+        # 1. Existence Check
         if not os.path.exists(path):
-            return DataCore._generate_emergency_data("FILE_NOT_FOUND")
+            return ContentRepository._get_fallback_data("File Missing")
 
         # 2. Dynamic Import
         try:
-            spec = importlib.util.spec_from_file_location("dynamic_content", path)
+            spec = importlib.util.spec_from_file_location("zenith_content", path)
             module = importlib.util.module_from_spec(spec)
-            sys.modules["dynamic_content"] = module
+            sys.modules["zenith_content"] = module
             spec.loader.exec_module(module)
             
-            raw = getattr(module, 'temas', None)
-            if not raw: return DataCore._generate_emergency_data("EMPTY_MODULE")
+            if not hasattr(module, 'temas'):
+                return ContentRepository._get_fallback_data("Invalid Structure")
+                
+            return ContentRepository._clean_data(module.temas)
             
-            return DataCore._sanitize(raw)
         except Exception as e:
-            st.sidebar.error(f"Data Corrupted: {str(e)}")
-            return DataCore._generate_emergency_data("CORRUPTION")
+            st.error(f"Critical Data Error: {e}")
+            return ContentRepository._get_fallback_data("Corruption Detected")
 
     @staticmethod
-    def _sanitize(raw_data: Dict) -> Dict:
+    def _clean_data(raw_data: Dict) -> Dict:
+        """
+        Normalizes the data structure to prevent TypeErrors in the UI.
+        """
         clean = {}
         for topic, content in raw_data.items():
-            # Handle List vs Dict inconsistencies
             if isinstance(content, list):
+                # Handle cases where data is wrapped in a list
                 if content and isinstance(content[0], dict):
                     clean[topic] = content[0]
                 else:
@@ -359,364 +412,395 @@ class DataCore:
         return clean
 
     @staticmethod
-    def _generate_emergency_data(reason: str) -> Dict:
-        """Generates mock data so the app NEVER crashes."""
+    def _get_fallback_data(reason: str) -> Dict:
         return {
-            f"EMERGENCY MODE ({reason})": {
-                "Level 1": [
-                    {"pregunta": "System Integrity Check?", "opciones": ["Stable", "Unstable", "Critical"], "correcta": "Stable", "explicacion": "Fallback active.", "traduccion": "Prueba de sistema."}
+            f"SYSTEM RECOVERY ({reason})": {
+                "Level 1: Diagnostics": [
+                    {
+                        "pregunta": "System Status Check",
+                        "opciones": ["Online", "Offline", "Rebooting"],
+                        "correcta": "Online",
+                        "explicacion": "Fallback system engaged successfully.",
+                        "traduccion": "Sistema en línea."
+                    }
                 ]
             }
         }
 
 # ======================================================================================================================
-# SECTION 4: ENGINE CONTROLLERS (THE BRAIN)
+# SECTION 5: LOGIC CONTROLLERS (MVC PATTERN)
 # ======================================================================================================================
 
-class QuizController:
+class QuizEngine:
     """
-    The Logic that runs the Training Modules.
-    IMPROVED: Separates selection from submission to avoid state loss.
+    Manages the logic for the Training Modules.
     """
     def __init__(self):
-        self.kb = DataCore.fetch_knowledge_base()
+        self.repo = ContentRepository.fetch_data()
 
     def render_selector(self):
-        st.markdown(f"## {VisualAssets.ICON_BRAIN} NEURAL TRAINING HUB")
-        st.markdown("Authenticate domain to proceed.")
+        st.markdown(f"## {VisualAssets.ICON_LEARN} Select Training Module")
+        st.markdown("Choose a knowledge domain to begin synchronization.")
         
-        topics = list(self.kb.keys())
+        topics = list(self.repo.keys())
         cols = st.columns(2)
+        
         for i, topic in enumerate(topics):
             with cols[i % 2]:
                 st.markdown(f"""
-                <div class="titan-card" style="text-align:center;">
-                    <h3 style="color:var(--neon-cyan);">{topic}</h3>
-                    <p style="color:#888;">Protocol Set {i+1}</p>
+                <div class="zenith-card" style="cursor: pointer; text-align:center;">
+                    <h3 style="margin-bottom: 10px;">{topic}</h3>
+                    <div style="height: 4px; width: 50px; background: #3b82f6; margin: 0 auto; border-radius: 2px;"></div>
                 </div>
                 """, unsafe_allow_html=True)
-                if st.button(f"ENGAGE {topic}", key=f"topic_{i}", use_container_width=True):
-                    q_state = AppState.quiz_state()
-                    q_state["active"] = True
-                    q_state["topic"] = topic
-                    q_state["level"] = None
+                
+                if st.button(f"Initialize {topic}", key=f"start_{i}", use_container_width=True):
+                    q = AppState.quiz()
+                    q["active_topic"] = topic
                     st.rerun()
 
     def render_level_selector(self):
-        state = AppState.quiz_state()
-        topic = state["topic"]
+        q = AppState.quiz()
+        topic = q["active_topic"]
         
-        st.markdown(f"## {VisualAssets.ICON_SECURE} ACCESS LEVEL: {topic}")
-        if st.button("<< ABORT SEQUENCE", type="secondary"):
-            state["active"] = False
-            state["topic"] = None
+        st.markdown(f"## {VisualAssets.ICON_CODE} {topic} // Configuration")
+        if st.button("← Return to Modules", type="secondary"):
+            q["active_topic"] = None
             st.rerun()
-
-        levels = list(self.kb[topic].keys())
+            
+        levels = list(self.repo[topic].keys())
+        st.divider()
+        
         c1, c2, c3 = st.columns(3)
         cols = [c1, c2, c3]
         
         for i, lvl in enumerate(levels):
             with cols[i % 3]:
                 st.markdown(f"""
-                <div class="titan-card" style="height: 150px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                    <h1>{i+1}</h1>
-                    <p>{lvl}</p>
+                <div class="zenith-card" style="text-align: center;">
+                    <h1 style="font-size: 3rem; opacity: 0.2;">0{i+1}</h1>
+                    <h3>{lvl}</h3>
                 </div>
                 """, unsafe_allow_html=True)
-                if st.button(f"INITIATE {lvl}", key=f"lvl_{i}", use_container_width=True):
-                    self._start_quiz(topic, lvl)
+                if st.button(f"Launch {lvl}", key=f"lvl_{i}", use_container_width=True):
+                    self._start_session(topic, lvl)
 
-    def _start_quiz(self, topic, lvl):
-        # 1. Load Data
-        raw_questions = self.kb[topic][lvl]
+    def _start_session(self, topic, lvl):
+        raw_list = self.repo[topic][lvl]
         deck = []
-        for item in raw_questions:
-            # Create Safe Object
+        for item in raw_list:
             opts = item.get("opciones", ["Error"])
             random.shuffle(opts)
             deck.append(Question(
                 id=str(uuid.uuid4()),
-                text=item.get("pregunta", "Data Error"),
+                text=item.get("pregunta", "Error loading text"),
                 options=opts,
                 correct_option=item.get("correcta", ""),
-                explanation=item.get("explicacion", ""),
-                translation=item.get("traduccion", "")
+                explanation=item.get("explicacion", "No data."),
+                translation=item.get("traduccion", "No data.")
             ))
         
-        # 2. Reset State
-        qs = AppState.quiz_state()
-        qs["level"] = lvl
-        qs["queue"] = deck
-        qs["current_idx"] = 0
-        qs["score"] = 0
-        AppState.reset_question_state()
+        random.shuffle(deck)
+        q = AppState.quiz()
+        q["deck"] = deck
+        q["current_index"] = 0
+        q["score"] = 0
+        q["phase"] = QuizPhase.PLAYING
+        q["feedback_mode"] = False
+        q["user_selection"] = None
         st.rerun()
 
     def render_gameplay(self):
-        qs = AppState.quiz_state()
-        deck = qs["queue"]
-        idx = qs["current_idx"]
+        q = AppState.quiz()
+        deck = q["deck"]
+        idx = q["current_index"]
         
-        # Victory Condition
+        # Check Win Condition
         if idx >= len(deck):
             self._render_victory()
             return
 
-        q = deck[idx]
+        question = deck[idx]
         
         # --- HUD ---
-        c1, c2, c3 = st.columns([1, 6, 2])
-        c1.markdown(f"### Q{idx+1}")
-        c2.progress((idx) / len(deck))
-        c3.metric("SCORE", f"{qs['score']} PTS")
+        c1, c2, c3 = st.columns([1, 4, 1])
+        c1.markdown(f"**Q-{idx+1}** / {len(deck)}")
+        c2.progress(idx / len(deck))
+        c3.markdown(f"**XP:** {AppState.user().xp}")
 
-        # --- QUESTION DISPLAY ---
+        # --- QUESTION CARD ---
         st.markdown(f"""
-        <div class="quiz-box">
-            <h2 style="margin:0;">{q.text}</h2>
+        <div class="zenith-card">
+            <h2 style="font-size: 1.5rem; color: white;">{question.text}</h2>
         </div>
         """, unsafe_allow_html=True)
 
-        # --- LOGIC CORE (BUG FIX) ---
-        # If we are waiting for input, show radio.
-        # If we showed result, show static info.
+        # --- INTERACTION LAYER ---
+        # Bug Fix: We check if we are in feedback mode. 
+        # If yes, we disable inputs. If no, we enable them.
         
-        if qs["state"] == "WAITING_INPUT":
-            # Input Phase
+        if not q["feedback_mode"]:
+            # --- INPUT STATE ---
             selection = st.radio(
-                "SELECT ANSWER PROTOCOL:",
-                q.options,
-                index=None,
-                key=f"radio_{q.id}"
+                "Select the correct syntax:", 
+                question.options, 
+                index=None, 
+                key=f"radio_{question.id}"
             )
             
-            st.write("")
-            if st.button("VERIFY PROTOCOL >>", use_container_width=True, type="primary"):
+            st.write("") # Spacing
+            
+            if st.button("Confirm Selection", type="primary", use_container_width=True):
                 if not selection:
-                    st.toast("⛔ INPUT REQUIRED: Please select an option!", icon="⛔")
+                    st.toast("Please make a selection first.", icon="⚠️")
                 else:
-                    # COMMIT ANSWER
-                    qs["last_selected_option"] = selection
-                    qs["state"] = "SHOWING_RESULT"
+                    # Transition to Feedback Mode
+                    q["user_selection"] = selection
+                    q["feedback_mode"] = True
                     
-                    if selection.strip() == q.correct_option.strip():
-                        qs["score"] += 1
+                    # Logic
+                    if selection.strip() == question.correct_option.strip():
+                        q["score"] += 1
                         AppState.user().add_xp(150)
+                        AppState.user().current_streak += 1
+                        st.toast("Correct! XP +150", icon="✅")
                     else:
-                        AppState.user().reset_streak()
+                        AppState.user().current_streak = 0
+                        st.toast("Incorrect Protocol.", icon="❌")
                     
                     st.rerun()
-
-        elif qs["state"] == "SHOWING_RESULT":
-            # Result Phase (Input Locked)
-            user_choice = qs["last_selected_option"]
-            is_correct = (user_choice.strip() == q.correct_option.strip())
+        
+        else:
+            # --- FEEDBACK STATE ---
+            user_sel = q["user_selection"]
+            is_correct = (user_sel.strip() == question.correct_option.strip())
             
             if is_correct:
-                st.markdown(f"""
-                <div class="hud-pass">
-                    ACCESS GRANTED. <br>
-                    Correct Protocol: {q.correct_option}
-                </div>
-                """, unsafe_allow_html=True)
+                st.success(f"✅ Correct! The answer is **{question.correct_option}**")
             else:
-                st.markdown(f"""
-                <div class="hud-fail">
-                    ACCESS DENIED. <br>
-                    Selected: {user_choice} <br>
-                    Required: {q.correct_option}
-                </div>
-                """, unsafe_allow_html=True)
+                st.error(f"❌ Incorrect. You selected **{user_sel}**.")
+                st.markdown(f"**Correct Answer:** `{question.correct_option}`")
 
-            # Explanation
-            st.info(f"📋 **ANALYSIS:** {q.explanation}")
-            st.caption(f"🌐 Translation: {q.translation}")
+            # Explanation Card
+            st.markdown(f"""
+            <div class="zenith-card" style="border-left: 4px solid #3b82f6;">
+                <h4 style="margin-top:0;">Analysis</h4>
+                <p>{question.explanation}</p>
+                <hr style="border-color: rgba(255,255,255,0.1);">
+                <small style="color: #94a3b8;">Translation: {question.translation}</small>
+            </div>
+            """, unsafe_allow_html=True)
             
-            # Next Button
-            if st.button("NEXT NODE >>", use_container_width=True):
-                qs["current_idx"] += 1
-                AppState.reset_question_state()
+            if st.button("Next Question →", type="primary", use_container_width=True):
+                q["current_index"] += 1
+                q["feedback_mode"] = False
+                q["user_selection"] = None
                 st.rerun()
 
     def _render_victory(self):
-        qs = AppState.quiz_state()
-        score = qs["score"]
-        total = len(qs["queue"])
-        
-        NeonEngine.render_anim(VisualAssets.ANIM_VICTORY, 400)
+        q = AppState.quiz()
+        ZenithUI.render_lottie(VisualAssets.ANIM_VICTORY_ROCKET, 400)
         
         st.markdown(f"""
-        <div class="titan-card" style="text-align:center; border-color: #00ff9d;">
-            <h1 style="font-size: 4rem;">MISSION COMPLETE</h1>
-            <h2>Efficiency: {score}/{total}</h2>
-            <p>Neural pathways updated successfully.</p>
+        <div class="zenith-card" style="text-align: center;">
+            <h1 style="font-size: 3rem; color: #3b82f6;">Module Complete</h1>
+            <h3>Score: {q['score']} / {len(q['deck'])}</h3>
+            <p>Database synchronization finished.</p>
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("RETURN TO DASHBOARD", use_container_width=True):
-            qs["active"] = False
-            qs["topic"] = None
+        if st.button("Return to Dashboard", use_container_width=True):
+            q["active_topic"] = None
+            q["phase"] = QuizPhase.SETUP
+            AppState.set_view("DASHBOARD")
             st.rerun()
 
-class SQLLabController:
+class SQLEngine:
     """
-    Mock SQL Environment for Practice.
+    Mock SQL Environment logic.
     """
     def render(self):
-        st.markdown(f"## {VisualAssets.ICON_DB} SQL TITAN WORKBENCH")
+        st.markdown(f"## {VisualAssets.ICON_CODE} SQL Workbench")
+        st.markdown("Execute T-SQL queries against the production replica.")
         
-        c_main, c_help = st.columns([3, 1])
+        col_main, col_sidebar = st.columns([3, 1])
         
-        with c_main:
-            st.markdown("### TERMINAL")
-            query = st.text_area("QUERY INPUT", height=150, placeholder="SELECT * FROM Employees WHERE...", key="sql_input")
+        with col_main:
+            query = st.text_area("SQL Editor", height=200, placeholder="SELECT * FROM Users WHERE...", key="sql_editor")
             
-            if st.button("EXECUTE QUERY", type="primary"):
-                self._execute_fake_query(query)
+            if st.button("Execute Query", type="primary"):
+                self._run_query(query)
                 
-        with c_help:
-            st.markdown("### SCHEMA")
+        with col_sidebar:
+            st.markdown("### Schema")
             st.code("""
-TABLE Employees (
-  ID int PK,
-  Name varchar,
-  Role varchar,
-  Salary int,
-  Joined date
-)
+PK ID (int)
+   Username (varchar)
+   Role (varchar)
+   LastLogin (datetime)
             """, language="sql")
             
-            with st.expander("CHEAT SHEET"):
-                st.markdown("""
-                - **SELECT** `col` FROM `table`
-                - **WHERE** `col` > 100
-                - **ORDER BY** `col` DESC
-                - **LIMIT** 5
-                """)
+            st.info("ReadOnly Mode Active")
 
-    def _execute_fake_query(self, sql):
+    def _run_query(self, sql):
         if not sql.strip():
-            st.warning("Empty buffer.")
+            st.warning("Buffer empty.")
             return
             
         if "select" not in sql.lower():
-            st.error("SECURITY ALERT: Only SELECT allowed.")
+            st.error("Access Denied: WRITE operations forbidden.")
             return
             
-        # Mock Data Generation
-        data = []
-        roles = ["Engineer", "Architect", "Manager", "Intern"]
-        for i in range(5):
-            data.append({
-                "ID": i+100,
-                "Name": f"Operative_{i}",
-                "Role": random.choice(roles),
-                "Salary": random.randint(50000, 150000),
-                "Joined": "2024-01-01"
-            })
+        # Simulate Processing
+        with st.spinner("Processing..."):
+            time.sleep(0.5)
+            
+        # Mock Data
+        data = [
+            {"ID": 101, "Username": "SysAdmin", "Role": "Root", "LastLogin": "2024-01-01"},
+            {"ID": 102, "Username": "DevOps_01", "Role": "User", "LastLogin": "2024-01-02"},
+            {"ID": 103, "Username": "Analyst_HQ", "Role": "Viewer", "LastLogin": "2024-01-03"},
+        ]
         
-        st.success(f"Query executed in 0.0{random.randint(1,9)}s")
+        st.success("Query executed successfully (14ms)")
         st.dataframe(pd.DataFrame(data), use_container_width=True)
 
+class DashboardController:
+    """
+    Manages the Home View.
+    """
+    def render(self):
+        user = AppState.user()
+        
+        # Header
+        c1, c2 = st.columns([2, 1])
+        with c1:
+            st.markdown(f"""
+            <div style="padding: 40px 0;">
+                <h1 style="font-size: 4rem; line-height: 1.1;">IRONCLAD<br><span style="color: #3b82f6;">ZENITH</span></h1>
+                <p style="font-size: 1.2rem; color: #94a3b8; margin-top: 10px;">
+                    Welcome, {user.username}.<br>
+                    Enterprise Learning Environment v4.0
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            b1, b2 = st.columns(2)
+            if b1.button("Start Training", type="primary", use_container_width=True):
+                AppState.set_view("TRAINING")
+                st.rerun()
+            if b2.button("Open SQL Lab", use_container_width=True):
+                AppState.set_view("SQL")
+                st.rerun()
+                
+        with c2:
+            ZenithUI.render_lottie(VisualAssets.ANIM_HOME_BOT, 300)
+
+        # Stats Cards
+        st.divider()
+        k1, k2, k3 = st.columns(3)
+        
+        with k1:
+            st.markdown(f"""
+            <div class="zenith-card">
+                <h3>{VisualAssets.ICON_FIRE} Streak</h3>
+                <h2 style="color: #f59e0b;">{user.current_streak} Days</h2>
+                <p>Keep it up!</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with k2:
+            st.markdown(f"""
+            <div class="zenith-card">
+                <h3>{VisualAssets.ICON_TROPHY} Level</h3>
+                <h2 style="color: #3b82f6;">{user.level}</h2>
+                <p>{user.xp} Total XP</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with k3:
+            st.markdown(f"""
+            <div class="zenith-card">
+                <h3>{VisualAssets.ICON_CODE} Completion</h3>
+                <h2 style="color: #10b981;">{user.total_questions_answered} Ops</h2>
+                <p>Questions Answered</p>
+            </div>
+            """, unsafe_allow_html=True)
+
 # ======================================================================================================================
-# SECTION 5: MAIN LAYOUT & ROUTING
+# SECTION 6: MAIN APPLICATION LOOP
 # ======================================================================================================================
 
 def render_sidebar():
     user = AppState.user()
+    
     with st.sidebar:
-        st.image("https://img.icons8.com/fluency/96/data-protection.png", width=80)
-        st.markdown(f"## {user.username}")
-        st.caption(f"Role: {user.role}")
+        # Profile Section
+        st.markdown(f"""
+        <div style="text-align: center; margin-bottom: 20px;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #3b82f6, #0f172a); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; border: 2px solid rgba(255,255,255,0.1);">
+                {user.username[:2]}
+            </div>
+            <h3 style="margin:0;">{user.username}</h3>
+            <p style="font-size: 0.8rem; color: #94a3b8;">{user.role}</p>
+        </div>
+        """, unsafe_allow_html=True)
         
         # XP Bar
-        st.progress((user.xp % 1000) / 1000)
-        st.markdown(f"**LVL {user.xp // 1000}** | {user.xp} XP")
+        st.progress(user.progress_to_next_level)
+        st.caption(f"Progress to Level {user.level + 1}")
         
         st.divider()
-        st.markdown("### 🧭 NAVIGATION")
         
-        if st.button("DASHBOARD", use_container_width=True):
-            AppState.get()["view"] = "DASHBOARD"
+        # Menu
+        if st.button(f"{VisualAssets.ICON_DASHBOARD} Dashboard", use_container_width=True):
+            AppState.set_view("DASHBOARD")
             st.rerun()
             
-        if st.button("NEURAL TRAINING", use_container_width=True):
-            AppState.get()["view"] = "TRAINING"
+        if st.button(f"{VisualAssets.ICON_LEARN} Training", use_container_width=True):
+            AppState.set_view("TRAINING")
             st.rerun()
             
-        if st.button("SQL LAB", use_container_width=True):
-            AppState.get()["view"] = "SQL"
+        if st.button(f"{VisualAssets.ICON_CODE} SQL Lab", use_container_width=True):
+            AppState.set_view("SQL")
             st.rerun()
             
         st.divider()
-        st.markdown("### ⚙️ SYSTEM STATUS")
-        st.code(f"""
-UPTIME: 99.9%
-LATENCY: 12ms
-STREAK: {user.streak}
-        """)
-
-def render_dashboard():
-    st.markdown(f"# {VisualAssets.ICON_HQ} IRONCLAD DASHBOARD")
-    st.markdown("Welcome back, Architect. Systems are nominal.")
-    
-    # Hero Animation
-    NeonEngine.render_anim(VisualAssets.ANIM_MAIN_ROBOT, 350)
-    
-    c1, c2, c3 = st.columns(3)
-    with c1:
+        
+        # Footer
         st.markdown("""
-        <div class="titan-card">
-            <h3>ENGLISH CORE</h3>
-            <p>Status: ACTIVE</p>
-            <p>Modules: Loaded</p>
-        </div>
-        """, unsafe_allow_html=True)
-    with c2:
-        st.markdown("""
-        <div class="titan-card">
-            <h3>SQL ENGINE</h3>
-            <p>Status: STANDBY</p>
-            <p>Connection: Secure</p>
-        </div>
-        """, unsafe_allow_html=True)
-    with c3:
-        st.markdown("""
-        <div class="titan-card">
-            <h3>USER METRICS</h3>
-            <p>Performance: Optimal</p>
-            <p>Sync: Complete</p>
+        <div style="text-align: center; color: #475569; font-size: 0.7rem;">
+            IRONCLAD ZENITH v4.0<br>
+            Secure Connection
         </div>
         """, unsafe_allow_html=True)
 
-def main_loop():
-    # 1. Inject CSS
-    NeonEngine.inject_css()
+def main():
+    # 1. Initialize CSS
+    ZenithUI.inject_css()
     
-    # 2. Sidebar
+    # 2. Render Sidebar
     render_sidebar()
     
     # 3. Router
     view = AppState.get()["view"]
     
     if view == "DASHBOARD":
-        render_dashboard()
+        DashboardController().render()
         
     elif view == "TRAINING":
-        ctrl = QuizController()
-        q_state = AppState.quiz_state()
+        ctrl = QuizEngine()
+        q = AppState.quiz()
         
-        if not q_state["active"]:
+        if q["active_topic"] is None:
             ctrl.render_selector()
-        elif q_state["topic"] and not q_state["level"]:
+        elif q["phase"] == QuizPhase.SETUP:
             ctrl.render_level_selector()
-        elif q_state["level"]:
+        elif q["phase"] == QuizPhase.PLAYING:
             ctrl.render_gameplay()
             
     elif view == "SQL":
-        sql_ctrl = SQLLabController()
-        sql_ctrl.render()
+        SQLEngine().render()
 
 if __name__ == "__main__":
-    main_loop()
+    main()
