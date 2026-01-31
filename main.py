@@ -5,12 +5,23 @@ import sqlite3
 import requests
 import time
 
-# ==========================================
-# 1. CONFIGURACIÓN Y ESTILOS (EL "MAQUILLAJE")
-# ==========================================
-st.set_page_config(page_title="Intecap Learning Hub", page_icon="🎓", layout="wide")
+# ==============================================================================
+# 1. CONFIGURACIÓN INICIAL Y LIBRERÍAS
+# ==============================================================================
+st.set_page_config(
+    page_title="MasterDev Learning Hub", 
+    page_icon="🎓", 
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-# --- ANIMACIONES LOTTIE ---
+# Intentar cargar Lottie para animaciones
+try:
+    from streamlit_lottie import st_lottie
+    LOTTIE_AVAILABLE = True
+except ImportError:
+    LOTTIE_AVAILABLE = False
+
 def load_lottieurl(url):
     try:
         r = requests.get(url)
@@ -18,324 +29,403 @@ def load_lottieurl(url):
         return r.json()
     except: return None
 
-# Cargamos animaciones (si fallan, no pasa nada)
-try:
-    from streamlit_lottie import st_lottie
-    lottie_coding = load_lottieurl("https://assets5.lottiefiles.com/packages/lf20_fcfjwiyb.json")
-    lottie_sql = load_lottieurl("https://assets2.lottiefiles.com/private_files/lf30_w1uxkbue.json")
-    LOTTIE_AVAILABLE = True
-except:
-    LOTTIE_AVAILABLE = False
+# Animaciones (URLs)
+anim_sql = load_lottieurl("https://assets2.lottiefiles.com/private_files/lf30_w1uxkbue.json")
+anim_welcome = load_lottieurl("https://assets5.lottiefiles.com/packages/lf20_fcfjwiyb.json")
+anim_success = load_lottieurl("https://assets10.lottiefiles.com/packages/lf20_lk80fpsm.json")
 
-# --- INYECCIÓN DE CSS "PROFESIONAL" (Más de 100 líneas de puro estilo) ---
+# ==============================================================================
+# 2. INYECCIÓN DE CSS AVANZADO (DISEÑO Y ANIMACIONES)
+# ==============================================================================
 st.markdown("""
 <style>
-    /* IMPORTAR FUENTE GOOGLE */
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
+    /* --- FUENTES Y GENERAL --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    
     html, body, [class*="css"] {
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Poppins', sans-serif;
     }
 
-    /* FONDO Y COLORES PRINCIPALES */
+    /* --- FONDO CON DEGRADADO MODERNO --- */
     .stApp {
-        background-color: #f0f2f6;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     }
 
-    /* BARRA LATERAL (SIDEBAR) */
+    /* --- SIDEBAR (BARRA LATERAL) OSCURA --- */
     section[data-testid="stSidebar"] {
-        background-color: #1e293b; /* Dark Navy */
-        color: white;
+        background-color: #0f172a; /* Dark Slate */
     }
-    section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] label {
-        color: #e2e8f0 !important;
+    section[data-testid="stSidebar"] .css-17lntkn { 
+        color: #e2e8f0; 
     }
-
-    /* TARJETAS DE PREGUNTAS (CARD STYLE) */
-    .question-card {
-        background-color: white;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        margin-bottom: 25px;
-        border-left: 6px solid #3b82f6; /* Azul Intecap */
-        transition: transform 0.2s;
-    }
-    .question-card:hover {
-        transform: translateY(-2px);
+    /* Títulos del sidebar en blanco */
+    div[data-testid="stSidebar"] h1, div[data-testid="stSidebar"] h2, div[data-testid="stSidebar"] h3 {
+        color: #ffffff !important;
     }
 
-    /* ENCABEZADOS PERSONALIZADOS */
-    .header-style {
-        font-size: 40px;
-        font-weight: 700;
-        background: -webkit-linear-gradient(45deg, #3b82f6, #8b5cf6);
+    /* --- CURSOR FIX (LA MANITA) --- */
+    button, [role="button"], .stRadio label {
+        cursor: pointer !important;
+    }
+
+    /* --- TARJETAS FLOTANTES (EFECTO GLASS) --- */
+    .card-container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,255,255,0.3);
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .card-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        border-left: 5px solid #3b82f6;
+    }
+
+    /* --- HEADER CON GRADIENTE --- */
+    .gradient-text {
+        background: -webkit-linear-gradient(45deg, #2563eb, #9333ea);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 20px;
+        font-weight: 800;
+        font-size: 3rem;
     }
 
-    /* BOTONES PERSONALIZADOS */
-    .stButton>button {
-        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+    /* --- BOTONES PERSONALIZADOS --- */
+    .stButton > button {
+        background: linear-gradient(92.88deg, #455EB5 9.16%, #5643CC 43.89%, #673FD7 64.72%);
         color: white;
+        border-radius: 8px;
         border: none;
-        padding: 10px 25px;
-        border-radius: 8px;
-        font-weight: bold;
-        box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
-        transition: 0.3s;
-        width: 100%;
+        padding: 0.5rem 2rem;
+        font-weight: 600;
+        transition: all 0.2s;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    .stButton>button:hover {
-        background: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%);
-        box-shadow: 0 6px 10px rgba(59, 130, 246, 0.5);
+    .stButton > button:hover {
+        box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        transform: scale(1.02);
     }
 
-    /* TABLAS DE DATOS */
-    div[data-testid="stDataFrame"] {
-        border-radius: 10px;
-        overflow: hidden;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    /* CAJA DE CÓDIGO SQL */
+    /* --- CONSOLA SQL ESTILO HACKER --- */
     .stTextArea textarea {
-        background-color: #0f172a;
-        color: #00ff9d; /* Letra verde hacker */
+        background-color: #1e293b !important;
+        color: #4ade80 !important; /* Verde Matrix */
         font-family: 'Courier New', monospace;
+        border: 1px solid #334155;
+        border-radius: 10px;
+    }
+
+    /* --- CAJA DE SCHEMA SQL (SIDEBAR) --- */
+    .schema-box {
+        background-color: #1e293b;
+        color: #94a3b8;
+        padding: 8px 12px;
+        margin-bottom: 6px;
+        border-radius: 6px;
+        border-left: 3px solid #f59e0b;
+        font-size: 0.85rem;
+        display: flex;
+        justify-content: space-between;
+    }
+    .schema-type {
+        color: #64748b;
+        font-size: 0.75rem;
+        font-style: italic;
+    }
+
+    /* --- ALERTAS PERSONALIZADAS --- */
+    .custom-success {
+        padding: 1rem;
+        background-color: #dcfce7;
+        border-left: 5px solid #22c55e;
+        color: #14532d;
         border-radius: 8px;
+        margin-top: 10px;
     }
-
-    /* MENSAJES DE ESTADO */
-    .success-msg {
-        padding: 15px; background-color: #dcfce7; color: #166534; 
-        border-radius: 8px; border: 1px solid #86efac; margin-top:10px;
-    }
-    .error-msg {
-        padding: 15px; background-color: #fee2e2; color: #991b1b; 
-        border-radius: 8px; border: 1px solid #fca5a5; margin-top:10px;
-    }
-
-    /* DECORACIÓN SIDEBAR SQL */
-    .sql-info-box {
-        background-color: #334155;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 5px;
-        font-size: 0.9em;
-        border-left: 3px solid #f59e0b; /* Naranja */
+    .custom-error {
+        padding: 1rem;
+        background-color: #fee2e2;
+        border-left: 5px solid #ef4444;
+        color: #7f1d1d;
+        border-radius: 8px;
+        margin-top: 10px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# ==========================================
-# 2. LOGICA DE DATOS Y CARGA
-# ==========================================
+# ==============================================================================
+# 3. LÓGICA DE DATOS (Backend)
+# ==============================================================================
 
-# Carga segura de preguntas
+# Carga de Preguntas
+STATUS_FILE = "OK"
 try:
     import preguntas
     import importlib
     importlib.reload(preguntas)
-    MIS_TEMAS = preguntas.temas if hasattr(preguntas, 'temas') else {}
-    DATA_LOADED = True
-except:
+    
+    if hasattr(preguntas, 'temas'):
+        MIS_TEMAS = preguntas.temas
+    else:
+        MIS_TEMAS = {}
+        STATUS_FILE = "NO_VAR"
+except ImportError:
     MIS_TEMAS = {}
-    DATA_LOADED = False
+    STATUS_FILE = "NO_FILE"
 
-# Generador de Base de Datos (300 Trabajadores)
-def inicializar_db():
+# Generación de Base de Datos (300 Trabajadores)
+def init_db():
     if 'db_trabajadores' not in st.session_state:
-        nombres = ["Juan", "Maria", "Carlos", "Ana", "Luis", "Sofia", "Pedro", "Lucia", "Miguel", "Elena"]
-        apellidos = ["Garcia", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Perez", "Sanchez"]
-        cargos = ["Analista Datos", "Dev Backend", "Gerente TI", "Soporte", "Admin BD", "Dev Frontend", "QA"]
+        # Listas para generar datos aleatorios realistas
+        nombres = ["Juan", "Maria", "Carlos", "Ana", "Luis", "Sofia", "Pedro", "Lucia", "Miguel", "Elena", "Javier", "Carmen"]
+        apellidos = ["Garcia", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Perez", "Sanchez", "Ramirez", "Torres"]
+        cargos = ["Data Analyst", "Backend Dev", "Frontend Dev", "IT Manager", "Tech Support", "DB Admin", "QA Engineer", "DevOps"]
         
         data = []
         for i in range(1, 301):
             nom = random.choice(nombres)
             ape = random.choice(apellidos)
             cargo = random.choice(cargos)
-            sueldo = random.randint(3500, 15000)
+            
+            # Lógica de sueldo según cargo
+            base = 4000
+            if "Manager" in cargo: base = 12000
+            elif "Dev" in cargo: base = 9000
+            
+            sueldo = base + random.randint(0, 3000)
             correo = f"{nom.lower()}.{ape.lower()}{i}@intecap.edu.gt"
-            data.append([i, nom, ape, f"555-{random.randint(1000,9999)}", correo, cargo, sueldo])
+            telefono = f"502-{random.randint(4000, 5999)}-{random.randint(1000, 9999)}"
+            
+            data.append([i, nom, ape, telefono, correo, cargo, sueldo])
             
         st.session_state.db_trabajadores = pd.DataFrame(data, columns=["ID", "NOMBRE", "APELLIDO", "NUMERO", "CORREO", "CARGO", "SUELDO"])
 
-inicializar_db()
+init_db()
 
-# Función para ejecutar SQL
-def run_query(query):
+# Ejecución SQL Segura
+def run_sql(query):
     conn = sqlite3.connect(':memory:')
     st.session_state.db_trabajadores.to_sql('TRABAJADORES', conn, index=False, if_exists='replace')
     try:
-        start_time = time.time()
-        res = pd.read_sql_query(query, conn)
-        end_time = time.time()
-        return res, None, end_time - start_time
+        start = time.time()
+        # Limpiamos la query de espacios extra
+        query = query.strip()
+        df = pd.read_sql_query(query, conn)
+        end = time.time()
+        return df, None, end-start
     except Exception as e:
         return None, str(e), 0
+    finally:
+        conn.close()
 
-# ==========================================
-# 3. INTERFAZ DE USUARIO (UI)
-# ==========================================
-
-# --- BARRA LATERAL INTELIGENTE ---
+# ==============================================================================
+# 4. INTERFAZ DE USUARIO - BARRA LATERAL
+# ==============================================================================
 with st.sidebar:
-    st.markdown("### 🚀 Navegación")
+    st.markdown("## 💻 MasterDev Hub")
     
-    # Menú Principal
-    modo = st.radio("", ["Inicio", "Práctica de Inglés", "Laboratorio SQL"], label_visibility="collapsed")
+    # Menú de Navegación con Iconos
+    menu = st.radio(
+        "Navegación", 
+        ["🏠 Inicio", "🇺🇸 Práctica Inglés", "🛢️ Laboratorio SQL"],
+    )
     
     st.markdown("---")
     
-    # MENÚ ESPECIAL: Solo aparece si estás en SQL
-    if modo == "Laboratorio SQL":
-        st.markdown("#### 🗄️ Database Schema")
-        st.info("Usa estos nombres exactos en tus consultas:")
+    # === AQUÍ ESTÁ LO QUE PEDISTE: ESPECIFICACIONES DE LA TABLA ===
+    if menu == "🛢️ Laboratorio SQL":
+        st.markdown("### 📋 Estructura de Tabla")
+        st.info("Tabla disponible: `TRABAJADORES`")
         
-        st.markdown("""
-        <div class="sql-info-box"><b>TRABAJADORES</b> (Tabla)</div>
-        <div class="sql-info-box">🔑 <b>ID</b> (INT)</div>
-        <div class="sql-info-box">👤 <b>NOMBRE</b> (VARCHAR)</div>
-        <div class="sql-info-box">👤 <b>APELLIDO</b> (VARCHAR)</div>
-        <div class="sql-info-box">📱 <b>NUMERO</b> (VARCHAR)</div>
-        <div class="sql-info-box">📧 <b>CORREO</b> (VARCHAR)</div>
-        <div class="sql-info-box">💼 <b>CARGO</b> (VARCHAR)</div>
-        <div class="sql-info-box">💵 <b>SUELDO</b> (INT)</div>
-        """, unsafe_allow_html=True)
+        cols = [
+            ("ID", "INT (PK)"),
+            ("NOMBRE", "VARCHAR"),
+            ("APELLIDO", "VARCHAR"),
+            ("NUMERO", "VARCHAR"),
+            ("CORREO", "VARCHAR"),
+            ("CARGO", "VARCHAR"),
+            ("SUELDO", "INT")
+        ]
         
-        if st.button("🔄 Resetear BD"):
+        for col_name, col_type in cols:
+            st.markdown(f"""
+            <div class="schema-box">
+                <span>🔹 {col_name}</span>
+                <span class="schema-type">{col_type}</span>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        st.markdown("---")
+        if st.button("⚠️ Resetear Base de Datos"):
             del st.session_state['db_trabajadores']
-            inicializar_db()
-            st.experimental_rerun()
+            st.rerun()
 
-    st.markdown("---")
-    st.caption("Developed for Intecap © 2026")
+    st.markdown("<br><br><div style='text-align:center; color:#64748b; font-size:0.8rem;'>Powered by Intecap<br>v2.5.0 Professional</div>", unsafe_allow_html=True)
 
-# --- PÁGINA: INICIO ---
-if modo == "Inicio":
-    col1, col2 = st.columns([1.5, 1])
-    with col1:
-        st.markdown('<p class="header-style">Bienvenido, Developer</p>', unsafe_allow_html=True)
-        st.markdown("""
-        ### Tu plataforma de entrenamiento intensivo.
-        
-        Esta aplicación ha sido diseñada para perfeccionar tus habilidades técnicas y lingüísticas.
-        
-        * **🧠 English Module:** Mejora tu gramática con verbos irregulares y tiempos verbales.
-        * **💾 SQL Lab:** Entorno real de ejecución de consultas sobre una base de datos de 300 empleados.
-        """)
-        
-        st.info("👈 Selecciona un módulo en la barra lateral para comenzar.")
-        
-        if not DATA_LOADED:
-            st.error("⚠️ ALERTA: No se encontró 'preguntas.py'. Sube el archivo para ver el contenido real.")
+# ==============================================================================
+# 5. CONTENIDO DE LAS PÁGINAS
+# ==============================================================================
 
+# --- PÁGINA INICIO ---
+if menu == "🏠 Inicio":
+    # Contenedor principal centrado
+    st.markdown('<div style="text-align: center; padding: 2rem;">', unsafe_allow_html=True)
+    st.markdown('<h1 class="gradient-text">Bienvenido al Futuro.</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 1.2rem; color: #475569;">Domina SQL y el Inglés Técnico en una sola plataforma interactiva.</p>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         if LOTTIE_AVAILABLE:
-            st_lottie(lottie_coding, height=350)
-
-# --- PÁGINA: INGLÉS (MODO TARJETAS) ---
-elif modo == "Práctica de Inglés":
-    st.markdown('<p class="header-style">English Practice 🇺🇸</p>', unsafe_allow_html=True)
+            st_lottie(anim_welcome, height=300)
     
-    if not DATA_LOADED:
-        st.warning("Necesitas subir 'preguntas.py' para ver este módulo.")
+    # Tarjetas de Resumen
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("""
+        <div class="card-container">
+            <h3>🇺🇸 Módulo de Inglés</h3>
+            <p>Verbos irregulares, gramática y tiempos verbales con sistema de tarjetas inteligente.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    with c2:
+        st.markdown("""
+        <div class="card-container">
+            <h3>🛢️ SQL Server Lab</h3>
+            <p>Entorno de ejecución real. Practica SELECT, WHERE, JOINs con una base de datos de 300 empleados.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+# --- PÁGINA INGLÉS ---
+elif menu == "🇺🇸 Práctica Inglés":
+    st.markdown('<h1 style="color:#1e293b;">English Practice <span style="font-size:0.5em; color:#64748b;">Interactive Mode</span></h1>', unsafe_allow_html=True)
+    
+    if STATUS_FILE != "OK":
+        st.error("❌ Error Crítico: No se pudo cargar el archivo 'preguntas.py'. Verifique que esté en la carpeta.")
     else:
-        # Filtrar solo temas de inglés
-        temas_ingles = [k for k in MIS_TEMAS.keys() if "SQL" not in k.upper()]
-        tema_sel = st.selectbox("Selecciona un tema:", temas_ingles)
+        # Filtro inteligente para excluir SQL de esta sección
+        temas_disponibles = [k for k in MIS_TEMAS.keys() if "SQL" not in k.upper()]
         
-        if tema_sel:
-            # Lógica para extraer niveles
-            contenido = MIS_TEMAS[tema_sel][0]
-            nivel_sel = st.select_slider("Nivel de Dificultad:", options=list(contenido.keys()))
+        col_sel1, col_sel2 = st.columns([2, 1])
+        with col_sel1:
+            tema = st.selectbox("📂 Selecciona un Tema de Estudio:", temas_disponibles)
+        
+        if tema:
+            contenido = MIS_TEMAS[tema][0] # Estructura del archivo
+            niveles = list(contenido.keys())
             
-            preguntas_lista = contenido[nivel_sel]
+            with col_sel2:
+                nivel = st.selectbox("📊 Nivel de Dificultad:", niveles)
             
-            # BARRA DE PROGRESO
-            progreso = st.progress(0)
+            preguntas_activas = contenido[nivel]
+            total_p = len(preguntas_activas)
             
-            for i, item in enumerate(preguntas_lista):
-                # TARJETA PERSONALIZADA (CSS)
+            st.divider()
+            
+            # Iterar preguntas
+            for idx, p in enumerate(preguntas_activas):
+                # TARJETA VISUAL (HTML/CSS)
                 st.markdown(f"""
-                <div class="question-card">
-                    <h4>Pregunta {i+1}</h4>
-                    <p style="font-size:18px;">{item['pregunta']}</p>
+                <div class="card-container">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:15px; font-size:0.8rem; font-weight:bold;">Pregunta {idx + 1} / {total_p}</span>
+                        <span style="color:#94a3b8; font-size:1.2rem;">🇺🇸</span>
+                    </div>
+                    <h3 style="color:#334155; margin-bottom:15px;">{p['pregunta']}</h3>
                 </div>
                 """, unsafe_allow_html=True)
                 
-                col_opts, col_btn = st.columns([3, 1])
+                # Opciones interactivas
+                col_opts, col_actions = st.columns([3, 1])
                 
                 with col_opts:
-                    # Usamos radio buttons nativos de Streamlit
-                    respuesta = st.radio(f"Select option:", item['opciones'], key=f"q_{i}", horizontal=True)
+                    # Radio buttons
+                    val = st.radio("Tu respuesta:", p['opciones'], key=f"q_{tema}_{idx}", label_visibility="collapsed")
                 
-                with col_btn:
-                    st.write("") # Espacio
-                    st.write("") # Espacio
-                    check = st.button(f"Comprobar", key=f"btn_{i}")
+                with col_actions:
+                    st.write("") # Espaciado
+                    check_btn = st.button("Comprobar Respuesta", key=f"btn_{tema}_{idx}")
                 
-                if check:
-                    if respuesta == item['correcta']:
-                        st.markdown(f'<div class="success-msg">✅ <b>Correct!</b> Muy bien hecho.</div>', unsafe_allow_html=True)
+                # Lógica de validación con FEEDBACK VISUAL
+                if check_btn:
+                    if val == p['correcta']:
+                        st.markdown(f"""
+                        <div class="custom-success">
+                            <h4>✅ ¡Excelente!</h4>
+                            <p>Respuesta correcta.</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        if LOTTIE_AVAILABLE: st_lottie(anim_success, height=100, key=f"anim_{idx}")
                     else:
-                        st.markdown(f'<div class="error-msg">❌ <b>Incorrect.</b> La respuesta era: <b>{item["correcta"]}</b></div>', unsafe_allow_html=True)
+                        st.markdown(f"""
+                        <div class="custom-error">
+                            <h4>❌ Incorrecto</h4>
+                            <p>La respuesta correcta era: <b>{p['correcta']}</b></p>
+                        </div>
+                        """, unsafe_allow_html=True)
                     
-                    with st.expander("📚 Ver Explicación y Traducción"):
-                        st.write(f"**Explicación:** {item['explicacion']}")
-                        st.markdown(f"**Traducción:** *{item['traduccion']}*")
+                    # Explicación Expandible
+                    with st.expander("💡 Ver Explicación Detallada y Traducción"):
+                        st.markdown(f"**Explicación:** {p['explicacion']}")
+                        st.info(f"**Traducción al Español:** {p['traduccion']}")
                 
-                st.markdown("---")
+                st.markdown("<br>", unsafe_allow_html=True) # Espacio entre tarjetas
 
-# --- PÁGINA: LABORATORIO SQL (EL FUERTE) ---
-elif modo == "Laboratorio SQL":
-    st.markdown('<p class="header-style">Laboratorio SQL Server 🛢️</p>', unsafe_allow_html=True)
-
-    col_a, col_b = st.columns([2, 1])
-    with col_a:
+# --- PÁGINA SQL ---
+elif menu == "🛢️ Laboratorio SQL":
+    st.markdown('<h1 style="color:#1e293b;">Laboratorio SQL Server <span style="font-size:0.5em; color:#64748b;">Powered by SQLite</span></h1>', unsafe_allow_html=True)
+    
+    col_intro, col_anim = st.columns([2, 1])
+    with col_intro:
         st.markdown("""
-        Bienvenido a la consola interactiva. Tienes acceso total a la tabla `TRABAJADORES`.
-        
-        * Usa el menú de la izquierda para ver los nombres de las columnas.
-        * Puedes usar `SELECT`, `WHERE`, `GROUP BY`, `ORDER BY`, etc.
-        """)
-    with col_b:
-        if LOTTIE_AVAILABLE:
-            st_lottie(lottie_sql, height=120, key="sql")
-
-    # TABS
-    tab_teoria, tab_consola = st.tabs(["📘 Desafíos SQL", "💻 Consola de Ejecución"])
-
+        <div style="background:#fff; padding:20px; border-radius:15px; border-left:5px solid #8b5cf6; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+            <h4>👨‍💻 Consola de Ejecución</h4>
+            <p>Escribe tus consultas SQL directamente. Recuerda consultar el <b>esquema de la tabla</b> en el menú izquierdo.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    with col_anim:
+        if LOTTIE_AVAILABLE: st_lottie(anim_sql, height=150)
+    
+    # Pestañas Superiores
+    tab_teoria, tab_practica = st.tabs(["📚 Desafíos Teóricos", "⚡ Consola Interactiva"])
+    
     with tab_teoria:
-        # Buscar la llave de SQL
-        key_sql = next((k for k in MIS_TEMAS.keys() if "SQL" in k.upper()), None)
-        if key_sql and DATA_LOADED:
-            datos_sql = MIS_TEMAS[key_sql][0]
-            nivel_sql = st.selectbox("Selecciona dificultad:", list(datos_sql.keys()))
+        llave_sql = next((k for k in MIS_TEMAS.keys() if "SQL" in k.upper()), None)
+        if llave_sql:
+            datos_sql = MIS_TEMAS[llave_sql][0]
+            nivel = st.selectbox("Selecciona Nivel de Desafío:", list(datos_sql.keys()))
             
-            for desafio in datos_sql[nivel_sql]:
-                texto = desafio['pregunta'] if isinstance(desafio, dict) else desafio
-                st.info(f"🔹 {texto}")
+            for item in datos_sql[nivel]:
+                txt = item['pregunta'] if isinstance(item, dict) else item
+                st.markdown(f"""
+                <div style="margin-bottom:10px; padding:15px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;">
+                    ❓ {txt}
+                </div>
+                """, unsafe_allow_html=True)
         else:
-            st.warning("No se encontraron preguntas de SQL en el archivo.")
+            st.warning("No se encontraron preguntas de SQL en el archivo cargado.")
 
-    with tab_consola:
-        query_default = "SELECT * FROM TRABAJADORES WHERE CARGO = 'Desarrollador Backend'"
-        query = st.text_area("Escribe tu Query SQL aquí:", value=query_default, height=150)
+    with tab_practica:
+        st.markdown("### Editor de Código")
+        default_q = "SELECT * FROM TRABAJADORES WHERE SUELDO > 8000 ORDER BY SUELDO DESC"
+        query_input = st.text_area("SQL Query:", value=default_q, height=150, help="Escribe tu sentencia SELECT aquí")
         
-        col_exec, col_clear = st.columns([1, 4])
+        col_exec, col_info = st.columns([1, 3])
         with col_exec:
-            run_btn = st.button("⚡ EJECUTAR QUERY")
+            btn_run = st.button("▶ EJECUTAR QUERY", type="primary")
         
-        if run_btn:
-            df_res, error, duracion = run_query(query)
+        if btn_run:
+            df, err, duration = run_sql(query_input)
             
-            if error:
-                st.markdown(f'<div class="error-msg">⛔ <b>Error SQL:</b><br>{error}</div>', unsafe_allow_html=True)
+            if err:
+                st.markdown(f'<div class="custom-error">⛔ <b>Error de Sintaxis SQL:</b><br>{err}</div>', unsafe_allow_html=True)
             else:
-                st.success(f"✅ Query ejecutada exitosamente en {duracion:.4f} segundos.")
-                st.write(f"Filas obtenidas: {len(df_res)}")
-                st.dataframe(df_res, use_container_width=True)
+                st.markdown(f'<div class="custom-success">✅ Consulta ejecutada en <b>{duration:.4f} segundos</b></div>', unsafe_allow_html=True)
+                st.write(f"Resultados: **{len(df)} filas** encontradas.")
+                st.dataframe(df, use_container_width=True)
