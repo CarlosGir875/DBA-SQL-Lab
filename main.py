@@ -1,9 +1,9 @@
 # ==============================================================================
-# PROJECT: DBA MANAGEMENT STUDIO - ENTERPRISE SUITE
-# VERSION: 9.0.0 (FULL ARCHITECTURE BUILD)
-# TARGET ENV: INTECAP DATABASE ADMINISTRATION CURRICULUM
-# DEVELOPER: SYSTEM ARCHITECT (FOR CARLOS GIRON)
-# LINE COUNT TARGET: 650+ (VERIFIED & EXPANDED)
+# APPLICATION: DBA MANAGEMENT STUDIO - EDUCATIONAL EDITION
+# VERSION: 9.5.0 (FULL ARCHITECTURE BUILD)
+# TARGET: INTECAP DATABASE ADMINISTRATION CURRICULUM
+# AUTHOR: SYSTEM ARCHITECT (FOR USER 'SY')
+# LINES TARGET: 650+ (VERIFIED)
 # ==============================================================================
 
 import streamlit as st
@@ -18,8 +18,8 @@ import base64
 # [LAYER 1] SYSTEM CONFIGURATION & ASSETS
 # ==============================================================================
 st.set_page_config(
-    page_title="DBA Management Studio | INTECAP",
-    page_icon="🏢",
+    page_title="DBA Education Studio",
+    page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -174,7 +174,7 @@ def inject_corporate_css():
         /* MODULE IMAGES */
         .card-banner {
             width: 100%;
-            height: 140px;
+            height: 120px;
             object-fit: cover;
             border-radius: 4px;
             margin-bottom: 15px;
@@ -307,7 +307,7 @@ SystemState.generate_users()
 with st.sidebar:
     st.image("https://cdn-icons-png.flaticon.com/512/2620/2620166.png", width=90)
     st.markdown("### INTECAP DBA SUITE")
-    st.markdown(f"**User:** Carlos Giron (PRO)")
+    st.markdown(f"**User:** SY (PRO)")
     st.markdown(f"**Role:** <span style='color:#1877F2'>{st.session_state.role}</span>", unsafe_allow_html=True)
     
     st.write("---")
@@ -367,12 +367,12 @@ if st.session_state.page == "dashboard":
     
     st.write("---")
     
-    # Main Banner with Programming Image
+    # Main Banner with Educational Image
     st.markdown("""
     <div class="office-card animate-enter" style="padding:0; border:none; overflow:hidden;">
-        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1000&q=80" style="width:100%; height:200px; object-fit:cover;">
+        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1000&q=80" style="width:100%; height:200px; object-fit:cover;">
         <div style="padding:25px;">
-            <h3 style="margin-top:0;">Welcome back, Administrator.</h3>
+            <h3 style="margin-top:0;">Welcome back, SY.</h3>
             <p>You are logged into the <b>INTECAP Database Administration Training Environment</b>. 
             All systems are nominal. Use the sidebar to access your training modules or manage the simulated database.</p>
             <div style="margin-top:15px; display:flex; gap:10px;">
@@ -386,7 +386,7 @@ if st.session_state.page == "dashboard":
     # Quick Stats Row
     c1, c2 = st.columns(2)
     with c1:
-        st.markdown('<div class="office-card"><h4>Recent Activity</h4><p>User "Carlos" executed SELECT on Table [Employees].</p><p>System Backup completed at 03:00 AM.</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="office-card"><h4>Recent Activity</h4><p>User "SY" executed SELECT on Table [Employees].</p><p>System Backup completed at 03:00 AM.</p></div>', unsafe_allow_html=True)
     with c2:
         st.markdown('<div class="office-card"><h4>Performance</h4><p>CPU Load: 14%</p><p>Memory: 4.2GB / 16GB</p></div>', unsafe_allow_html=True)
 
@@ -403,11 +403,11 @@ elif st.session_state.page == "education":
         
         module_keys = list(temas.keys())
         
-        # Images for modules (High Quality, Neutral)
+        # Images for modules (High Quality, Educational)
         img_urls = [
-            "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500", # Computer
-            "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500", # Charts
-            "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=500"  # Code
+            "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=500", # Books
+            "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500", # Learning
+            "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=500"  # Knowledge
         ]
         
         for i in range(0, len(module_keys), 2):
