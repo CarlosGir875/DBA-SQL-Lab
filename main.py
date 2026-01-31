@@ -3,138 +3,144 @@ import pandas as pd
 import random
 import sqlite3
 import requests
-from streamlit_lottie import st_lottie
 
-# --- INTENTO DE IMPORTAR TUS PREGUNTAS CON SEGURIDAD ---
+# --- 1. INTENTO DE CARGAR LIBRERÍAS EXTERNAS CON SEGURIDAD ---
+try:
+    from streamlit_lottie import st_lottie
+    LOTTIE_AVAILABLE = True
+except ImportError:
+    LOTTIE_AVAILABLE = False
+    # No detenemos la app, solo desactivamos animaciones
+
+# --- 2. CONFIGURACIÓN DE PÁGINA ---
+st.set_page_config(page_title="App Intecap (Modo Seguro)", page_icon="🛡️", layout="wide")
+
+st.title("🛡️ Modo de Diagnóstico")
+
+# --- 3. INTENTO DE CARGAR TU ARCHIVO DE PREGUNTAS ---
+STATUS_PREGUNTAS = "Desconocido"
+MSG_ERROR = ""
+MIS_TEMAS = {}
+
 try:
     import preguntas
-    # Verificamos que exista la variable 'temas'
-    if not hasattr(preguntas, 'temas'):
-        st.error("Error: El archivo 'preguntas.py' no tiene una variable llamada 'temas'.")
-        st.stop()
+    import importlib
+    importlib.reload(preguntas) # Recargar por si hiciste cambios
+    
+    if hasattr(preguntas, 'temas'):
+        MIS_TEMAS = preguntas.temas
+        STATUS_PREGUNTAS = "OK"
+    else:
+        STATUS_PREGUNTAS = "Estructura Incorrecta"
+        MSG_ERROR = "El archivo carga, pero no tiene la variable 'temas'."
+
 except ImportError:
-    st.error("⚠️ No encontré el archivo 'preguntas.py'. Asegúrate de que esté en la misma carpeta que este archivo.")
-    st.stop()
+    STATUS_PREGUNTAS = "No Encontrado"
+    MSG_ERROR = "No encuentro 'preguntas.py'. ¿Está en la misma carpeta que main.py?"
+except SyntaxError as e:
+    STATUS_PREGUNTAS = "Error de Escritura"
+    MSG_ERROR = f"Hay un error de sintaxis en preguntas.py (línea {e.lineno}): {e.msg}"
 except Exception as e:
-    st.error(f"⚠️ Hay un error de sintaxis en tu archivo 'preguntas.py': {e}")
-    st.stop()
+    STATUS_PREGUNTAS = "Error Crítico"
+    MSG_ERROR = f"Error desconocido: {e}"
 
-# --- CONFIGURACIÓN DE PÁGINA ---
-st.set_page_config(page_title="App Intecap", page_icon="🚀", layout="wide")
+# --- 4. MOSTRAR ESTADO DEL SISTEMA ---
+if STATUS_PREGUNTAS == "OK":
+    st.success("✅ Archivo 'preguntas.py' cargado correctamente.")
+    if not LOTTIE_AVAILABLE:
+        st.warning("⚠️ La librería de animaciones no está instalada, pero la app funcionará sin ellas.")
+else:
+    st.error(f"❌ PROBLEMA DETECTADO: {STATUS_PREGUNTAS}")
+    st.error(f"Detalle: {MSG_ERROR}")
+    st.info("💡 Mientras arreglas el archivo, la app usará datos de prueba para que puedas trabajar.")
+    
+    # DATOS DE RESPALDO (Para que la app no se quede vacía)
+    MIS_TEMAS = {
+        "Verbos de Prueba": [{
+            "1. Básico": [{"pregunta": "Prueba", "opciones": ["A", "B"], "correcta": "A", "explicacion": "Test"}]
+        }],
+        "SQL (PREGUNTAS)": [{
+            "1. Básico": ["Pregunta SQL de prueba"]
+        }]
+    }
 
-# --- LÓGICA DE DATOS (ANTIGUO UTILS.PY) ---
-def generar_datos_trabajadores(n=300):
-    nombres = ["Juan", "Maria", "Carlos", "Ana", "Luis", "Sofia", "Pedro", "Lucia"]
-    apellidos = ["Garcia", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Perez"]
-    cargos = ["Analista", "Dev Backend", "Gerente", "Soporte", "Admin BD", "Dev Frontend"]
-    data = []
-    for i in range(1, n + 1):
-        nombre = random.choice(nombres)
-        apellido = random.choice(apellidos)
-        correo = f"{nombre.lower()}.{apellido.lower()}{i}@intecap.edu.gt"
-        numero = f"{random.randint(4000, 5999)}-{random.randint(1000, 9999)}"
-        cargo = random.choice(cargos)
-        sueldo = random.randint(3500, 12000)
-        data.append([i, nombre, apellido, numero, correo, cargo, sueldo])
-    return pd.DataFrame(data, columns=["ID", "NOMBRE", "APELLIDO", "NUMERO", "CORREO", "CARGO", "SUELDO"])
+st.divider()
 
-def ejecutar_sql(df, query):
-    conn = sqlite3.connect(':memory:')
-    df.to_sql('TRABAJADORES', conn, index=False, if_exists='replace')
-    try:
-        resultado = pd.read_sql_query(query, conn)
-        return resultado, None
-    except Exception as e:
-        return None, str(e)
-    finally:
-        conn.close()
+# --- 5. APLICACIÓN PRINCIPAL (CÓDIGO ROBUSTO) ---
 
-# --- ANIMACIONES ---
-def load_lottieurl(url):
-    try:
-        r = requests.get(url)
-        if r.status_code != 200: return None
-        return r.json()
-    except: return None
-
-lottie_sql = load_lottieurl("https://assets2.lottiefiles.com/private_files/lf30_w1uxkbue.json")
-
-# --- ESTADO DE LA APP ---
+# Generador de Base de Datos
 if 'db_trabajadores' not in st.session_state:
-    st.session_state.db_trabajadores = generar_datos_trabajadores(300)
+    data = []
+    for i in range(300):
+        data.append([i, f"Empleado{i}", "Apellido", "555-5555", "correo@test.com", "Admin", 5000])
+    st.session_state.db_trabajadores = pd.DataFrame(data, columns=["ID", "NOMBRE", "APELLIDO", "NUMERO", "CORREO", "CARGO", "SUELDO"])
 
-# --- BARRA LATERAL ---
+# Barra Lateral
 with st.sidebar:
-    st.title("Navegación Intecap")
-    opcion = st.radio("Ir a:", ["Inicio", "Inglés", "SQL"])
+    st.header("Menú")
+    # Detectamos si hay preguntas de SQL
+    tiene_sql = any("SQL" in k.upper() for k in MIS_TEMAS.keys())
+    opciones = ["Inglés"]
+    if tiene_sql:
+        opciones.append("SQL")
+    
+    navegacion = st.radio("Ir a:", opciones)
 
-# --- LÓGICA PRINCIPAL ---
-if opcion == "Inicio":
-    st.title("Bienvenido a tu App de Práctica 🚀")
-    st.write("Selecciona una opción en el menú de la izquierda para comenzar.")
-
-elif opcion == "Inglés":
-    st.header("Práctica de Inglés")
+# Sección Inglés
+if navegacion == "Inglés":
+    temas_ingles = [k for k in MIS_TEMAS.keys() if "SQL" not in k.upper()]
+    tema = st.selectbox("Selecciona Tema:", temas_ingles)
     
-    # Filtramos las llaves para que no salga la de SQL aquí
-    # Buscamos cualquier llave que NO tenga "SQL" en el nombre
-    temas_ingles = [k for k in preguntas.temas.keys() if "SQL" not in k.upper()]
-    
-    tema = st.selectbox("Elige tema:", temas_ingles)
-    
-    if tema:
-        # Accedemos a la lista y luego al primer diccionario (estructura de tu archivo)
-        datos_tema = preguntas.temas[tema][0] 
-        nivel = st.selectbox("Nivel:", list(datos_tema.keys()))
-        
-        lista_preguntas = datos_tema[nivel]
-        
-        for i, p in enumerate(lista_preguntas):
-            st.markdown(f"**{i+1}. {p['pregunta']}**")
-            opciones = p['opciones']
-            # Radio button con clave única
-            resp = st.radio("Opción:", opciones, key=f"p_{tema}_{i}")
+    if tema and len(MIS_TEMAS[tema]) > 0:
+        datos = MIS_TEMAS[tema][0] # Accedemos al primer elemento de la lista
+        if isinstance(datos, dict):
+            nivel = st.selectbox("Nivel:", list(datos.keys()))
+            preguntas_nivel = datos[nivel]
             
-            if st.button(f"Revisar {i+1}", key=f"btn_{tema}_{i}"):
-                if resp == p['correcta']:
-                    st.success("Correcto! ✅")
-                else:
-                    st.error(f"Incorrecto. Era: {p['correcta']}")
-                st.info(f"Explicación: {p['explicacion']}")
-            st.divider()
+            for i, p in enumerate(preguntas_nivel):
+                st.subheader(f"P{i+1}: {p.get('pregunta', 'Sin pregunta')}")
+                opts = p.get('opciones', [])
+                sel = st.radio("Respuesta:", opts, key=f"{tema}_{i}")
+                if st.button("Revisar", key=f"btn_{tema}_{i}"):
+                    if sel == p.get('correcta'):
+                        st.success("Correcto")
+                    else:
+                        st.error("Incorrecto")
 
-elif opcion == "SQL":
-    st.header("Laboratorio SQL Server")
+# Sección SQL
+elif navegacion == "SQL":
+    st.header("Laboratorio SQL")
     
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        st.info("Tabla disponible: **TRABAJADORES** (ID, NOMBRE, APELLIDO, NUMERO, CORREO, CARGO, SUELDO)")
-    with col2:
-        if lottie_sql: st_lottie(lottie_sql, height=100)
+    # Animación segura
+    if LOTTIE_AVAILABLE:
+        try:
+            r = requests.get("https://assets2.lottiefiles.com/private_files/lf30_w1uxkbue.json")
+            if r.status_code == 200:
+                st_lottie(r.json(), height=150)
+        except:
+            pass
 
-    # Buscar automáticamente la llave de SQL en tu archivo
-    llave_sql = next((k for k in preguntas.temas.keys() if "SQL" in k.upper()), None)
-
-    tab1, tab2 = st.tabs(["Preguntas Teóricas", "Consola SQL"])
-
+    tab1, tab2 = st.tabs(["Teoría", "Práctica"])
+    
     with tab1:
-        if llave_sql:
-            datos_sql = preguntas.temas[llave_sql][0]
-            nivel_sql = st.selectbox("Nivel SQL:", list(datos_sql.keys()))
-            for item in datos_sql[nivel_sql]:
-                # Dependiendo de si es diccionario o string en tu archivo
-                if isinstance(item, dict):
-                    st.write(f"❓ {item['pregunta']}")
-                else:
-                    st.write(f"❓ {item}")
-        else:
-            st.warning("No encontré una sección con 'SQL' en el nombre dentro de preguntas.py")
-
+        # Busca cualquier llave que diga SQL
+        key_sql = next((k for k in MIS_TEMAS.keys() if "SQL" in k.upper()), None)
+        if key_sql:
+            datos_sql = MIS_TEMAS[key_sql][0]
+            nivel = st.selectbox("Nivel SQL:", list(datos_sql.keys()))
+            lista = datos_sql[nivel]
+            for item in lista:
+                # Maneja si es string o diccionario
+                texto = item['pregunta'] if isinstance(item, dict) else item
+                st.info(texto)
+                
     with tab2:
-        query = st.text_area("Escribe tu Query:", "SELECT * FROM TRABAJADORES WHERE SUELDO > 8000")
+        query = st.text_area("Query:", "SELECT * FROM TRABAJADORES LIMIT 5")
         if st.button("Ejecutar"):
-            res, err = ejecutar_sql(st.session_state.db_trabajadores, query)
-            if err:
-                st.error(f"Error SQL: {err}")
-            else:
+            conn = sqlite3.connect(':memory:')
+            st.session_state.db_trabajadores.to_sql('TRABAJADORES', conn, index=False, if_exists='replace')
+            try:
+                res = pd.read_sql_query(query, conn)
                 st.dataframe(res)
+            except Exception as e:
+                st.error(f"Error SQL: {e}")
