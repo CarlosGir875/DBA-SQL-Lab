@@ -1,9 +1,9 @@
 # ==============================================================================
-# APPLICATION: DBA MANAGEMENT STUDIO - ENTERPRISE SUITE
-# VERSION: 8.5.0 (FULL ARCHITECTURE BUILD)
-# TARGET: INTECAP DATABASE ADMINISTRATION CURRICULUM
-# AUTHOR: SYSTEM ARCHITECT (FOR CARLOS GIRON)
-# LINES TARGET: 650+ (VERIFIED)
+# PROJECT: DBA MANAGEMENT STUDIO - ENTERPRISE SUITE
+# VERSION: 9.0.0 (FULL ARCHITECTURE BUILD)
+# TARGET ENV: INTECAP DATABASE ADMINISTRATION CURRICULUM
+# DEVELOPER: SYSTEM ARCHITECT (FOR CARLOS GIRON)
+# LINE COUNT TARGET: 650+ (VERIFIED & EXPANDED)
 # ==============================================================================
 
 import streamlit as st
@@ -12,6 +12,7 @@ import pandas as pd
 import time
 import datetime
 import re
+import base64
 
 # ==============================================================================
 # [LAYER 1] SYSTEM CONFIGURATION & ASSETS
@@ -27,7 +28,7 @@ st.set_page_config(
 # [LAYER 2] INTERNAL DATA BACKUP SYSTEM (THE "LINE 600" INSURANCE)
 # ==============================================================================
 # This creates a massive internal dictionary to ensure the app works 
-# even if 'preguntas.py' is missing, and provides the volume you requested.
+# even if 'preguntas.py' is missing. Contains 3 LEVELS per module.
 
 INTERNAL_DATA_BACKUP = {
     "Verbos Irregulares": [
@@ -47,7 +48,9 @@ INTERNAL_DATA_BACKUP = {
         ]},
         {'3. Avanzado': [
             {'pregunta': 'Past Participle of "Drive"', 'opciones': ['Driven', 'Drove', 'Drivven'], 'correcta': 'Driven', 'explicacion': 'The server was DRIVEN by high traffic.', 'traduccion': 'Conducir/Impulsar'},
-            {'pregunta': 'Past Participle of "Fall"', 'opciones': ['Fallen', 'Fell', 'Falled'], 'correcta': 'Fallen', 'explicacion': 'The system has FALLEN offline.', 'traduccion': 'Caer'}
+            {'pregunta': 'Past Participle of "Fall"', 'opciones': ['Fallen', 'Fell', 'Falled'], 'correcta': 'Fallen', 'explicacion': 'The system has FALLEN offline.', 'traduccion': 'Caer'},
+            {'pregunta': 'Past Participle of "Forgive"', 'opciones': ['Forgiven', 'Forgave', 'Forgived'], 'correcta': 'Forgiven', 'explicacion': 'Forgive -> Forgave -> Forgiven.', 'traduccion': 'Perdonar'},
+            {'pregunta': 'Past Participle of "Freeze"', 'opciones': ['Frozen', 'Froze', 'Freezed'], 'correcta': 'Frozen', 'explicacion': 'The process is FROZEN.', 'traduccion': 'Congelar'}
         ]}
     ],
     "SQL Vocabulary": [
@@ -58,6 +61,11 @@ INTERNAL_DATA_BACKUP = {
         {'2. Intermedio': [
             {'pregunta': 'What is a "Foreign Key"?', 'opciones': ['Link between tables', 'Main ID'], 'correcta': 'Link between tables', 'explicacion': 'Enforces referential integrity.', 'traduccion': 'Llave Foránea'},
             {'pregunta': 'Meaning of "Constraint"', 'opciones': ['Restriction/Rule', 'Freedom'], 'correcta': 'Restriction/Rule', 'explicacion': 'Limits the type of data that can go into a table.', 'traduccion': 'Restricción'}
+        ]},
+        {'3. Avanzado': [
+            {'pregunta': 'What does ACID stand for?', 'opciones': ['Atomicity, Consistency, Isolation, Durability', 'All Columns In Database'], 'correcta': 'Atomicity, Consistency, Isolation, Durability', 'explicacion': 'Standard properties of database transactions.', 'traduccion': 'Propiedades ACID'},
+            {'pregunta': 'What is a "Stored Procedure"?', 'opciones': ['Saved SQL code', 'A temporary table'], 'correcta': 'Saved SQL code', 'explicacion': 'A prepared SQL code that you can reuse.', 'traduccion': 'Procedimiento Almacenado'},
+            {'pregunta': 'Explain "Normalization"', 'opciones': ['Organizing data to reduce redundancy', 'Deleting data'], 'correcta': 'Organizing data to reduce redundancy', 'explicacion': 'Process of structuring a relational database.', 'traduccion': 'Normalización'}
         ]}
     ],
     "Technical Idioms": [
@@ -68,6 +76,25 @@ INTERNAL_DATA_BACKUP = {
         {'2. Intermedio': [
             {'pregunta': '"Thinking outside the box"', 'opciones': ['Creative thinking', 'Working outdoors'], 'correcta': 'Creative thinking', 'explicacion': 'Solving problems in new ways.', 'traduccion': 'Pensar creativamente'},
             {'pregunta': '"Bottleneck"', 'opciones': ['Process congestion', 'Glass container'], 'correcta': 'Process congestion', 'explicacion': 'A point of congestion in a system.', 'traduccion': 'Cuello de botella'}
+        ]},
+        {'3. Avanzado': [
+            {'pregunta': '"Cutting edge"', 'opciones': ['Latest technology', 'Sharp knife'], 'correcta': 'Latest technology', 'explicacion': 'The most advanced stage of development.', 'traduccion': 'Vanguardia'},
+            {'pregunta': '"Drill down"', 'opciones': ['Analyze in detail', 'Use a tool'], 'correcta': 'Analyze in detail', 'explicacion': 'To look at data in more detail.', 'traduccion': 'Profundizar'},
+            {'pregunta': '"Legacy system"', 'opciones': ['Old system', 'Legal system'], 'correcta': 'Old system', 'explicacion': 'An old method, technology, computer system, or application program.', 'traduccion': 'Sistema heredado/antiguo'}
+        ]}
+    ],
+    "Tenses: Present Continuous": [
+        {'1. Básico': [
+            {'pregunta': 'I ____ (work) on the server.', 'opciones': ['am working', 'work', 'working'], 'correcta': 'am working', 'explicacion': 'Subject + am/is/are + verb-ing.', 'traduccion': 'Estoy trabajando'},
+            {'pregunta': 'She ____ (run) a query.', 'opciones': ['is running', 'run', 'running'], 'correcta': 'is running', 'explicacion': 'Third person singular + is + ing.', 'traduccion': 'Ella está ejecutando'}
+        ]},
+        {'2. Intermedio': [
+            {'pregunta': 'We ____ (not / use) that database anymore.', 'opciones': ['are not using', 'not use', 'no using'], 'correcta': 'are not using', 'explicacion': 'Negative form.', 'traduccion': 'No estamos usando'},
+            {'pregunta': '____ they ____ (monitor) the logs?', 'opciones': ['Are / monitoring', 'Is / monitoring'], 'correcta': 'Are / monitoring', 'explicacion': 'Question form.', 'traduccion': '¿Están monitoreando?'}
+        ]},
+        {'3. Avanzado': [
+            {'pregunta': 'Why ____ the server ____ (lag) today?', 'opciones': ['is / lagging', 'are / lag'], 'correcta': 'is / lagging', 'explicacion': 'Wh- question structure.', 'traduccion': '¿Por qué se está trabando el servidor?'},
+            {'pregunta': 'Who ____ (manage) the migration right now?', 'opciones': ['is managing', 'are managing'], 'correcta': 'is managing', 'explicacion': 'Subject question.', 'traduccion': '¿Quién está gestionando la migración?'}
         ]}
     ]
 }
@@ -84,7 +111,7 @@ except ImportError:
     DATA_SOURCE = "INTERNAL BACKUP"
 
 # ==============================================================================
-# [LAYER 3] CSS ARCHITECTURE: THE "SOFT OFFICE" THEME
+# [LAYER 3] CSS ARCHITECTURE: THE "SOFT OFFICE" THEME (MOBILE OPTIMIZED)
 # ==============================================================================
 def inject_corporate_css():
     st.markdown("""
@@ -110,7 +137,7 @@ def inject_corporate_css():
             font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
         }
 
-        /* PROFESSIONAL CARDS (Shadows & Rounded Corners) */
+        /* PROFESSIONAL CARDS */
         .office-card {
             background-color: var(--card-white);
             border: 1px solid var(--border-color);
@@ -147,11 +174,11 @@ def inject_corporate_css():
         /* MODULE IMAGES */
         .card-banner {
             width: 100%;
-            height: 120px;
+            height: 140px;
             object-fit: cover;
             border-radius: 4px;
             margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 3px solid var(--accent-blue);
         }
 
         /* CUSTOM BUTTONS (Flat Design) */
@@ -184,6 +211,7 @@ def inject_corporate_css():
             font-size: 0.85rem;
             color: var(--text-secondary);
             font-weight: 600;
+            flex-wrap: wrap; /* Mobile friendly */
         }
 
         /* SQL CHEAT SHEET PANEL */
@@ -206,6 +234,13 @@ def inject_corporate_css():
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-enter { animation: fadeIn 0.5s ease-out; }
+
+        /* MOBILE OPTIMIZATION */
+        @media only screen and (max-width: 600px) {
+            .office-card { padding: 15px; }
+            h1 { font-size: 1.8rem; }
+            .sql-toolbar { gap: 10px; font-size: 0.75rem; }
+        }
 
     </style>
     """, unsafe_allow_html=True)
@@ -332,20 +367,18 @@ if st.session_state.page == "dashboard":
     
     st.write("---")
     
-    # Main Banner
+    # Main Banner with Programming Image
     st.markdown("""
-    <div class="office-card animate-enter">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-                <h3 style="margin-top:0;">Welcome back, Administrator.</h3>
-                <p>You are logged into the <b>INTECAP Database Administration Training Environment</b>. 
-                All systems are nominal. Use the sidebar to access your training modules or manage the simulated database.</p>
-                <div style="margin-top:15px;">
-                    <span style="background:#E7F3FF; color:#1877F2; padding:5px 10px; border-radius:15px; font-size:0.8rem; font-weight:bold;">SQL Server 2026</span>
-                    <span style="background:#E6F6EC; color:#09822C; padding:5px 10px; border-radius:15px; font-size:0.8rem; font-weight:bold;">Status: Online</span>
-                </div>
+    <div class="office-card animate-enter" style="padding:0; border:none; overflow:hidden;">
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1000&q=80" style="width:100%; height:200px; object-fit:cover;">
+        <div style="padding:25px;">
+            <h3 style="margin-top:0;">Welcome back, Administrator.</h3>
+            <p>You are logged into the <b>INTECAP Database Administration Training Environment</b>. 
+            All systems are nominal. Use the sidebar to access your training modules or manage the simulated database.</p>
+            <div style="margin-top:15px; display:flex; gap:10px;">
+                <span style="background:#E7F3FF; color:#1877F2; padding:5px 10px; border-radius:15px; font-size:0.8rem; font-weight:bold;">SQL Server 2026</span>
+                <span style="background:#E6F6EC; color:#09822C; padding:5px 10px; border-radius:15px; font-size:0.8rem; font-weight:bold;">Status: Online</span>
             </div>
-            <div style="font-size:3rem;">🏢</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -370,11 +403,11 @@ elif st.session_state.page == "education":
         
         module_keys = list(temas.keys())
         
-        # Images for modules
+        # Images for modules (High Quality, Neutral)
         img_urls = [
-            "https://images.unsplash.com/photo-1555099962-4199c345e5dd?w=500",
-            "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500",
-            "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=500"
+            "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500", # Computer
+            "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500", # Charts
+            "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=500"  # Code
         ]
         
         for i in range(0, len(module_keys), 2):
