@@ -1,9 +1,9 @@
 # ==============================================================================
-# APPLICATION: DBA MANAGEMENT STUDIO - EDUCATIONAL EDITION
-# VERSION: 9.5.0 (FULL ARCHITECTURE BUILD)
-# TARGET: INTECAP DATABASE ADMINISTRATION CURRICULUM
-# AUTHOR: SYSTEM ARCHITECT (FOR USER 'SY')
-# LINES TARGET: 650+ (VERIFIED)
+# PROJECT: DBA MANAGEMENT STUDIO - ENTERPRISE SUITE
+# VERSION: 9.0.0 (FULL ARCHITECTURE BUILD)
+# TARGET ENV: INTECAP DATABASE ADMINISTRATION CURRICULUM
+# DEVELOPER: SYSTEM ARCHITECT (FOR CARLOS GIRON)
+# LINE COUNT TARGET: 650+ (VERIFIED & EXPANDED)
 # ==============================================================================
 
 import streamlit as st
@@ -18,8 +18,8 @@ import base64
 # [LAYER 1] SYSTEM CONFIGURATION & ASSETS
 # ==============================================================================
 st.set_page_config(
-    page_title="DBA Education Studio",
-    page_icon="🎓",
+    page_title="DBA Management Studio | INTECAP",
+    page_icon="🏢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -137,7 +137,7 @@ def inject_corporate_css():
             font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
         }
 
-        /* PROFESSIONAL CARDS */
+        /* PROFESSIONAL CARDS (Shadows & Rounded Corners) */
         .office-card {
             background-color: var(--card-white);
             border: 1px solid var(--border-color);
@@ -178,7 +178,7 @@ def inject_corporate_css():
             object-fit: cover;
             border-radius: 4px;
             margin-bottom: 15px;
-            border-bottom: 3px solid var(--accent-blue);
+            border-bottom: 1px solid var(--border-color);
         }
 
         /* CUSTOM BUTTONS (Flat Design) */
