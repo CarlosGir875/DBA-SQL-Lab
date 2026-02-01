@@ -7772,9 +7772,11 @@ temas = {
                 {'pregunta': 'If it ___ not for the cache, the system would be very slow.', 'opciones': ['was', 'were', 'is'], 'correcta': 'were', 'explicacion': 'Subjuntivo: "If it were not for...".', 'traduccion': 'Si no fuera por el caché, el sistema sería muy lento.'},
                 {'pregunta': 'A number of issues ___ identified during the audit.', 'opciones': ['was', 'were', 'is'], 'correcta': 'were', 'explicacion': '"A number of" siempre requiere verbo en plural.', 'traduccion': 'Varios problemas fueron identificados durante la auditoría.'},
                 {'pregunta': 'He ___ my coworker.', 'opciones': ['is', 'are', 'was'], 'correcta': 'was', 'explicacion': "En pasado, 'He' usa 'was'.", 'traduccion': 'Él era mi compañero.'},
-                {'pregunta': 'I ___ the winner.', 'opciones': ['was', 'were', 'am'], 'correcta': 'was', 'explicacion': "En pasado, 'I' usa 'was'.", 'traduccion': 'Yo fui el ganador.'}
-            ],
+                {'pregunta': 'I ___ the winner.', 'opciones': ['was', 'were', 'am'], 'correcta': 'was', 'explicacion': "En pasado, 'I' usa 'was'.", 'traduccion': 'Yo fui el ganador.'}  ],
+
+
             '2. Avanzado': [
+
                 {'pregunta': 'If the server ___ to fail, the secondary node would take over.', 'opciones': ['was', 'were', 'is'], 'correcta': 'were', 'explicacion': 'Uso de "were to" para condiciones hipotéticas en el futuro.', 'traduccion': 'Si el servidor llegara a fallar, el nodo secundario tomaría el control.'},
 {'pregunta': 'The data ___ stored in a distributed cluster.', 'opciones': ['was', 'were', 'is'], 'correcta': 'were', 'explicacion': 'En contextos técnicos, "data" suele tratarse como plural (plural de datum).', 'traduccion': 'Los datos fueron almacenados en un clúster distribuido.'},
 {'pregunta': 'Everything that could go wrong ___ already addressed.', 'opciones': ['was', 'were', 'are'], 'correcta': 'was', 'explicacion': '"Everything" es un pronombre singular.', 'traduccion': 'Todo lo que podía salir mal ya fue abordado.'},
@@ -7825,136 +7827,1591 @@ temas = {
 #
 #
 #
-"SQL Questions": [
+    "SQL Questions":
 
-{
-    "1. Básico": [
-        "1. Escribe el código SQL para SELECCIONAR todas las columnas de la tabla Employees.",
-        "2. Escribe el código SQL para SELECCIONAR únicamente las columnas FirstName y LastName de Employees.",
-        "3. Escribe el código SQL para FILTRAR empleados cuyo LastName sea 'Lopez'.",
-        "4. Escribe el código SQL para ORDENAR los empleados por FirstName ascendente.",
-        "5. Escribe el código SQL para ORDENAR los empleados por HireDate descendente.",
-        "6. Escribe el código SQL para SELECCIONAR los productos cuyo nombre CONTENGA 'USB' usando LIKE.",
-        "7. Escribe el código SQL para OBTENER empleados cuyo FirstName INICIE con 'A' usando LIKE.",
-        "8. Escribe el código SQL para OBTENER empleados cuyo LastName TERMINE en 'ez' usando LIKE.",
-        "9. Escribe el código SQL para SELECCIONAR los primeros 10 registros de la tabla Orders.",
-        "10. Escribe el código SQL para ASIGNAR un alias 'emp' a la tabla Employees en un SELECT.",
-        "11. Escribe el código SQL para ASIGNAR un alias 'NombreCompleto' a la concatenación de FirstName y LastName.",
-        "12. Escribe el código SQL para LISTAR productos con Price mayor a 50.",
-        "13. Escribe el código SQL para LISTAR clientes cuya ciudad NO sea 'Madrid'.",
-        "14. Escribe el código SQL para FILTRAR registros con fecha posterior a '2024-01-01'.",
-        "15. Escribe el código SQL para FILTRAR productos cuyo Stock sea entre 10 y 50 usando BETWEEN.",
-        "16. Escribe el código SQL para SELECCIONAR productos cuyo CategoryID esté en (1,2,3).",
-        "17. Escribe el código SQL para OBTENER empleados cuyo MiddleName sea NULL.",
-        "18. Escribe el código SQL para OBTENER empleados cuyo MiddleName NO sea NULL.",
-        "19. Escribe el código SQL para LISTAR órdenes cuya cantidad sea mayor o igual a 5.",
-        "20. Escribe el código SQL para MOSTRAR los productos ordenados primero por CategoryID y luego por Price.",
-        "21. Escribe el código SQL para RENOMBRAR la columna Price como PrecioFinal.",
-        "22. Escribe el código SQL para SELECCIONAR clientes cuyo Email incluya '@gmail.com'.",
-        "23. Escribe el código SQL para SELECCIONAR productos cuyo nombre tenga exactamente 5 letras usando LIKE.",
-        "24. Escribe el código SQL para OBTENER empleados contratados ENTRE 2020 y 2022.",
-        "25. Escribe el código SQL para OBTENER productos cuyo Stock NO esté entre 20 y 40.",
-        "26. Escribe el código SQL para FILTRAR pedidos cuyo Status sea 'Pending' o 'Processing'.",
-        "27. Escribe el código SQL para SELECCIONAR DISTINCT las ciudades de los clientes.",
-        "28. Escribe el código SQL para CONTAR cuántos registros existen en la tabla Products.",
-        "29. Escribe el código SQL para MOSTRAR productos cuyo nombre tenga 'Pro' al inicio.",
-        "30. Escribe el código SQL para MOSTRAR clientes cuyo código postal contenga '01'.",
-        "31. Escribe el código SQL para LISTAR empleados cuyo FirstName sea 'Carlos'.",
-        "32. Escribe el código SQL para LISTAR órdenes creadas en el año 2023.",
-        "33. Escribe el código SQL para SELECCIONAR productos más baratos que 15.",
-        "34. Escribe el código SQL para SELECCIONAR categorías cuyo nombre termine en 's'.",
-        "35. Escribe el código SQL para MOSTRAR productos ordenados alfabéticamente por nombre.",
-        "36. Escribe el código SQL para FILTRAR empleados cuya edad sea menor de 30.",
-        "37. Escribe el código SQL para SELECCIONAR productos cuyo SupplierID sea 5.",
-        "38. Escribe el código SQL para FILTRAR órdenes cuyo Total sea inferior a 100.",
-        "39. Escribe el código SQL para MOSTRAR empleados cuyo puesto incluya 'Manager'.",
-        "40. Escribe el código SQL para SELECCIONAR productos cuyo nombre NO contenga 'Deluxe'.",
-        "41. Escribe el código SQL para LISTAR clientes cuyo nombre contenga un espacio.",
-        "42. Escribe el código SQL para FILTRAR registros donde la columna Estado sea 'Activo'.",
-        "43. Escribe el código SQL para ORDENAR clientes por apellido descendente.",
-        "44. Escribe el código SQL para SELECCIONAR productos cuyo precio sea mayor a 200.",
-        "45. Escribe el código SQL para MOSTRAR órdenes realizadas un lunes (usando DATEPART).",
-        "46. Escribe el código SQL para MOSTRAR clientes cuyo teléfono empiece con '+34'.",
-        "47. Escribe el código SQL para SELECCIONAR productos cuyo nombre tenga la letra 'x' en cualquier posición.",
-        "48. Escribe el código SQL para FILTRAR órdenes canceladas.",
-        "49. Escribe el código SQL para MOSTRAR empleados cuyo FirstName sea de longitud 4.",
-        "50. Escribe el código SQL para MOSTRAR productos cuyo precio sea exactamente 99."
-    ],
-    "2. Intermedio": [
-        "1. Escribe el código SQL para REALIZAR un INNER JOIN entre Employees y Departments por DepartmentID.",
-        "2. Escribe el código SQL para REALIZAR un LEFT JOIN entre Orders y Customers por CustomerID.",
-        "3. Escribe el código SQL para OBTENER el total de ventas agrupado por año usando GROUP BY.",
-        "4. Escribe el código SQL para OBTENER el promedio de precios por categoría.",
-        "5. Escribe el código SQL para LISTAR empleados y su departamento usando INNER JOIN.",
-        "6. Escribe el código SQL para OBTENER cuántas órdenes tiene cada cliente.",
-        "7. Escribe el código SQL para MOSTRAR categorías y la suma total de existencias.",
-        "8. Escribe el código SQL para MOSTRAR categorías con suma de inventario mayor a 500 usando HAVING.",
-        "9. Escribe el código SQL para OBTENER el promedio de salarios por departamento.",
-        "10. Escribe el código SQL para OBTENER el número de empleados por puesto.",
-        "11. Escribe el código SQL para MOSTRAR proveedores y el número de productos asociados.",
-        "12. Escribe el código SQL para MOSTRAR clientes con más de 5 órdenes.",
-        "13. Escribe el código SQL para OBTENER la suma total de ventas por mes.",
-        "14. Escribe el código SQL para OBTENER el precio promedio de productos por SupplierID.",
-        "15. Escribe el código SQL para OBTENER órdenes cuyo total supere el promedio de todas las órdenes.",
-        "16. Escribe el código SQL para MOSTRAR departamentos que tengan más de 10 empleados.",
-        "17. Escribe el código SQL para REALIZAR un LEFT JOIN entre Products y Categories.",
-        "18. Escribe el código SQL para CONTAR cuántos productos tiene cada categoría.",
-        "19. Escribe el código SQL para OBTENER el máximo precio de cada categoría.",
-        "20. Escribe el código SQL para OBTENER el mínimo precio de cada proveedor.",
-        "21. Escribe el código SQL para OBTENER órdenes agrupadas por CustomerID y filtrar clientes con total > 1000.",
-        "22. Escribe el código SQL para MOSTRAR ciudades y cantidad de clientes asociados.",
-        "23. Escribe el código SQL para OBTENER total, promedio y máxima venta por cliente.",
-        "24. Escribe el código SQL para AGRUPAR órdenes por estado y mostrar el conteo.",
-        "25. Escribe el código SQL para OBTENER ventas por día de semana.",
-        "26. Escribe el código SQL para MOSTRAR empleados y su manager usando un self join.",
-        "27. Escribe el código SQL para MOSTRAR productos y la categoría a la que pertenecen.",
-        "28. Escribe el código SQL para MOSTRAR órdenes y productos usando JOIN a OrderDetails.",
-        "29. Escribe el código SQL para CONTAR cuántos productos tienen un proveedor.",
-        "30. Escribe el código SQL para MOSTRAR clientes cuyo gasto total supere 500.",
-        "31. Escribe el código SQL para OBTENER el total de órdenes por año.",
-        "32. Escribe el código SQL para OBTENER el total de órdenes por mes.",
-        "33. Escribe el código SQL para OBTENER los 5 clientes con mayor gasto total.",
-        "34. Escribe el código SQL para AGRUPAR empleados por nivel educativo.",
-        "35. Escribe el código SQL para AGRUPAR productos por disponibilidad (Stock > 0).",
-        "36. Escribe el código SQL para MOSTRAR productos y proveedores usando JOIN.",
-        "37. Escribe el código SQL para OBTENER el promedio de calificaciones por producto.",
-        "38. Escribe el código SQL para MOSTRAR cuántos pedidos tiene cada estado.",
-        "39. Escribe el código SQL para MOSTRAR empleados por antigüedad usando GROUP BY.",
-        "40. Escribe el código SQL para AGRUPAR clientes por país.",
-        "41. Escribe el código SQL para HACER un INNER JOIN entre Orders, OrderDetails y Products.",
-        "42. Escribe el código SQL para MOSTRAR categorías con precio promedio mayor a 100.",
-        "43. Escribe el código SQL para MOSTRAR proveedores con inventario total mayor a 300.",
-        "44. Escribe el código SQL para OBTENER ventas totales por producto.",
-        "45. Escribe el código SQL para OBTENER ventas totales por categoría.",
-        "46. Escribe el código SQL para LISTAR los clientes sin órdenes usando LEFT JOIN.",
-        "47. Escribe el código SQL para CALCULAR el porcentaje de ventas por categoría.",
-        "48. Escribe el código SQL para OBTENER los productos más vendidos.",
-        "49. Escribe el código SQL para MOSTRAR clientes y su última orden.",
-        "50. Escribe el código SQL para MOSTRAR empleados cuyo salario esté por encima del promedio general."
-    ],
-    "3. Avanzado": [
-        "1. Escribe el código SQL para CREAR un Stored Procedure que devuelva todos los empleados.",
-        "2. Escribe el código SQL para CREAR un Stored Procedure que reciba un ID y devuelva el cliente.",
-        "3. Escribe el código SQL para CREAR un Stored Procedure que inserte un nuevo producto.",
-        "4. Escribe el código SQL para CREAR un Stored Procedure que actualice el precio de un producto.",
-        "5. Escribe el código SQL para CREAR un Stored Procedure que elimine un producto por ID.",
-        "6. Escribe el código SQL para CREAR un Trigger que registre inserciones en Employees.",
-        "7. Escribe el código SQL para CREAR un Trigger que evite eliminar categorías con productos asociados.",
-        "8. Escribe el código SQL para CREAR un Trigger que registre cambios de precio.",
-        "9. Escribe el código SQL para CREAR una Vista que muestre empleados y departamentos.",
-        "10. Escribe el código SQL para CREAR una Vista que muestre productos con categoría.",
-        "11. Escribe el código SQL para CREAR una Transacción que inserte dos productos.",
-        "12. Escribe el código SQL para CREAR una Transacción que actualice stock y registre log.",
-        "13. Escribe el código SQL para CREAR bloque TRY/CATCH que maneje un error de inserción.",
-        "14. Escribe el código SQL para CREAR un Stored Procedure que calcule total de ventas por cliente.",
-        "15. Escribe el código SQL para CREAR un Stored Procedure que devuelva top 5 productos más vendidos.",
-        "16. Escribe el código SQL para CREAR un Stored Procedure que busque productos por nombre usando LIKE.",
-        "17. Escribe el código SQL para CREAR una Vista con las ventas totales por mes.",
-        "18. Escribe el código SQL para CREAR una Vista con listado de empleados activos.",
-        "19. Escribe el código SQL para CREAR un Trigger que impida actualización de salario a valores negativos.",
-        "20. Escribe el código SQL para CREAR un Trigger que registre eliminaciones en Orders.",
-        "21. Escribe el código SQL para CREAR una Transacción que inserte cliente y orden.",
-        "22. Escribe el código SQL para CREAR TRY/CATCH que registre errores en tabla Logs."]  ,
- }  # Este cierra la última pregunta de SQL
-    ]      # Este cierra la lista de "3. Avanzado"
-}          # ESTE ES EL QUE TE FALTA (Cierra todo el diccionario 'temas')
+       { "1. Básico": [
+            {
+                "pregunta": "1. ¿Qué comando se usa para extraer datos de una base de datos?",
+                "opciones": ["GET", "OPEN", "SELECT"],
+                "correcta": "SELECT",
+                "explicacion": "SELECT es la instrucción fundamental para leer datos en SQL.",
+                "traduccion": "Seleccionar."
+            },
+            {
+                "pregunta": "2. ¿Cómo seleccionas TODAS las columnas de una tabla llamada 'Usuarios'?",
+                "opciones": ["SELECT ALL FROM Usuarios", "SELECT * FROM Usuarios", "SELECT Usuarios"],
+                "correcta": "SELECT * FROM Usuarios",
+                "explicacion": "El símbolo asterisco (*) significa 'todas las columnas'.",
+                "traduccion": "Seleccionar todo de Usuarios."
+            },
+            {
+                "pregunta": "3. ¿Qué cláusula se usa para FILTRAR registros?",
+                "opciones": ["WHERE", "FILTER", "SEARCH"],
+                "correcta": "WHERE",
+                "explicacion": "WHERE especifica qué filas deben ser devueltas basándose en una condición.",
+                "traduccion": "Donde..."
+            },
+            {
+                "pregunta": "4. ¿Cómo filtras usuarios que tengan el nombre 'Ana'?",
+                "opciones": ["SELECT * FROM Usuarios WHERE Nombre = 'Ana'", "SELECT * FROM Usuarios IF Nombre IS 'Ana'", "SELECT * FROM Usuarios WHERE Nombre LIKE Ana"],
+                "correcta": "SELECT * FROM Usuarios WHERE Nombre = 'Ana'",
+                "explicacion": "Se usa el signo igual (=) para coincidencias exactas y comillas para texto.",
+                "traduccion": "Donde el nombre sea igual a Ana."
+            },
+            {
+                "pregunta": "5. ¿Qué comando se usa para ORDENAR los resultados?",
+                "opciones": ["SORT BY", "ORDER BY", "ARRANGE BY"],
+                "correcta": "ORDER BY",
+                "explicacion": "ORDER BY organiza el resultado ascendente o descendentemente.",
+                "traduccion": "Ordenar por..."
+            },
+            {
+                "pregunta": "6. ¿Cómo ordenas los salarios de MAYOR a MENOR?",
+                "opciones": ["ORDER BY Salario DESC", "ORDER BY Salario ASC", "SORT Salario DOWN"],
+                "correcta": "ORDER BY Salario DESC",
+                "explicacion": "DESC significa Descendente (de mayor a menor).",
+                "traduccion": "Ordenar por salario descendente."
+            },
+            {
+                "pregunta": "7. ¿Qué operador se usa para buscar un patrón (ej. nombres que empiezan con 'A')?",
+                "opciones": ["EQUALS", "LIKE", "MATCH"],
+                "correcta": "LIKE",
+                "explicacion": "LIKE junto con el comodín % se usa para buscar patrones.",
+                "traduccion": "Como / Parecido a."
+            },
+            {
+                "pregunta": "8. ¿Cuál es la sintaxis correcta para seleccionar valores ÚNICOS (sin repetidos)?",
+                "opciones": ["SELECT UNIQUE Pais FROM Clientes", "SELECT DIFFERENT Pais FROM Clientes", "SELECT DISTINCT Pais FROM Clientes"],
+                "correcta": "SELECT DISTINCT Pais FROM Clientes",
+                "explicacion": "DISTINCT elimina los duplicados del resultado.",
+                "traduccion": "Seleccionar distintos."
+            },
+            {
+                "pregunta": "9. ¿Cómo insertas un nuevo registro en una tabla?",
+                "opciones": ["ADD RECORD INTO...", "INSERT INTO...", "CREATE NEW..."],
+                "correcta": "INSERT INTO...",
+                "explicacion": "INSERT INTO nombre_tabla VALUES... es el comando para agregar datos.",
+                "traduccion": "Insertar dentro."
+            },
+            {
+                "pregunta": "10. ¿Qué significa NULL en SQL?",
+                "opciones": ["El valor es cero", "El campo está vacío", "Valor desconocido o faltante"],
+                "correcta": "Valor desconocido o faltante",
+                "explicacion": "NULL no es cero ni espacio vacío, es la ausencia de valor.",
+                "traduccion": "Nulo."
+            },
+            {
+                "pregunta": "11. ¿Cómo filtras registros donde el campo Email NO esté vacío?",
+                "opciones": ["WHERE Email IS NOT NULL", "WHERE Email != NULL", "WHERE Email <> NULL"],
+                "correcta": "WHERE Email IS NOT NULL",
+                "explicacion": "Para NULL siempre se usa IS o IS NOT, nunca operadores matemáticos.",
+                "traduccion": "Donde Email no es nulo."
+            },
+            {
+                "pregunta": "12. ¿Qué comando se usa para ACTUALIZAR datos existentes?",
+                "opciones": ["MODIFY", "UPDATE", "CHANGE"],
+                "correcta": "UPDATE",
+                "explicacion": "UPDATE tabla SET campo = valor...",
+                "traduccion": "Actualizar."
+            },
+            {
+                "pregunta": "13. ¿Qué comando se usa para BORRAR registros de una tabla?",
+                "opciones": ["REMOVE", "DELETE", "ERASE"],
+                "correcta": "DELETE",
+                "explicacion": "DELETE FROM tabla WHERE... elimina filas.",
+                "traduccion": "Borrar."
+            },
+            {
+                "pregunta": "14. ¿Qué pasa si haces un DELETE FROM Clientes sin usar WHERE?",
+                "opciones": ["Da un error", "Borra solo el primer registro", "Borra TODOS los registros"],
+                "correcta": "Borra TODOS los registros",
+                "explicacion": "Sin WHERE, el DELETE aplica a toda la tabla. ¡Peligroso!",
+                "traduccion": "Borra todo."
+            },
+            {
+                "pregunta": "15. ¿Qué función devuelve el número total de filas?",
+                "opciones": ["SUM(*)", "TOTAL(*)", "COUNT(*)"],
+                "correcta": "COUNT(*)",
+                "explicacion": "COUNT cuenta las filas devueltas por la consulta.",
+                "traduccion": "Contar."
+            },
+            {
+                "pregunta": "16. ¿Qué función devuelve el valor más alto de una columna?",
+                "opciones": ["TOP()", "MAX()", "HIGH()"],
+                "correcta": "MAX()",
+                "explicacion": "MAX(columna) devuelve el valor máximo.",
+                "traduccion": "Máximo."
+            },
+            {
+                "pregunta": "17. ¿Qué función devuelve el valor más bajo?",
+                "opciones": ["MIN()", "LOW()", "BOTTOM()"],
+                "correcta": "MIN()",
+                "explicacion": "MIN(columna) devuelve el valor mínimo.",
+                "traduccion": "Mínimo."
+            },
+            {
+                "pregunta": "18. ¿Cómo seleccionas registros donde la edad esté entre 20 y 30?",
+                "opciones": ["WHERE Edad BETWEEN 20 AND 30", "WHERE Edad > 20 AND < 30", "WHERE Edad LIMIT 20-30"],
+                "correcta": "WHERE Edad BETWEEN 20 AND 30",
+                "explicacion": "BETWEEN incluye los valores extremos del rango.",
+                "traduccion": "Entre 20 y 30."
+            },
+            {
+                "pregunta": "19. ¿Cómo seleccionas registros donde la ciudad sea 'Madrid' O 'Barcelona'?",
+                "opciones": ["WHERE Ciudad = 'Madrid' OR Ciudad = 'Barcelona'", "WHERE Ciudad = 'Madrid' AND Ciudad = 'Barcelona'", "WHERE Ciudad BOTH 'Madrid', 'Barcelona'"],
+                "correcta": "WHERE Ciudad = 'Madrid' OR Ciudad = 'Barcelona'",
+                "explicacion": "OR se usa cuando queremos que se cumpla una condición O la otra.",
+                "traduccion": "Madrid o Barcelona."
+            },
+            {
+                "pregunta": "20. ¿Qué operador se usa para seleccionar valores dentro de una lista específica?",
+                "opciones": ["WITHIN", "IN", "LIST"],
+                "correcta": "IN",
+                "explicacion": "Ejemplo: WHERE ID IN (1, 5, 9).",
+                "traduccion": "En."
+            },
+            {
+                "pregunta": "21. ¿Qué comando elimina una tabla COMPLETA (estructura y datos)?",
+                "opciones": ["DELETE TABLE", "DROP TABLE", "CLEAR TABLE"],
+                "correcta": "DROP TABLE",
+                "explicacion": "DROP borra la tabla del mapa. DELETE solo borra el contenido.",
+                "traduccion": "Soltar tabla."
+            },
+            {
+                "pregunta": "22. ¿Cómo le das un apodo (alias) temporal a una columna?",
+                "opciones": ["SELECT Nombre AS Name", "SELECT Nombre IS Name", "SELECT Name = Nombre"],
+                "correcta": "SELECT Nombre AS Name",
+                "explicacion": "AS se usa para renombrar temporalmente columnas o tablas.",
+                "traduccion": "Como."
+            },
+            {
+                "pregunta": "23. ¿Cuál es el operador para 'Diferente de' en SQL estándar?",
+                "opciones": ["<>", "!=", "Ambos son correctos"],
+                "correcta": "Ambos son correctos",
+                "explicacion": "<> y != suelen funcionar en la mayoría de bases de datos.",
+                "traduccion": "Diferente."
+            },
+            {
+                "pregunta": "24. ¿Qué hace la función SUM()?",
+                "opciones": ["Cuenta filas", "Suma valores numéricos", "Resume texto"],
+                "correcta": "Suma valores numéricos",
+                "explicacion": "SUM(columna) suma todos los números de esa columna.",
+                "traduccion": "Suma."
+            },
+            {
+                "pregunta": "25. ¿Qué hace la función AVG()?",
+                "opciones": ["Calcula el promedio", "Calcula la mediana", "Cuenta el promedio"],
+                "correcta": "Calcula el promedio",
+                "explicacion": "AVG viene de Average (Promedio).",
+                "traduccion": "Promedio."
+            },
+            {
+                "pregunta": "26. ¿Cómo escribes un comentario de una sola línea en SQL?",
+                "opciones": ["// Comentario", "-- Comentario", "# Comentario"],
+                "correcta": "-- Comentario",
+                "explicacion": "Los guiones dobles (--) inician un comentario en SQL estándar.",
+                "traduccion": "Comentario."
+            },
+            {
+                "pregunta": "27. ¿Qué comando se usa para limitar el número de filas devueltas?",
+                "opciones": ["LIMIT (o TOP en SQL Server)", "STOP", "MAXROWS"],
+                "correcta": "LIMIT (o TOP en SQL Server)",
+                "explicacion": "MySQL/Postgres usan LIMIT, SQL Server usa TOP.",
+                "traduccion": "Límite."
+            },
+            {
+                "pregunta": "28. ¿Cómo seleccionas registros cuyo nombre termine con la letra 'o'?",
+                "opciones": ["LIKE 'o%'", "LIKE '%o'", "LIKE '*o'"],
+                "correcta": "LIKE '%o'",
+                "explicacion": "El % al principio significa 'cualquier cosa antes', y la 'o' al final.",
+                "traduccion": "Termina en o."
+            },
+            {
+                "pregunta": "29. ¿Qué instrucción se usa para agregar una nueva columna a una tabla existente?",
+                "opciones": ["ALTER TABLE ... ADD", "UPDATE TABLE ... ADD", "INSERT COLUMN ..."],
+                "correcta": "ALTER TABLE ... ADD",
+                "explicacion": "ALTER TABLE modifica la estructura de la tabla.",
+                "traduccion": "Alterar tabla."
+            },
+            {
+                "pregunta": "30. ¿Qué tipo de dato usarías para guardar un número entero?",
+                "opciones": ["VARCHAR", "INT", "DATE"],
+                "correcta": "INT",
+                "explicacion": "INT o INTEGER se usa para números enteros.",
+                "traduccion": "Entero."
+            },
+
+            {
+                "pregunta": "31. ¿Cómo seleccionas registros que cumplan DOS condiciones a la vez (ej. Edad > 20 Y Ciudad = 'Madrid')?",
+                "opciones": ["WHERE Edad > 20 OR Ciudad = 'Madrid'", "WHERE Edad > 20 AND Ciudad = 'Madrid'", "WHERE Edad > 20 PLUS Ciudad = 'Madrid'"],
+                "correcta": "WHERE Edad > 20 AND Ciudad = 'Madrid'",
+                "explicacion": "El operador AND obliga a que ambas condiciones sean verdaderas.",
+                "traduccion": "Y (condición lógica)."
+            },
+            {
+                "pregunta": "32. ¿Qué operador invierte el resultado de una condición?",
+                "opciones": ["REVERSE", "NOT", "INV"],
+                "correcta": "NOT",
+                "explicacion": "NOT cambia verdadero a falso y viceversa (ej. NOT IN).",
+                "traduccion": "No / Negación."
+            },
+            {
+                "pregunta": "33. ¿Qué función te da la fecha y hora actual del sistema?",
+                "opciones": ["GETDATE() o CURRENT_TIMESTAMP", "TODAY()", "NOW()"],
+                "correcta": "GETDATE() o CURRENT_TIMESTAMP",
+                "explicacion": "En SQL Server se usa GETDATE().",
+                "traduccion": "Obtener fecha."
+            },
+            {
+                "pregunta": "34. ¿Cómo unes (concatenas) dos textos, como Nombre y Apellido?",
+                "opciones": ["Nombre + ' ' + Apellido", "Nombre & ' ' & Apellido", "JOIN(Nombre, Apellido)"],
+                "correcta": "Nombre + ' ' + Apellido",
+                "explicacion": "En SQL Server se usa el signo más (+) o la función CONCAT().",
+                "traduccion": "Concatenar."
+            },
+            {
+                "pregunta": "35. ¿Qué restricción (constraint) asegura que no se repitan valores en una columna?",
+                "opciones": ["NOT NULL", "UNIQUE", "CHECK"],
+                "correcta": "UNIQUE",
+                "explicacion": "UNIQUE impide duplicados en esa columna.",
+                "traduccion": "Único."
+            },
+            {
+                "pregunta": "36. ¿Qué restricción identifica de forma única a cada fila de una tabla?",
+                "opciones": ["FOREIGN KEY", "PRIMARY KEY", "INDEX"],
+                "correcta": "PRIMARY KEY",
+                "explicacion": "La Llave Primaria es el identificador único (ej. ID).",
+                "traduccion": "Llave Primaria."
+            },
+            {
+                "pregunta": "37. ¿Qué comando crea una nueva base de datos vacía?",
+                "opciones": ["NEW DATABASE", "CREATE DATABASE", "START DATABASE"],
+                "correcta": "CREATE DATABASE",
+                "explicacion": "CREATE DATABASE nombre_db;",
+                "traduccion": "Crear base de datos."
+            },
+            {
+                "pregunta": "38. ¿Qué comando elimina una base de datos completa?",
+                "opciones": ["DELETE DATABASE", "DROP DATABASE", "REMOVE DATABASE"],
+                "correcta": "DROP DATABASE",
+                "explicacion": "DROP DATABASE borra todo el contenedor y sus archivos. ¡Cuidado!",
+                "traduccion": "Soltar base de datos."
+            },
+            {
+                "pregunta": "39. ¿Cuál es el orden por defecto si usas ORDER BY sin especificar ASC o DESC?",
+                "opciones": ["Descendente (DESC)", "Aleatorio", "Ascendente (ASC)"],
+                "correcta": "Ascendente (ASC)",
+                "explicacion": "Por defecto, SQL ordena de menor a mayor (A-Z, 0-9).",
+                "traduccion": "Ascendente."
+            },
+            {
+                "pregunta": "40. ¿Qué función convierte un texto a MAYÚSCULAS?",
+                "opciones": ["UPPER()", "CAPS()", "TOUPPER()"],
+                "correcta": "UPPER()",
+                "explicacion": "UPPER('hola') devuelve 'HOLA'.",
+                "traduccion": "Superior / Mayúsculas."
+            },
+            {
+                "pregunta": "41. ¿Qué función convierte un texto a minúsculas?",
+                "opciones": ["LOWER()", "SMALL()", "DOWN()"],
+                "correcta": "LOWER()",
+                "explicacion": "LOWER('HOLA') devuelve 'hola'.",
+                "traduccion": "Inferior / Minúsculas."
+            },
+            {
+                "pregunta": "42. ¿Cómo seleccionas registros donde el precio sea MAYOR O IGUAL a 100?",
+                "opciones": ["WHERE Precio >= 100", "WHERE Precio => 100", "WHERE Precio > 100"],
+                "correcta": "WHERE Precio >= 100",
+                "explicacion": "El operador es >= (el signo igual va después).",
+                "traduccion": "Mayor o igual."
+            },
+            {
+                "pregunta": "43. ¿Qué hace la instrucción USE [NombreBD]?",
+                "opciones": ["Crea una BD", "Borra una BD", "Cambia el contexto a esa BD"],
+                "correcta": "Cambia el contexto a esa BD",
+                "explicacion": "Le dice al gestor 'ahora voy a trabajar dentro de esta base de datos'.",
+                "traduccion": "Usar."
+            },
+            {
+                "pregunta": "44. ¿Qué tipo de dato usarías para guardar una fecha?",
+                "opciones": ["VARCHAR", "INT", "DATE / DATETIME"],
+                "correcta": "DATE / DATETIME",
+                "explicacion": "DATE almacena fecha, DATETIME fecha y hora.",
+                "traduccion": "Fecha."
+            },
+            {
+                "pregunta": "45. ¿Cómo seleccionas solo los primeros 5 registros en SQL Server?",
+                "opciones": ["SELECT TOP 5 * FROM...", "SELECT * FROM... LIMIT 5", "SELECT * FROM... FIRST 5"],
+                "correcta": "SELECT TOP 5 * FROM...",
+                "explicacion": "En T-SQL (SQL Server) se usa TOP. LIMIT es de MySQL/Postgres.",
+                "traduccion": "Superiores / Primeros."
+            },
+            {
+                "pregunta": "46. ¿Qué restricción impide dejar un campo vacío?",
+                "opciones": ["UNIQUE", "NOT NULL", "DEFAULT"],
+                "correcta": "NOT NULL",
+                "explicacion": "Obliga a que el campo siempre tenga un dato.",
+                "traduccion": "No nulo."
+            },
+            {
+                "pregunta": "47. ¿Qué operador matemático calcula el residuo de una división?",
+                "opciones": ["/", "MOD", "%"],
+                "correcta": "%",
+                "explicacion": "El signo de porcentaje (%) es el operador Módulo.",
+                "traduccion": "Módulo."
+            },
+            {
+                "pregunta": "48. ¿Cómo buscas un nombre que tenga la letra 'a' en la SEGUNDA posición?",
+                "opciones": ["LIKE '_a%'", "LIKE '2a%'", "LIKE '%a'"],
+                "correcta": "LIKE '_a%'",
+                "explicacion": "El guion bajo (_) representa exactamente un carácter cualquiera.",
+                "traduccion": "Patrón con guion bajo."
+            },
+            {
+                "pregunta": "49. ¿Qué función elimina los espacios en blanco al inicio y final de un texto?",
+                "opciones": ["CLEAN()", "STRIP()", "TRIM()"],
+                "correcta": "TRIM()",
+                "explicacion": "TRIM quita espacios sobrantes. (LTRIM y RTRIM también existen).",
+                "traduccion": "Recortar."
+            },
+            {
+                "pregunta": "50. ¿Qué devuelve la consulta SELECT 10 + 5?",
+                "opciones": ["105", "15", "Error"],
+                "correcta": "15",
+                "explicacion": "SQL puede usarse como calculadora simple.",
+                "traduccion": "Quince."
+            },
+            {
+                "pregunta": "51. ¿Para qué sirve el comando ALTER TABLE?",
+                "opciones": ["Para borrar la tabla", "Para ver los datos", "Para modificar la estructura de la tabla"],
+                "correcta": "Para modificar la estructura de la tabla",
+                "explicacion": "Sirve para agregar, borrar o modificar columnas.",
+                "traduccion": "Alterar tabla."
+            },
+            {
+                "pregunta": "52. ¿Qué significa DML?",
+                "opciones": ["Data Manipulation Language", "Database Main Log", "Data Master List"],
+                "correcta": "Data Manipulation Language",
+                "explicacion": "Son los comandos para manipular datos: INSERT, UPDATE, DELETE.",
+                "traduccion": "Lenguaje de Manipulación de Datos."
+            },
+            {
+                "pregunta": "53. ¿Qué significa DDL?",
+                "opciones": ["Data Definition Language", "Daily Data Load", "Drop Delete List"],
+                "correcta": "Data Definition Language",
+                "explicacion": "Son los comandos de estructura: CREATE, ALTER, DROP.",
+                "traduccion": "Lenguaje de Definición de Datos."
+            },
+            {
+                "pregunta": "54. ¿Cómo asignas un valor predeterminado a una columna si no se inserta nada?",
+                "opciones": ["DEFAULT valor", "AUTO valor", "SET valor"],
+                "correcta": "DEFAULT valor",
+                "explicacion": "La restricción DEFAULT llena el campo automáticamente.",
+                "traduccion": "Por defecto."
+            },
+            {
+                "pregunta": "55. ¿Cuál es el operador para 'Menor o igual'?",
+                "opciones": ["<=", "=<", "<"],
+                "correcta": "<=",
+                "explicacion": "Primero el símbolo menor, luego el igual.",
+                "traduccion": "Menor o igual."
+            },
+            {
+                "pregunta": "56. ¿Qué pasa si haces SELECT * FROM Tabla WHERE 1 = 1?",
+                "opciones": ["Devuelve todas las filas", "Da un error", "No devuelve nada"],
+                "correcta": "Devuelve todas las filas",
+                "explicacion": "1=1 siempre es verdadero, así que el filtro no descarta nada.",
+                "traduccion": "Tautología (siempre verdad)."
+            },
+            {
+                "pregunta": "57. ¿Qué función devuelve la longitud de una cadena de texto?",
+                "opciones": ["SIZE()", "LEN() o LENGTH()", "COUNT()"],
+                "correcta": "LEN() o LENGTH()",
+                "explicacion": "LEN() en SQL Server, LENGTH() en otros.",
+                "traduccion": "Longitud."
+            },
+            {
+                "pregunta": "58. ¿Cómo seleccionas valores que NO estén en una lista (ej. ni 1 ni 2)?",
+                "opciones": ["NOT IN (1, 2)", "OUT (1, 2)", "DIFFERENT (1, 2)"],
+                "correcta": "NOT IN (1, 2)",
+                "explicacion": "Es el opuesto de IN.",
+                "traduccion": "No en."
+            },
+            {
+                "pregunta": "59. ¿Para qué sirve la cláusula GROUP BY?",
+                "opciones": ["Para ordenar filas", "Para agrupar filas con valores idénticos", "Para filtrar grupos"],
+                "correcta": "Para agrupar filas con valores idénticos",
+                "explicacion": "Es esencial para funciones de agregado como SUM o COUNT por categoría.",
+                "traduccion": "Agrupar por."
+            },
+            {
+                "pregunta": "60. ¿Cuál es el comodín para buscar 'cualquier cadena de caracteres'?",
+                "opciones": ["*", "?", "%"],
+                "correcta": "%",
+                "explicacion": "El % sustituye a 0 o más caracteres en un LIKE.",
+                "traduccion": "Porcentaje (comodín)."
+            },
+
+            {
+                "pregunta": "61. ¿Qué significan las siglas SQL?",
+                "opciones": ["Structured Question List", "Structured Query Language", "Simple Query Language"],
+                "correcta": "Structured Query Language",
+                "explicacion": "Es el lenguaje estándar para bases de datos relacionales.",
+                "traduccion": "Lenguaje de Consulta Estructurado."
+            },
+            {
+                "pregunta": "62. ¿Cuál es el orden correcto de una consulta básica?",
+                "opciones": ["SELECT -> WHERE -> FROM", "FROM -> SELECT -> WHERE", "SELECT -> FROM -> WHERE"],
+                "correcta": "SELECT -> FROM -> WHERE",
+                "explicacion": "Primero dices QUÉ quieres, luego DE DÓNDE y al final el FILTRO.",
+                "traduccion": "Orden lógico."
+            },
+            {
+                "pregunta": "63. ¿Cómo se llama una fila en una tabla de base de datos?",
+                "opciones": ["Campo (Field)", "Registro (Record)", "Columna (Column)"],
+                "correcta": "Registro (Record)",
+                "explicacion": "Las filas son registros; las columnas son campos.",
+                "traduccion": "Registro."
+            },
+            {
+                "pregunta": "64. ¿Qué operador usarías para 'NO es igual a'?",
+                "opciones": ["==", "<>", "><"],
+                "correcta": "<>",
+                "explicacion": "En SQL estándar, <> se usa para desigualdad (también != en algunos sistemas).",
+                "traduccion": "Desigualdad."
+            },
+            {
+                "pregunta": "65. ¿Qué hace la función COUNT(DISTINCT Pais)?",
+                "opciones": ["Cuenta todos los países", "Cuenta solo los países únicos (sin repetidos)", "Suma la población de los países"],
+                "correcta": "Cuenta solo los países únicos (sin repetidos)",
+                "explicacion": "Combina contar con eliminar duplicados.",
+                "traduccion": "Contar distintos."
+            },
+            {
+                "pregunta": "66. ¿Qué tipo de dato es mejor para guardar un precio (ej: 10.50)?",
+                "opciones": ["INT", "VARCHAR", "DECIMAL / MONEY"],
+                "correcta": "DECIMAL / MONEY",
+                "explicacion": "INT no guarda decimales. DECIMAL o MONEY son precisos para dinero.",
+                "traduccion": "Decimal / Dinero."
+            },
+            {
+                "pregunta": "67. Si ejecutas 'DROP TABLE Usuarios', ¿se pueden recuperar los datos?",
+                "opciones": ["Sí, con deshacer (Undo)", "No, se borra todo permanentemente", "Sí, quedan en la papelera"],
+                "correcta": "No, se borra todo permanentemente",
+                "explicacion": "DROP es destructivo y generalmente irreversible sin copias de seguridad.",
+                "traduccion": "Eliminación permanente."
+            },
+            {
+                "pregunta": "68. ¿Cuál es el operador lógico para 'O esto O aquello'?",
+                "opciones": ["AND", "OR", "XOR"],
+                "correcta": "OR",
+                "explicacion": "Devuelve verdadero si al menos una de las condiciones se cumple.",
+                "traduccion": "O (disyunción)."
+            },
+            {
+                "pregunta": "69. ¿Cómo escribes un comentario de varias líneas en SQL?",
+                "opciones": ["/* Comentario */", "// Comentario //", "# Comentario #"],
+                "correcta": "/* Comentario */",
+                "explicacion": "La barra y asterisco abren y cierran bloques de comentarios.",
+                "traduccion": "Bloque de comentario."
+            },
+            {
+                "pregunta": "70. ¿Qué palabra clave se usa para definir un alias de tabla (ej: Employees E)?",
+                "opciones": ["LIKE", "AS", "SET"],
+                "correcta": "AS",
+                "explicacion": "SELECT * FROM Employees AS E (aunque el AS es opcional).",
+                "traduccion": "Como (Alias)."
+            },
+            {
+                "pregunta": "71. ¿Cuál es la función del comando TRUNCATE?",
+                "opciones": ["Borra la tabla del disco", "Borra los datos pero deja la estructura", "Borra una columna"],
+                "correcta": "Borra los datos pero deja la estructura",
+                "explicacion": "Es más rápido que DELETE y reinicia los contadores de ID.",
+                "traduccion": "Truncar."
+            },
+            {
+                "pregunta": "72. ¿Qué operador se usa para rangos de fechas?",
+                "opciones": ["INSIDE", "BETWEEN", "AMONG"],
+                "correcta": "BETWEEN",
+                "explicacion": "WHERE Fecha BETWEEN '2023-01-01' AND '2023-12-31'.",
+                "traduccion": "Entre."
+            },
+            {
+                "pregunta": "73. ¿Qué resultado da: SELECT 'Hola' + ' ' + 'Mundo'?",
+                "opciones": ["Hola Mundo", "Error", "HolaMundo"],
+                "correcta": "Hola Mundo",
+                "explicacion": "Concatena las cadenas de texto (en SQL Server).",
+                "traduccion": "Concatenación."
+            },
+            {
+                "pregunta": "74. ¿Para qué sirve la cláusula AS?",
+                "opciones": ["Para filtrar", "Para renombrar temporalmente una columna o tabla", "Para ordenar"],
+                "correcta": "Para renombrar temporalmente una columna o tabla",
+                "explicacion": "Mejora la legibilidad del resultado (ej: SELECT FirstName AS Nombre).",
+                "traduccion": "Alias."
+            },
+            {
+                "pregunta": "75. ¿Qué sentencia se usa para modificar la estructura de una tabla (ej. añadir columna)?",
+                "opciones": ["UPDATE TABLE", "CHANGE TABLE", "ALTER TABLE"],
+                "correcta": "ALTER TABLE",
+                "explicacion": "ALTER TABLE nombre_tabla ADD nombre_columna tipo_dato;",
+                "traduccion": "Alterar tabla."
+            }, ],
+
+  "2. Intermedio": [
+            {
+                "pregunta": "1. ¿Qué tipo de JOIN devuelve solo las filas que tienen coincidencia en AMBAS tablas?",
+                "opciones": ["LEFT JOIN", "INNER JOIN", "FULL JOIN"],
+                "correcta": "INNER JOIN",
+                "explicacion": "INNER JOIN es la intersección estricta entre dos tablas.",
+                "traduccion": "Unión interna."
+            },
+            {
+                "pregunta": "2. ¿Qué JOIN devuelve TODAS las filas de la tabla izquierda y las coincidentes de la derecha?",
+                "opciones": ["RIGHT JOIN", "INNER JOIN", "LEFT JOIN"],
+                "correcta": "LEFT JOIN",
+                "explicacion": "Si no hay coincidencia en la derecha, devuelve NULL.",
+                "traduccion": "Unión izquierda."
+            },
+            {
+                "pregunta": "3. Si usas LEFT JOIN y no hay coincidencia en la tabla derecha, ¿qué valores obtienes?",
+                "opciones": ["Ceros", "Errores", "NULL"],
+                "correcta": "NULL",
+                "explicacion": "SQL rellena con NULL los campos donde no encontró relación.",
+                "traduccion": "Nulo / Sin valor."
+            },
+            {
+                "pregunta": "4. ¿Qué JOIN devuelve TODAS las filas de ambas tablas, coincidan o no?",
+                "opciones": ["CROSS JOIN", "FULL OUTER JOIN", "INNER JOIN"],
+                "correcta": "FULL OUTER JOIN",
+                "explicacion": "Combina los resultados de Left y Right Join.",
+                "traduccion": "Unión externa completa."
+            },
+            {
+                "pregunta": "5. ¿Qué hace un CROSS JOIN?",
+                "opciones": ["Combina cada fila de una tabla con CADA fila de la otra", "Filtra duplicados", "Une solo claves primarias"],
+                "correcta": "Combina cada fila de una tabla con CADA fila de la otra",
+                "explicacion": "Genera un producto cartesiano (multiplica las filas de A por las de B).",
+                "traduccion": "Unión cruzada."
+            },
+            {
+                "pregunta": "6. ¿Cuál es la sintaxis correcta para unir 'Empleados' con 'Departamentos'?",
+                "opciones": ["SELECT * FROM Empleados JOIN Departamentos ON Empleados.DepID = Departamentos.ID", "SELECT * FROM Empleados JOIN Departamentos WHERE ID = DepID", "SELECT * FROM Empleados MERGE Departamentos"],
+                "correcta": "SELECT * FROM Empleados JOIN Departamentos ON Empleados.DepID = Departamentos.ID",
+                "explicacion": "Se usa la palabra clave ON para especificar la columna de relación.",
+                "traduccion": "Unir en..."
+            },
+            {
+                "pregunta": "7. ¿Para qué se utiliza la cláusula GROUP BY?",
+                "opciones": ["Para ordenar alfabéticamente", "Para agrupar filas que tienen los mismos valores en filas de resumen", "Para filtrar datos nulos"],
+                "correcta": "Para agrupar filas que tienen los mismos valores en filas de resumen",
+                "explicacion": "Es necesario cuando usas funciones como SUM, COUNT, AVG por categoría.",
+                "traduccion": "Agrupar por."
+            },
+            {
+                "pregunta": "8. ¿Qué diferencia hay entre WHERE y HAVING?",
+                "opciones": ["No hay diferencia", "WHERE filtra antes de agrupar, HAVING filtra después de agrupar", "HAVING es solo para Oracle"],
+                "correcta": "WHERE filtra antes de agrupar, HAVING filtra después de agrupar",
+                "explicacion": "No puedes usar WHERE con funciones de agregado (SUM, COUNT), para eso es HAVING.",
+                "traduccion": "Donde vs Teniendo."
+            },
+            {
+                "pregunta": "9. ¿Cómo obtienes el número de empleados por cada departamento?",
+                "opciones": ["SELECT DepID, COUNT(*) FROM Empleados GROUP BY DepID", "SELECT DepID, SUM(*) FROM Empleados", "SELECT COUNT(*) FROM Empleados"],
+                "correcta": "SELECT DepID, COUNT(*) FROM Empleados GROUP BY DepID",
+                "explicacion": "Necesitas agrupar por el ID del departamento para contarlos individualmente.",
+                "traduccion": "Contar agrupado."
+            },
+            {
+                "pregunta": "10. ¿Qué operador se usa para combinar el resultado de dos SELECTS en uno solo?",
+                "opciones": ["JOIN", "MERGE", "UNION"],
+                "correcta": "UNION",
+                "explicacion": "UNION apila los resultados de dos consultas (deben tener las mismas columnas).",
+                "traduccion": "Unión."
+            },
+            {
+                "pregunta": "11. ¿Cuál es la diferencia entre UNION y UNION ALL?",
+                "opciones": ["UNION elimina duplicados, UNION ALL los mantiene", "UNION es más rápido", "UNION ALL ordena los datos"],
+                "correcta": "UNION elimina duplicados, UNION ALL los mantiene",
+                "explicacion": "Si quieres ver todo (incluso repetidos) y ganar velocidad, usa UNION ALL.",
+                "traduccion": "Unión vs Unión Todo."
+            },
+            {
+                "pregunta": "12. ¿Qué función de agregado calcula el promedio?",
+                "opciones": ["MEAN()", "AVG()", "MEDIAN()"],
+                "correcta": "AVG()",
+                "explicacion": "AVG() calcula la media aritmética de una columna numérica.",
+                "traduccion": "Promedio."
+            },
+            {
+                "pregunta": "13. ¿Qué es una Subconsulta (Subquery)?",
+                "opciones": ["Una consulta dentro de otra consulta", "Una consulta lenta", "Una base de datos pequeña"],
+                "correcta": "Una consulta dentro de otra consulta",
+                "explicacion": "Se usan a menudo en la cláusula WHERE o SELECT.",
+                "traduccion": "Subconsulta."
+            },
+            {
+                "pregunta": "14. ¿Cómo seleccionas los productos cuyo precio sea mayor al promedio de TODOS los productos?",
+                "opciones": ["WHERE Precio > AVG(Precio)", "WHERE Precio > (SELECT AVG(Precio) FROM Productos)", "WHERE Precio > AVERAGE()"],
+                "correcta": "WHERE Precio > (SELECT AVG(Precio) FROM Productos)",
+                "explicacion": "No puedes usar funciones de agregado directamente en WHERE, necesitas una subconsulta.",
+                "traduccion": "Mayor que el promedio."
+            },
+            {
+                "pregunta": "15. ¿Qué hace la función COALESCE()?",
+                "opciones": ["Borra nulos", "Devuelve el primer valor no nulo de una lista", "Concatena textos"],
+                "correcta": "Devuelve el primer valor no nulo de una lista",
+                "explicacion": "Útil para reemplazar NULLs por valores por defecto (ej. COALESCE(Teléfono, 'Sin número')).",
+                "traduccion": "Fusionar / Coalescencia."
+            },
+            {
+                "pregunta": "16. ¿Qué restricción (constraint) se usa para asegurar que un valor exista en otra tabla?",
+                "opciones": ["PRIMARY KEY", "INDEX", "FOREIGN KEY"],
+                "correcta": "FOREIGN KEY",
+                "explicacion": "La Llave Foránea mantiene la integridad referencial entre tablas.",
+                "traduccion": "Llave Foránea."
+            },
+            {
+                "pregunta": "17. ¿Qué es un Self-Join?",
+                "opciones": ["Unir una tabla consigo misma", "Unir una tabla con su respaldo", "Unir dos bases de datos"],
+                "correcta": "Unir una tabla consigo misma",
+                "explicacion": "Útil para jerarquías, como empleados y sus jefes en la misma tabla.",
+                "traduccion": "Auto-unión."
+            },
+            {
+                "pregunta": "18. ¿Cómo renombras una tabla temporalmente en una consulta (Alias)?",
+                "opciones": ["RENAME tabla TO t", "SELECT * FROM tabla t", "SET tabla = t"],
+                "correcta": "SELECT * FROM tabla t",
+                "explicacion": "Poner una letra o nombre después de la tabla crea un alias para acortar código.",
+                "traduccion": "Alias de tabla."
+            },
+            {
+                "pregunta": "19. ¿Qué operador verifica si un valor existe dentro de una subconsulta?",
+                "opciones": ["EXISTS", "CONTAINS", "INSIDE"],
+                "correcta": "EXISTS",
+                "explicacion": "EXISTS devuelve verdadero si la subconsulta retorna al menos una fila.",
+                "traduccion": "Existe."
+            },
+            {
+                "pregunta": "20. ¿Qué instrucción condicional permite lógica 'If-Then-Else' dentro de un SELECT?",
+                "opciones": ["SWITCH", "CASE WHEN... END", "IF... ELSE"],
+                "correcta": "CASE WHEN... END",
+                "explicacion": "CASE WHEN condición THEN resultado ELSE otro END.",
+                "traduccion": "Caso."
+            },
+            {
+                "pregunta": "21. ¿Qué función se usa para obtener solo el AÑO de un campo fecha?",
+                "opciones": ["GETYEAR()", "YEAR()", "EXTRACT YEAR"],
+                "correcta": "YEAR()",
+                "explicacion": "En SQL Server es YEAR(fecha).",
+                "traduccion": "Año."
+            },
+            {
+                "pregunta": "22. ¿Cómo eliminas registros duplicados en una consulta SELECT?",
+                "opciones": ["SELECT UNIQUE", "SELECT DISTINCT", "SELECT NO REPEAT"],
+                "correcta": "SELECT DISTINCT",
+                "explicacion": "DISTINCT fuerza a que cada fila devuelta sea única.",
+                "traduccion": "Distinto."
+            },
+            {
+                "pregunta": "23. ¿Para qué sirve una VISTA (VIEW)?",
+                "opciones": ["Para guardar datos físicamente", "Para guardar una consulta compleja como una tabla virtual", "Para hacer backups"],
+                "correcta": "Para guardar una consulta compleja como una tabla virtual",
+                "explicacion": "Una vista no tiene datos propios, es una 'ventana' a los datos de otras tablas.",
+                "traduccion": "Vista."
+            },
+            {
+                "pregunta": "24. ¿Cómo creas una vista?",
+                "opciones": ["MAKE VIEW nombre AS...", "CREATE VIEW nombre AS SELECT...", "NEW VIEW nombre..."],
+                "correcta": "CREATE VIEW nombre AS SELECT...",
+                "explicacion": "La sintaxis estándar es CREATE VIEW seguido de la consulta.",
+                "traduccion": "Crear vista."
+            },
+            {
+                "pregunta": "25. ¿Qué hace la función CONCAT()?",
+                "opciones": ["Divide texto", "Suma números", "Une dos o más cadenas de texto"],
+                "correcta": "Une dos o más cadenas de texto",
+                "explicacion": "CONCAT('A', 'B') resulta en 'AB'.",
+                "traduccion": "Concatenar."
+            },
+            {
+                "pregunta": "26. ¿Qué restricción se usa para verificar que un dato cumpla una condición (ej. Precio > 0)?",
+                "opciones": ["VERIFY", "CHECK", "RULE"],
+                "correcta": "CHECK",
+                "explicacion": "CHECK (Precio > 0) impide insertar valores negativos.",
+                "traduccion": "Chequear / Verificar."
+            },
+            {
+                "pregunta": "27. ¿Cómo copias datos de una tabla a otra nueva?",
+                "opciones": ["COPY TABLE", "SELECT * INTO NuevaTabla FROM ViejaTabla", "INSERT INTO NuevaTabla FROM ViejaTabla"],
+                "correcta": "SELECT * INTO NuevaTabla FROM ViejaTabla",
+                "explicacion": "SELECT INTO crea la tabla nueva y copia los datos en un paso (SQL Server).",
+                "traduccion": "Seleccionar hacia."
+            },
+            {
+                "pregunta": "28. ¿Qué función usas para redondear un número decimal?",
+                "opciones": ["TRUNC()", "ROUND()", "CEIL()"],
+                "correcta": "ROUND()",
+                "explicacion": "ROUND(numero, decimales) redondea al valor más cercano.",
+                "traduccion": "Redondear."
+            },
+            {
+                "pregunta": "29. ¿Cuál es el orden correcto de ejecución lógica en SQL?",
+                "opciones": ["SELECT -> FROM -> WHERE", "FROM -> WHERE -> GROUP BY -> HAVING -> SELECT", "WHERE -> FROM -> SELECT"],
+                "correcta": "FROM -> WHERE -> GROUP BY -> HAVING -> SELECT",
+                "explicacion": "Aunque escribes SELECT primero, el motor procesa primero el FROM y los filtros.",
+                "traduccion": "Orden de ejecución."
+            },
+            {
+                "pregunta": "30. ¿Qué hace TRUNCATE TABLE?",
+                "opciones": ["Borra la tabla del servidor", "Borra todos los datos rápidamente sin log individual", "Borra columnas"],
+                "correcta": "Borra todos los datos rápidamente sin log individual",
+                "explicacion": "Es más rápido que DELETE y reinicia los IDs (Identity).",
+                "traduccion": "Truncar tabla."
+            },
+            {
+                "pregunta": "31. ¿Qué operador se usa para rangos de texto o números?",
+                "opciones": ["AMONG", "BETWEEN", "RANGE"],
+                "correcta": "BETWEEN",
+                "explicacion": "WHERE Precio BETWEEN 10 AND 20.",
+                "traduccion": "Entre."
+            },
+            {
+                "pregunta": "32. ¿Qué función devuelve la parte izquierda de una cadena?",
+                "opciones": ["START()", "LEFT()", "BEGIN()"],
+                "correcta": "LEFT()",
+                "explicacion": "LEFT('Hola', 2) devuelve 'Ho'.",
+                "traduccion": "Izquierda."
+            },
+            {
+                "pregunta": "33. ¿Cómo filtras nombres que NO contengan la letra 'x'?",
+                "opciones": ["WHERE Nombre NOT LIKE '%x%'", "WHERE Nombre != '%x%'", "WHERE Nombre EXCLUDE 'x'"],
+                "correcta": "WHERE Nombre NOT LIKE '%x%'",
+                "explicacion": "NOT LIKE invierte la búsqueda de patrón.",
+                "traduccion": "No como."
+            },
+            {
+                "pregunta": "34. En un JOIN, ¿qué pasa si hay columnas con el mismo nombre en ambas tablas?",
+                "opciones": ["Da error automáticamente", "Debes usar alias de tabla (Tabla.Columna)", "SQL elige una al azar"],
+                "correcta": "Debes usar alias de tabla (Tabla.Columna)",
+                "explicacion": "Hay ambigüedad. Debes especificar el origen (ej. Empleados.ID).",
+                "traduccion": "Ambigüedad de columna."
+            },
+            {
+                "pregunta": "35. ¿Qué significa ACID en bases de datos?",
+                "opciones": ["Atomicidad, Consistencia, Aislamiento, Durabilidad", "Acceso, Control, Identidad, Datos", "Ninguna"],
+                "correcta": "Atomicidad, Consistencia, Aislamiento, Durabilidad",
+                "explicacion": "Son las propiedades que garantizan transacciones fiables.",
+                "traduccion": "ACID."
+            },
+            {
+                "pregunta": "36. ¿Qué comando se usa para deshacer una transacción?",
+                "opciones": ["CANCEL", "BACK", "ROLLBACK"],
+                "correcta": "ROLLBACK",
+                "explicacion": "ROLLBACK revierte todos los cambios de la transacción actual.",
+                "traduccion": "Revertir."
+            },
+            {
+                "pregunta": "37. ¿Qué comando confirma y guarda los cambios de una transacción?",
+                "opciones": ["SAVE", "COMMIT", "CONFIRM"],
+                "correcta": "COMMIT",
+                "explicacion": "COMMIT hace permanentes los cambios.",
+                "traduccion": "Confirmar / Comprometer."
+            },
+            {
+                "pregunta": "38. ¿Qué función matemática devuelve el valor absoluto?",
+                "opciones": ["POS()", "ABS()", "VAL()"],
+                "correcta": "ABS()",
+                "explicacion": "ABS(-5) devuelve 5.",
+                "traduccion": "Absoluto."
+            },
+            {
+                "pregunta": "39. ¿Cómo se llama cuando una consulta devuelve TODAS las combinaciones posibles de filas (sin ON)?",
+                "opciones": ["Inner Join", "Producto Cartesiano", "Full Join"],
+                "correcta": "Producto Cartesiano",
+                "explicacion": "Ocurre en un CROSS JOIN o si olvidas el WHERE/ON.",
+                "traduccion": "Producto cartesiano."
+            },
+            {
+                "pregunta": "40. ¿Qué hace la función CAST()?",
+                "opciones": ["Crea una película", "Convierte un dato de un tipo a otro", "Borra datos"],
+                "correcta": "Convierte un dato de un tipo a otro",
+                "explicacion": "Ejemplo: CAST('2023-01-01' AS DATE).",
+                "traduccion": "Convertir (castear)."
+            },
+
+            {
+                "pregunta": "41. ¿Qué función devuelve la longitud de una cadena de texto en bytes (no caracteres)?",
+                "opciones": ["LEN()", "DATALENGTH()", "SIZE()"],
+                "correcta": "DATALENGTH()",
+                "explicacion": "LEN cuenta caracteres, DATALENGTH cuenta bytes (importante en NVARCHAR).",
+                "traduccion": "Longitud de datos."
+            },
+            {
+                "pregunta": "42. ¿Cómo reemplazas todas las apariciones de 'A' por 'B' en un texto?",
+                "opciones": ["CHANGE('texto', 'A', 'B')", "REPLACE('texto', 'A', 'B')", "SWAP('texto', 'A', 'B')"],
+                "correcta": "REPLACE('texto', 'A', 'B')",
+                "explicacion": "REPLACE(string, viejo, nuevo) sustituye caracteres.",
+                "traduccion": "Reemplazar."
+            },
+            {
+                "pregunta": "43. ¿Qué función matemática devuelve el entero más cercano hacia ARRIBA?",
+                "opciones": ["FLOOR()", "ROUND()", "CEILING()"],
+                "correcta": "CEILING()",
+                "explicacion": "CEILING(10.1) devuelve 11.",
+                "traduccion": "Techo."
+            },
+            {
+                "pregunta": "44. ¿Qué función matemática devuelve el entero más cercano hacia ABAJO?",
+                "opciones": ["FLOOR()", "DOWN()", "BOTTOM()"],
+                "correcta": "FLOOR()",
+                "explicacion": "FLOOR(10.9) devuelve 10.",
+                "traduccion": "Piso."
+            },
+            {
+                "pregunta": "45. ¿Cuál es el resultado de NULL + 5?",
+                "opciones": ["5", "0", "NULL"],
+                "correcta": "NULL",
+                "explicacion": "Cualquier operación aritmética con NULL resulta en NULL.",
+                "traduccion": "Propagación de nulos."
+            },
+            {
+                "pregunta": "46. ¿Qué función devuelve la diferencia entre dos fechas?",
+                "opciones": ["DATEADD()", "DATEDIFF()", "SUBDATE()"],
+                "correcta": "DATEDIFF()",
+                "explicacion": "DATEDIFF(intervalo, fecha_inicio, fecha_fin) calcula la diferencia.",
+                "traduccion": "Diferencia de fechas."
+            },
+            {
+                "pregunta": "47. ¿Cómo sumas 5 días a una fecha?",
+                "opciones": ["DATEADD(day, 5, fecha)", "DATEPLUS(fecha, 5)", "fecha + 5 days"],
+                "correcta": "DATEADD(day, 5, fecha)",
+                "explicacion": "DATEADD se usa para sumar o restar intervalos de tiempo.",
+                "traduccion": "Añadir fecha."
+            },
+            {
+                "pregunta": "48. ¿Qué es la Normalización?",
+                "opciones": ["Hacer copias de seguridad", "Organizar datos para reducir redundancia", "Borrar datos viejos"],
+                "correcta": "Organizar datos para reducir redundancia",
+                "explicacion": "Es el proceso de estructurar tablas para evitar datos duplicados.",
+                "traduccion": "Normalización."
+            },
+            {
+                "pregunta": "49. ¿Cuál es la principal desventaja de tener MUCHOS índices en una tabla?",
+                "opciones": ["Las lecturas (SELECT) son lentas", "Las escrituras (INSERT/UPDATE) son lentas", "Ocupa menos espacio"],
+                "correcta": "Las escrituras (INSERT/UPDATE) son lentas",
+                "explicacion": "Cada vez que escribes, el motor debe actualizar todos los índices.",
+                "traduccion": "Sobrecarga de índices."
+            },
+            {
+                "pregunta": "50. ¿Qué hace la instrucción 'INSERT INTO... SELECT...'?",
+                "opciones": ["Crea una tabla nueva", "Copia datos de una tabla a otra existente", "Actualiza registros"],
+                "correcta": "Copia datos de una tabla a otra existente",
+                "explicacion": "Inserta el resultado de una consulta en otra tabla.",
+                "traduccion": "Insertar desde selección."
+            },
+            {
+                "pregunta": "51. ¿Qué es una Clave Compuesta (Composite Key)?",
+                "opciones": ["Una clave muy larga", "Una clave primaria formada por dos o más columnas", "Una clave encriptada"],
+                "correcta": "Una clave primaria formada por dos o más columnas",
+                "explicacion": "Se usa cuando una sola columna no basta para identificar la fila.",
+                "traduccion": "Clave compuesta."
+            },
+            {
+                "pregunta": "52. ¿Cómo se llama a una consulta SQL escrita dentro de otra?",
+                "opciones": ["Consulta anidada (Nested Query)", "Consulta doble", "Consulta espejo"],
+                "correcta": "Consulta anidada (Nested Query)",
+                "explicacion": "También conocida como Subquery.",
+                "traduccion": "Consulta anidada."
+            },
+            {
+                "pregunta": "53. ¿Qué operador usarías para buscar coincidencias en una lista de textos?",
+                "opciones": ["LIKE", "BETWEEN", "IN"],
+                "correcta": "IN",
+                "explicacion": "WHERE Color IN ('Rojo', 'Azul', 'Verde').",
+                "traduccion": "En (lista)."
+            },
+            {
+                "pregunta": "54. ¿Qué es un Stored Procedure?",
+                "opciones": ["Un código SQL guardado y reutilizable", "Una tabla temporal", "Un error de sistema"],
+                "correcta": "Un código SQL guardado y reutilizable",
+                "explicacion": "Permite encapsular lógica compleja y ejecutarla con parámetros.",
+                "traduccion": "Procedimiento Almacenado."
+            },
+            {
+                "pregunta": "55. ¿Cuál es la ventaja de usar Stored Procedures?",
+                "opciones": ["Son más lentos", "Mejoran la seguridad y el rendimiento", "Ocupan más espacio"],
+                "correcta": "Mejoran la seguridad y el rendimiento",
+                "explicacion": "Previenen inyección SQL y el plan de ejecución se cachea.",
+                "traduccion": "Ventaja de SP."
+            },
+            {
+                "pregunta": "56. ¿Qué comando se usa para eliminar un Stored Procedure?",
+                "opciones": ["DELETE PROCEDURE", "DROP PROCEDURE", "REMOVE PROCEDURE"],
+                "correcta": "DROP PROCEDURE",
+                "explicacion": "Al igual que tablas y vistas, se usa DROP.",
+                "traduccion": "Soltar procedimiento."
+            },
+            {
+                "pregunta": "57. ¿Qué es un Trigger (Disparador)?",
+                "opciones": ["Un botón en la interfaz", "Código que se ejecuta automáticamente ante un evento (INSERT/UPDATE/DELETE)", "Un tipo de virus"],
+                "correcta": "Código que se ejecuta automáticamente ante un evento (INSERT/UPDATE/DELETE)",
+                "explicacion": "Se usan para auditoría o validaciones complejas.",
+                "traduccion": "Disparador."
+            },
+            {
+                "pregunta": "58. ¿Qué significa que una transacción sea 'Atómica' (Atomicity)?",
+                "opciones": ["Que es pequeña", "Que se ejecuta todo o nada", "Que es rápida"],
+                "correcta": "Que se ejecuta todo o nada",
+                "explicacion": "Si una parte falla, toda la transacción se deshace.",
+                "traduccion": "Atomicidad."
+            },
+            {
+                "pregunta": "59. ¿Para qué sirve el comando SAVEPOINT?",
+                "opciones": ["Para guardar el archivo", "Para marcar un punto de restauración dentro de una transacción", "Para cerrar la sesión"],
+                "correcta": "Para marcar un punto de restauración dentro de una transacción",
+                "explicacion": "Permite hacer rollback parcial hasta ese punto.",
+                "traduccion": "Punto de guardado."
+            },
+            {
+                "pregunta": "60. ¿Cómo obtienes los primeros 3 caracteres de una cadena?",
+                "opciones": ["LEFT(cadena, 3)", "START(cadena, 3)", "FIRST(cadena, 3)"],
+                "correcta": "LEFT(cadena, 3)",
+                "explicacion": "LEFT extrae caracteres desde la izquierda.",
+                "traduccion": "Izquierda."
+            },
+            {
+                "pregunta": "61. ¿Cómo obtienes los últimos 3 caracteres de una cadena?",
+                "opciones": ["END(cadena, 3)", "RIGHT(cadena, 3)", "LAST(cadena, 3)"],
+                "correcta": "RIGHT(cadena, 3)",
+                "explicacion": "RIGHT extrae caracteres desde la derecha.",
+                "traduccion": "Derecha."
+            },
+            {
+                "pregunta": "62. ¿Qué hace la función SUBSTRING(texto, 2, 3)?",
+                "opciones": ["Extrae 3 caracteres empezando en la posición 2", "Extrae desde la posición 2 hasta la 3", "Borra el texto"],
+                "correcta": "Extrae 3 caracteres empezando en la posición 2",
+                "explicacion": "SUBSTRING(cadena, inicio, longitud).",
+                "traduccion": "Subcadena."
+            },
+            {
+                "pregunta": "63. ¿Qué operador se usa para comprobar si un campo es NULO?",
+                "opciones": ["= NULL", "IS NULL", "EQUALS NULL"],
+                "correcta": "IS NULL",
+                "explicacion": "La comparación con = NULL siempre da falso (o unknown).",
+                "traduccion": "Es nulo."
+            },
+            {
+                "pregunta": "64. ¿Para qué sirve la instrucción TRY... CATCH?",
+                "opciones": ["Para jugar atrapada", "Para manejar errores en tiempo de ejecución", "Para hacer bucles"],
+                "correcta": "Para manejar errores en tiempo de ejecución",
+                "explicacion": "Permite capturar el error y ejecutar código alternativo sin detener el programa.",
+                "traduccion": "Intentar... Capturar."
+            },
+            {
+                "pregunta": "65. ¿Qué es una Clave Candidata?",
+                "opciones": ["Cualquier columna que podría ser clave primaria", "Una clave temporal", "Una clave foránea"],
+                "correcta": "Cualquier columna que podría ser clave primaria",
+                "explicacion": "Es una columna con valores únicos que no fue elegida como Primary Key.",
+                "traduccion": "Clave candidata."
+            },
+            {
+                "pregunta": "66. ¿Qué función devuelve el valor absoluto de un número?",
+                "opciones": ["ABS()", "POS()", "VALUE()"],
+                "correcta": "ABS()",
+                "explicacion": "Convierte números negativos en positivos.",
+                "traduccion": "Absoluto."
+            },
+            {
+                "pregunta": "67. ¿Qué función eleva un número a una potencia?",
+                "opciones": ["SQRT()", "POWER()", "EXP()"],
+                "correcta": "POWER()",
+                "explicacion": "POWER(base, exponente).",
+                "traduccion": "Potencia."
+            },
+            {
+                "pregunta": "68. ¿Qué es un índice 'Clustered' (Agrupado)?",
+                "opciones": ["Un índice desordenado", "Un índice que ordena físicamente los datos de la tabla", "Un índice secundario"],
+                "correcta": "Un índice que ordena físicamente los datos de la tabla",
+                "explicacion": "Solo puede haber un índice Clustered por tabla (generalmente la PK).",
+                "traduccion": "Índice agrupado."
+            },
+            {
+                "pregunta": "69. ¿Qué es un índice 'Non-Clustered'?",
+                "opciones": ["Un índice que no ordena físicamente la tabla, crea una estructura aparte", "Un índice sin clave", "Un índice roto"],
+                "correcta": "Un índice que no ordena físicamente la tabla, crea una estructura aparte",
+                "explicacion": "Funciona como el índice al final de un libro, apuntando a los datos reales.",
+                "traduccion": "Índice no agrupado."
+            },
+            {
+                "pregunta": "70. ¿Qué hace la función REVERSE()?",
+                "opciones": ["Invierte el orden de los caracteres en un string", "Borra el string", "Ordena Z-A"],
+                "correcta": "Invierte el orden de los caracteres en un string",
+                "explicacion": "REVERSE('abc') devuelve 'cba'.",
+                "traduccion": "Reversa."
+            },
+            {
+                "pregunta": "71. ¿Cómo seleccionas la fecha actual SIN la hora (en algunos sistemas)?",
+                "opciones": ["GETDATE()", "CURRENT_DATE", "NOW()"],
+                "correcta": "CURRENT_DATE",
+                "explicacion": "En SQL estándar es CURRENT_DATE. En T-SQL se usa CAST(GETDATE() AS DATE).",
+                "traduccion": "Fecha actual."
+            },
+            {
+                "pregunta": "72. ¿Qué cláusula usas para limitar resultados en una paginación (saltar filas)?",
+                "opciones": ["JUMP", "OFFSET... FETCH NEXT", "SKIP"],
+                "correcta": "OFFSET... FETCH NEXT",
+                "explicacion": "OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY (para paginar).",
+                "traduccion": "Desplazamiento."
+            },
+            {
+                "pregunta": "73. ¿Puede una Primary Key contener valores NULL?",
+                "opciones": ["Sí, uno solo", "No, nunca", "Sí, ilimitados"],
+                "correcta": "No, nunca",
+                "explicacion": "Por definición, una PK debe ser única y NO NULA.",
+                "traduccion": "Nulo en PK."
+            },
+            {
+                "pregunta": "74. ¿Qué es la 'Integridad Referencial'?",
+                "opciones": ["Que los datos sean correctos", "Mantener la coherencia entre claves foráneas y primarias", "Hacer backups"],
+                "correcta": "Mantener la coherencia entre claves foráneas y primarias",
+                "explicacion": "Impide que tengas un pedido de un cliente que no existe.",
+                "traduccion": "Integridad referencial."
+            },
+            {
+                "pregunta": "75. ¿Qué hace la instrucción GRANT?",
+                "opciones": ["Quita permisos", "Otorga permisos de acceso a usuarios", "Borra usuarios"],
+                "correcta": "Otorga permisos de acceso a usuarios",
+                "explicacion": "GRANT SELECT ON Tabla TO Usuario.",
+                "traduccion": "Conceder."
+            }],
+        
+        "3. Avanzado": [
+            {
+                "pregunta": "1. ¿Qué es un Stored Procedure (Procedimiento Almacenado)?",
+                "opciones": ["Una tabla temporal", "Código SQL precompilado y guardado en el servidor", "Un script de Python"],
+                "correcta": "Código SQL precompilado y guardado en el servidor",
+                "explicacion": "Permite reutilizar lógica, mejora seguridad y rendimiento.",
+                "traduccion": "Procedimiento Almacenado."
+            },
+            {
+                "pregunta": "2. ¿Cómo ejecutas un Stored Procedure llamado 'sp_GetVentas'?",
+                "opciones": ["RUN sp_GetVentas", "EXEC sp_GetVentas", "CALL sp_GetVentas"],
+                "correcta": "EXEC sp_GetVentas",
+                "explicacion": "EXEC o EXECUTE es el comando en SQL Server.",
+                "traduccion": "Ejecutar SP."
+            },
+            {
+                "pregunta": "3. ¿Qué es un Trigger (Disparador)?",
+                "opciones": ["Un botón de pánico", "Un script que se ejecuta automáticamente ante eventos (INSERT/UPDATE/DELETE)", "Un índice especial"],
+                "correcta": "Un script que se ejecuta automáticamente ante eventos (INSERT/UPDATE/DELETE)",
+                "explicacion": "Se usan para auditoría, validación o integridad referencial compleja.",
+                "traduccion": "Disparador."
+            },
+            {
+                "pregunta": "4. ¿Qué son las tablas mágicas 'INSERTED' y 'DELETED' en un Trigger?",
+                "opciones": ["Tablas del sistema", "Tablas temporales que contienen los datos afectados por la operación", "No existen"],
+                "correcta": "Tablas temporales que contienen los datos afectados por la operación",
+                "explicacion": "Permiten acceder a los datos nuevos (INSERTED) o viejos (DELETED) dentro del trigger.",
+                "traduccion": "Tablas insertadas/borradas."
+            },
+            {
+                "pregunta": "5. ¿Qué propiedad asegura que una transacción se complete al 100% o no se haga nada?",
+                "opciones": ["Atomicidad", "Aislamiento", "Durabilidad"],
+                "correcta": "Atomicidad",
+                "explicacion": "Es la 'A' en ACID. Todo o nada.",
+                "traduccion": "Atomicidad."
+            },
+            {
+                "pregunta": "6. ¿Qué comando guarda los cambios de una transacción permanentemente?",
+                "opciones": ["SAVE TRANSACTION", "COMMIT TRANSACTION", "PUSH TRANSACTION"],
+                "correcta": "COMMIT TRANSACTION",
+                "explicacion": "COMMIT finaliza la transacción exitosamente.",
+                "traduccion": "Comprometer/Confirmar."
+            },
+            {
+                "pregunta": "7. ¿Qué comando deshace los cambios de una transacción si ocurre un error?",
+                "opciones": ["UNDO", "ROLLBACK TRANSACTION", "RETURN"],
+                "correcta": "ROLLBACK TRANSACTION",
+                "explicacion": "Regresa la base de datos al estado previo a la transacción.",
+                "traduccion": "Revertir."
+            },
+            {
+                "pregunta": "8. ¿Qué es una Vista (View)?",
+                "opciones": ["Una copia física de la tabla", "Una tabla virtual basada en el resultado de una consulta", "Un backup"],
+                "correcta": "Una tabla virtual basada en el resultado de una consulta",
+                "explicacion": "No almacena datos propios, solo la consulta (query). Simplifica accesos complejos.",
+                "traduccion": "Vista."
+            },
+            {
+                "pregunta": "9. ¿Qué es un Índice Clustered (Agrupado)?",
+                "opciones": ["Un índice secundario", "Un índice que ordena físicamente los datos de la tabla", "Un índice desordenado"],
+                "correcta": "Un índice que ordena físicamente los datos de la tabla",
+                "explicacion": "Solo puede haber UNO por tabla. Los datos 'viven' en el índice.",
+                "traduccion": "Índice Agrupado."
+            },
+            {
+                "pregunta": "10. ¿Qué es un Índice Non-Clustered (No Agrupado)?",
+                "opciones": ["Una estructura separada que apunta a los datos", "El índice principal", "Una copia de la tabla"],
+                "correcta": "Una estructura separada que apunta a los datos",
+                "explicacion": "Es como el índice al final de un libro. Puedes tener muchos.",
+                "traduccion": "Índice No Agrupado."
+            },
+            {
+                "pregunta": "11. ¿Cuál es el riesgo principal del SQL Dinámico (construir strings de código)?",
+                "opciones": ["Es muy lento", "Inyección SQL", "No funciona"],
+                "correcta": "Inyección SQL",
+                "explicacion": "Si concatenas texto usuario directamente, pueden inyectar código malicioso.",
+                "traduccion": "Inyección SQL."
+            },
+            {
+                "pregunta": "12. ¿Qué instrucción se usa para dar permisos a un usuario?",
+                "opciones": ["ALLOW", "PERMIT", "GRANT"],
+                "correcta": "GRANT",
+                "explicacion": "Ejemplo: GRANT SELECT ON Tabla TO Usuario.",
+                "traduccion": "Conceder."
+            },
+            {
+                "pregunta": "13. ¿Qué instrucción quita permisos a un usuario?",
+                "opciones": ["REMOVE", "REVOKE", "DENY"],
+                "correcta": "REVOKE",
+                "explicacion": "REVOKE quita un permiso previamente concedido. DENY lo prohíbe explícitamente.",
+                "traduccion": "Revocar."
+            },
+            {
+                "pregunta": "14. ¿Qué es una CTE (Common Table Expression)?",
+                "opciones": ["Una tabla común", "Un conjunto de resultados temporal nombrado, definido con WITH", "Una variable"],
+                "correcta": "Un conjunto de resultados temporal nombrado, definido con WITH",
+                "explicacion": "Hace las consultas complejas más legibles. WITH NombreCTE AS...",
+                "traduccion": "Expresión de Tabla Común."
+            },
+            {
+                "pregunta": "15. ¿Qué hace la función de ventana ROW_NUMBER()?",
+                "opciones": ["Cuenta filas totales", "Asigna un número secuencial único a cada fila dentro de una partición", "Suma filas"],
+                "correcta": "Asigna un número secuencial único a cada fila dentro de una partición",
+                "explicacion": "Muy útil para paginación o eliminar duplicados.",
+                "traduccion": "Número de fila."
+            },
+            {
+                "pregunta": "16. ¿Cuál es la diferencia entre RANK() y DENSE_RANK()?",
+                "opciones": ["No hay diferencia", "RANK deja huecos en la numeración si hay empates, DENSE_RANK no", "DENSE_RANK es más lento"],
+                "correcta": "RANK deja huecos en la numeración si hay empates, DENSE_RANK no",
+                "explicacion": "Si dos empatan en 1er lugar: RANK da (1, 1, 3); DENSE_RANK da (1, 1, 2).",
+                "traduccion": "Rango vs Rango Denso."
+            },
+            {
+                "pregunta": "17. ¿Qué es la Normalización?",
+                "opciones": ["Hacer copias de seguridad", "El proceso de organizar datos para reducir redundancia y mejorar integridad", "Crear índices"],
+                "correcta": "El proceso de organizar datos para reducir redundancia y mejorar integridad",
+                "explicacion": "Busca eliminar datos repetidos y dependencias ilógicas.",
+                "traduccion": "Normalización."
+            },
+            {
+                "pregunta": "18. ¿Qué regla define la Primera Forma Normal (1NF)?",
+                "opciones": ["Tener claves foráneas", "Eliminar grupos repetidos y asegurar atomicidad (un valor por celda)", "Tener claves primarias"],
+                "correcta": "Eliminar grupos repetidos y asegurar atomicidad (un valor por celda)",
+                "explicacion": "No puedes tener listas separadas por comas en una celda.",
+                "traduccion": "Primera Forma Normal."
+            },
+            {
+                "pregunta": "19. ¿Qué hace un Plan de Ejecución (Execution Plan)?",
+                "opciones": ["Ejecuta la consulta", "Muestra cómo el motor de BD va a ejecutar la consulta internamente", "Guarda la consulta"],
+                "correcta": "Muestra cómo el motor de BD va a ejecutar la consulta internamente",
+                "explicacion": "Vital para optimización. Muestra si usa índices o escaneos de tabla.",
+                "traduccion": "Plan de ejecución."
+            },
+            {
+                "pregunta": "20. ¿Qué es un 'Table Scan' y por qué suele ser malo?",
+                "opciones": ["Escaneo de virus", "Leer toda la tabla fila por fila; es lento en tablas grandes", "Es la forma más rápida"],
+                "correcta": "Leer toda la tabla fila por fila; es lento en tablas grandes",
+                "explicacion": "Significa que no se usó un índice adecuado para buscar el dato.",
+                "traduccion": "Escaneo de tabla."
+            },
+            {
+                "pregunta": "21. ¿Qué es un Deadlock (Interbloqueo)?",
+                "opciones": ["Cuando se cae el servidor", "Dos transacciones se bloquean mutuamente esperando recursos de la otra", "Un candado roto"],
+                "correcta": "Dos transacciones se bloquean mutuamente esperando recursos de la otra",
+                "explicacion": "El motor debe matar una de las transacciones para liberar la otra.",
+                "traduccion": "Interbloqueo / Abrazo mortal."
+            },
+            {
+                "pregunta": "22. ¿Qué es una Tabla Temporal Local (#Tabla)?",
+                "opciones": ["Una tabla que vive en memoria solo para la sesión actual", "Una tabla permanente", "Una tabla global"],
+                "correcta": "Una tabla que vive en memoria solo para la sesión actual",
+                "explicacion": "Se borra automáticamente cuando cierras la conexión.",
+                "traduccion": "Tabla temporal."
+            },
+            {
+                "pregunta": "23. ¿Qué diferencia hay entre DELETE y TRUNCATE en cuanto al log de transacciones?",
+                "opciones": ["Ninguna", "DELETE registra cada fila borrada (lento), TRUNCATE registra solo la página (rápido)", "TRUNCATE no se puede deshacer"],
+                "correcta": "DELETE registra cada fila borrada (lento), TRUNCATE registra solo la página (rápido)",
+                "explicacion": "TRUNCATE es DDL y mínimamente logueado; DELETE es DML y totalmente logueado.",
+                "traduccion": "Borrar vs Truncar."
+            },
+            {
+                "pregunta": "24. ¿Para qué sirve la cláusula PARTITION BY en funciones de ventana?",
+                "opciones": ["Para borrar particiones", "Para dividir el conjunto de resultados en grupos para la función", "Para ordenar"],
+                "correcta": "Para dividir el conjunto de resultados en grupos para la función",
+                "explicacion": "Ej: ROW_NUMBER() OVER (PARTITION BY Departamento ORDER BY Salario).",
+                "traduccion": "Particionar por."
+            },
+            {
+                "pregunta": "25. ¿Qué es una Clave Foránea con 'CASCADE DELETE'?",
+                "opciones": ["Borra la tabla", "Si borras el padre, se borran automáticamente los hijos relacionados", "Da error al borrar"],
+                "correcta": "Si borras el padre, se borran automáticamente los hijos relacionados",
+                "explicacion": "Automatiza la limpieza de datos relacionados.",
+                "traduccion": "Borrado en cascada."
+            },
+            {
+                "pregunta": "26. ¿Qué función se usa para obtener el último ID insertado (Identity)?",
+                "opciones": ["LAST_ID()", "SCOPE_IDENTITY() o @@IDENTITY", "MAX(ID)"],
+                "correcta": "SCOPE_IDENTITY() o @@IDENTITY",
+                "explicacion": "SCOPE_IDENTITY() es más seguro porque se limita al ámbito actual.",
+                "traduccion": "Identidad del ámbito."
+            },
+            {
+                "pregunta": "27. ¿Qué es el nivel de aislamiento 'READ UNCOMMITTED'?",
+                "opciones": ["El más seguro", "Permite leer datos 'sucios' que aún no han sido confirmados (commit)", "Bloquea todo"],
+                "correcta": "Permite leer datos 'sucios' que aún no han sido confirmados (commit)",
+                "explicacion": "Rápido pero peligroso (Dirty Reads). Se usa con NOLOCK.",
+                "traduccion": "Lectura no confirmada."
+            },
+            {
+                "pregunta": "28. ¿Qué significa ETL?",
+                "opciones": ["Extract, Transform, Load", "Exit, Terminate, Leave", "Enterprise Tool Level"],
+                "correcta": "Extract, Transform, Load",
+                "explicacion": "Proceso de mover datos de sistemas origen a un Data Warehouse.",
+                "traduccion": "Extracción, Transformación y Carga."
+            },
+            {
+                "pregunta": "29. ¿Qué es un esquema (Schema) en base de datos?",
+                "opciones": ["Un diagrama", "Un contenedor lógico para agrupar objetos (tablas, vistas, etc.)", "Una contraseña"],
+                "correcta": "Un contenedor lógico para agrupar objetos (tablas, vistas, etc.)",
+                "explicacion": "Ejemplo: Sales.Orders, HR.Employees (Sales y HR son esquemas).",
+                "traduccion": "Esquema."
+            },
+            {
+                "pregunta": "30. ¿Qué hace la función PIVOT?",
+                "opciones": ["Gira la pantalla", "Transforma filas en columnas", "Ordena datos"],
+                "correcta": "Transforma filas en columnas",
+                "explicacion": "Útil para reportes cruzados (Cross-tab).",
+                "traduccion": "Pivotar."
+            },
+            {
+                "pregunta": "31. ¿Qué es un 'Backup Diferencial'?",
+                "opciones": ["Copia todo", "Copia solo lo que cambió desde el último backup completo", "Copia solo logs"],
+                "correcta": "Copia solo lo que cambió desde el último backup completo",
+                "explicacion": "Es más rápido y pequeño que un Full Backup.",
+                "traduccion": "Respaldo diferencial."
+            },
+            {
+                "pregunta": "32. ¿Qué comando se usa para actualizar estadísticas de índices?",
+                "opciones": ["REFRESH STATS", "UPDATE STATISTICS", "NEW STATS"],
+                "correcta": "UPDATE STATISTICS",
+                "explicacion": "Ayuda al optimizador a elegir el mejor plan de ejecución.",
+                "traduccion": "Actualizar estadísticas."
+            },
+            {
+                "pregunta": "33. ¿Qué es la 'Collation' (Intercalación)?",
+                "opciones": ["Un tipo de join", "Reglas para ordenar y comparar texto (mayúsculas, acentos, etc.)", "Una colección"],
+                "correcta": "Reglas para ordenar y comparar texto (mayúsculas, acentos, etc.)",
+                "explicacion": "Define si 'A' es igual a 'a' (Case Insensitive) o diferente.",
+                "traduccion": "Intercalación."
+            },
+            {
+                "pregunta": "34. ¿Qué es un 'Cursor' en SQL?",
+                "opciones": ["El puntero del mouse", "Una estructura para procesar filas una por una", "Un error"],
+                "correcta": "Una estructura para procesar filas una por una",
+                "explicacion": "Generalmente se evita por bajo rendimiento; SQL es mejor trabajando en conjuntos (sets).",
+                "traduccion": "Cursor."
+            },
+            {
+                "pregunta": "35. ¿Qué hace la función ISNULL(valor, reemplazo)?",
+                "opciones": ["Devuelve error si es nulo", "Si 'valor' es NULL, devuelve 'reemplazo'", "Borra el nulo"],
+                "correcta": "Si 'valor' es NULL, devuelve 'reemplazo'",
+                "explicacion": "Similar a COALESCE pero específico de T-SQL y limitado a 2 parámetros.",
+                "traduccion": "Es nulo."
+            },
+            {
+                "pregunta": "36. ¿Qué es una restricción CHECK?",
+                "opciones": ["Verifica integridad referencial", "Limita los valores que se pueden insertar en una columna según una condición", "Revisa ortografía"],
+                "correcta": "Limita los valores que se pueden insertar en una columna según una condición",
+                "explicacion": "Ej: CHECK (Edad >= 18).",
+                "traduccion": "Verificación."
+            },
+            {
+                "pregunta": "37. ¿Qué es una 'Derived Table' (Tabla Derivada)?",
+                "opciones": ["Una subconsulta en la cláusula FROM con un alias", "Una tabla física", "Una vista"],
+                "correcta": "Una subconsulta en la cláusula FROM con un alias",
+                "explicacion": "SELECT * FROM (SELECT * FROM Tabla) AS Alias.",
+                "traduccion": "Tabla derivada."
+            },
+            {
+                "pregunta": "38. ¿Qué significa que una base de datos esté en modo 'Simple Recovery'?",
+                "opciones": ["Que es fácil de usar", "Que el log de transacciones se trunca automáticamente y no permite backup del log", "Que no tiene password"],
+                "correcta": "Que el log de transacciones se trunca automáticamente y no permite backup del log",
+                "explicacion": "Ahorra espacio pero pierdes la capacidad de restaurar a un punto exacto en el tiempo.",
+                "traduccion": "Recuperación simple."
+            },
+            {
+                "pregunta": "39. ¿Qué es un 'Computed Column' (Columna Calculada)?",
+                "opciones": ["Una columna que almacena una fórmula usando otras columnas", "Una columna de Excel", "Un error"],
+                "correcta": "Una columna que almacena una fórmula usando otras columnas",
+                "explicacion": "Ej: Total = Cantidad * Precio. Puede ser virtual o persistida.",
+                "traduccion": "Columna calculada."
+            },
+            {
+                "pregunta": "40. ¿Qué hace el comando MERGE?",
+                "opciones": ["Une tablas", "Realiza INSERT, UPDATE o DELETE en una sola instrucción basada en coincidencias", "Mezcla colores"],
+                "correcta": "Realiza INSERT, UPDATE o DELETE en una sola instrucción basada en coincidencias",
+                "explicacion": "Sincroniza dos tablas (origen y destino) en un solo paso.",
+                "traduccion": "Mezclar / Fusionar."
+            },
+
+            {
+                "pregunta": "41. ¿Qué diferencia hay entre VARCHAR y NVARCHAR?",
+                "opciones": ["Ninguna", "NVARCHAR soporta caracteres Unicode (ej. tildes, chino, emojis) y ocupa el doble", "VARCHAR es más lento"],
+                "correcta": "NVARCHAR soporta caracteres Unicode (ej. tildes, chino, emojis) y ocupa el doble",
+                "explicacion": "NVARCHAR usa 2 bytes por carácter, permitiendo símbolos internacionales.",
+                "traduccion": "Caracteres variables nacionales."
+            },
+            {
+                "pregunta": "42. ¿Qué es un 'Deadlock' (Abrazo mortal)?",
+                "opciones": ["Un error de sintaxis", "Dos procesos se bloquean mutuamente esperando recursos del otro", "El servidor se apaga"],
+                "correcta": "Dos procesos se bloquean mutuamente esperando recursos del otro",
+                "explicacion": "El motor de base de datos debe elegir una 'víctima' para desbloquear el sistema.",
+                "traduccion": "Interbloqueo."
+            },
+            {
+                "pregunta": "43. ¿Qué función de ventana permite acceder a la fila ANTERIOR sin un Self-Join?",
+                "opciones": ["PREVIOUS()", "LAG()", "BEFORE()"],
+                "correcta": "LAG()",
+                "explicacion": "LAG(columna, 1) devuelve el valor de la fila previa.",
+                "traduccion": "Rezagado / Anterior."
+            },
+            {
+                "pregunta": "44. ¿Qué función de ventana permite acceder a la fila SIGUIENTE?",
+                "opciones": ["NEXT()", "LEAD()", "AFTER()"],
+                "correcta": "LEAD()",
+                "explicacion": "LEAD(columna, 1) mira hacia adelante en el conjunto de resultados.",
+                "traduccion": "Líder / Siguiente."
+            },
+            {
+                "pregunta": "45. ¿Para qué sirve el comando DBCC CHECKDB?",
+                "opciones": ["Para apagar la base de datos", "Para verificar la integridad física y lógica de la base de datos", "Para borrar logs"],
+                "correcta": "Para verificar la integridad física y lógica de la base de datos",
+                "explicacion": "Detecta corrupciones en los archivos de datos.",
+                "traduccion": "Comando de Consola de Base de Datos."
+            },
+            {
+                "pregunta": "46. ¿Qué es una Tabla Temporal Global (##Tabla)?",
+                "opciones": ["Visible solo para mi sesión", "Visible para TODAS las sesiones y usuarios conectados", "Una tabla permanente"],
+                "correcta": "Visible para TODAS las sesiones y usuarios conectados",
+                "explicacion": "Se crea con dos almohadillas (##). Se borra cuando la última sesión que la usa se desconecta.",
+                "traduccion": "Tabla temporal global."
+            },
+            {
+                "pregunta": "47. ¿Qué es la 'Inyección SQL'?",
+                "opciones": ["Una vacuna para el servidor", "Una técnica de ataque donde se inserta código malicioso en las consultas", "Instalar SQL rápido"],
+                "correcta": "Una técnica de ataque donde se inserta código malicioso en las consultas",
+                "explicacion": "Ocurre cuando no se validan las entradas del usuario.",
+                "traduccion": "Inyección SQL."
+            },
+            {
+                "pregunta": "48. ¿Cómo previenes la Inyección SQL?",
+                "opciones": ["Usando antivirus", "Usando Consultas Parametrizadas o Stored Procedures", "Borrando la base de datos"],
+                "correcta": "Usando Consultas Parametrizadas o Stored Procedures",
+                "explicacion": "Nunca concatenes texto del usuario directamente en la consulta.",
+                "traduccion": "Parametrización."
+            },
+            {
+                "pregunta": "49. ¿Qué significa OLTP?",
+                "opciones": ["Online Transaction Processing", "Old Long Text Protocol", "Only Live Transaction Process"],
+                "correcta": "Online Transaction Processing",
+                "explicacion": "Sistemas optimizados para muchas transacciones rápidas (ej. cajeros, ventas).",
+                "traduccion": "Procesamiento de Transacciones en Línea."
+            },
+            {
+                "pregunta": "50. ¿Qué significa OLAP?",
+                "opciones": ["Online Analytical Processing", "Old Large Analytical Process", "Only Live Analytical Protocol"],
+                "correcta": "Online Analytical Processing",
+                "explicacion": "Sistemas optimizados para análisis y reportes complejos (Data Warehouse).",
+                "traduccion": "Procesamiento Analítico en Línea."
+            },
+            {
+                "pregunta": "51. ¿Qué es un 'Table Scan'?",
+                "opciones": ["Un antivirus de tablas", "Cuando el motor lee TODAS las filas de una tabla porque no encontró un índice útil", "Una lectura rápida"],
+                "correcta": "Cuando el motor lee TODAS las filas de una tabla porque no encontró un índice útil",
+                "explicacion": "Es ineficiente en tablas grandes. Se evita creando índices.",
+                "traduccion": "Escaneo de tabla."
+            },
+            {
+                "pregunta": "52. ¿Qué es la 'Desnormalización'?",
+                "opciones": ["Un error de diseño", "Introducir redundancia intencionalmente para mejorar el rendimiento de lectura", "Borrar claves foráneas"],
+                "correcta": "Introducir redundancia intencionalmente para mejorar el rendimiento de lectura",
+                "explicacion": "Se usa en Data Warehouses para evitar demasiados JOINs.",
+                "traduccion": "Desnormalización."
+            },
+            {
+                "pregunta": "53. ¿Qué hace la opción 'WITH (NOLOCK)' en una consulta?",
+                "opciones": ["Bloquea la tabla", "Permite leer datos sin bloquearlos, pero arriesga leer datos sucios", "Borra el candado"],
+                "correcta": "Permite leer datos sin bloquearlos, pero arriesga leer datos sucios",
+                "explicacion": "Equivale al nivel de aislamiento READ UNCOMMITTED.",
+                "traduccion": "Sin bloqueo."
+            },
+            {
+                "pregunta": "54. ¿Qué es un 'Linked Server'?",
+                "opciones": ["Un servidor conectado a internet", "Una configuración que permite ejecutar consultas en otros servidores de BD remotos", "Un cable de red"],
+                "correcta": "Una configuración que permite ejecutar consultas en otros servidores de BD remotos",
+                "explicacion": "Permite hacer JOINs entre bases de datos de servidores físicos distintos.",
+                "traduccion": "Servidor vinculado."
+            },
+            {
+                "pregunta": "55. ¿Cuál es el propósito del Transaction Log (Log de Transacciones)?",
+                "opciones": ["Guardar mensajes de error", "Registrar todas las modificaciones para garantizar la recuperación y atomicidad", "Guardar usuarios"],
+                "correcta": "Registrar todas las modificaciones para garantizar la recuperación y atomicidad",
+                "explicacion": "Es vital para restaurar la base de datos a un punto exacto en el tiempo.",
+                "traduccion": "Registro de transacciones."
+            },
+            {
+                "pregunta": "56. ¿Qué función devuelve el nombre del usuario actual conectado?",
+                "opciones": ["WHOAMI()", "SYSTEM_USER o CURRENT_USER", "GET_USER()"],
+                "correcta": "SYSTEM_USER o CURRENT_USER",
+                "explicacion": "Útil para auditoría y seguridad.",
+                "traduccion": "Usuario del sistema."
+            },
+            {
+                "pregunta": "57. ¿Qué es un CTE Recursivo?",
+                "opciones": ["Un error de bucle infinito", "Una consulta que se llama a sí misma, útil para estructuras jerárquicas (árboles)", "Una tabla rota"],
+                "correcta": "Una consulta que se llama a sí misma, útil para estructuras jerárquicas (árboles)",
+                "explicacion": "Permite recorrer organigramas o categorías anidadas.",
+                "traduccion": "CTE Recursivo."
+            },
+            {
+                "pregunta": "58. ¿Qué es la fragmentación de índices?",
+                "opciones": ["Cuando el índice se rompe", "Cuando el orden lógico de las páginas no coincide con el físico, reduciendo rendimiento", "Cuando faltan datos"],
+                "correcta": "Cuando el orden lógico de las páginas no coincide con el físico, reduciendo rendimiento",
+                "explicacion": "Requiere mantenimiento (Reorganize o Rebuild) para arreglarse.",
+                "traduccion": "Fragmentación."
+            },
+            {
+                "pregunta": "59. ¿Qué comando se usa para vaciar el caché de planes de ejecución (Cuidado en producción)?",
+                "opciones": ["DBCC FREEPROCCACHE", "DELETE CACHE", "CLEAR PLANS"],
+                "correcta": "DBCC FREEPROCCACHE",
+                "explicacion": "Obliga a SQL Server a recompilar todos los planes.",
+                "traduccion": "Liberar caché de procedimientos."
+            },
+            {
+                "pregunta": "60. ¿Qué es 'Change Data Capture' (CDC)?",
+                "opciones": ["Un virus", "Una característica que graba la actividad de inserción, actualización y borrado en tablas", "Un backup"],
+                "correcta": "Una característica que graba la actividad de inserción, actualización y borrado en tablas",
+                "explicacion": "Útil para auditoría histórica sin usar triggers manuales.",
+                "traduccion": "Captura de datos de cambios."
+            },
+            {
+                "pregunta": "61. ¿Qué es una variable de tabla (@Tabla)?",
+                "opciones": ["Una variable que almacena un conjunto de filas en memoria", "Una tabla permanente", "Una vista"],
+                "correcta": "Una variable que almacena un conjunto de filas en memoria",
+                "explicacion": "Similar a #Tabla Temporal, pero con alcance solo dentro del lote de ejecución actual.",
+                "traduccion": "Variable de tabla."
+            },
+            {
+                "pregunta": "62. ¿Qué significa el término 'Cardinalidad'?",
+                "opciones": ["La importancia de la tabla", "El número de valores únicos en una columna", "El tamaño en disco"],
+                "correcta": "El número de valores únicos en una columna",
+                "explicacion": "Ayuda al optimizador a decidir si usar un índice o no.",
+                "traduccion": "Cardinalidad."
+            },
+            {
+                "pregunta": "63. ¿Qué es 'Soft Delete' (Borrado Lógico)?",
+                "opciones": ["Borrar despacio", "Marcar un registro como inactivo (ej. IsDeleted = 1) en lugar de borrarlo físicamente", "Borrar con cuidado"],
+                "correcta": "Marcar un registro como inactivo (ej. IsDeleted = 1) en lugar de borrarlo físicamente",
+                "explicacion": "Permite recuperar datos o mantener historial.",
+                "traduccion": "Borrado suave/lógico."
+            },
+            {
+                "pregunta": "64. ¿Para qué sirve la función ROW_NUMBER()?",
+                "opciones": ["Cuenta filas", "Numera secuencialmente las filas de un conjunto de resultados", "Suma filas"],
+                "correcta": "Numera secuencialmente las filas de un conjunto de resultados",
+                "explicacion": "Útil para paginación: WHERE RowNum BETWEEN 10 AND 20.",
+                "traduccion": "Número de fila."
+            },
+            {
+                "pregunta": "65. ¿Qué hace la instrucción SET NOCOUNT ON?",
+                "opciones": ["Evita que se devuelva el mensaje de 'X filas afectadas'", "Detiene el conteo de registros", "Da error"],
+                "correcta": "Evita que se devuelva el mensaje de 'X filas afectadas'",
+                "explicacion": "Mejora el rendimiento de red en procedimientos almacenados.",
+                "traduccion": "Sin conteo activado."
+            },
+            {
+                "pregunta": "66. ¿Qué es una 'Scalar Function'?",
+                "opciones": ["Una función que devuelve un solo valor", "Una función que devuelve una tabla", "Una función matemática"],
+                "correcta": "Una función que devuelve un solo valor",
+                "explicacion": "A diferencia de las 'Table-Valued Functions' que devuelven listas.",
+                "traduccion": "Función escalar."
+            },
+            {
+                "pregunta": "67. ¿Qué es un 'Plan Guide'?",
+                "opciones": ["Un mapa", "Una regla para forzar al optimizador a usar un plan específico", "Un manual de usuario"],
+                "correcta": "Una regla para forzar al optimizador a usar un plan específico",
+                "explicacion": "Se usa cuando el motor elige un plan ineficiente y no puedes cambiar el código.",
+                "traduccion": "Guía de plan."
+            },
+            {
+                "pregunta": "68. ¿Qué significa que una columna sea 'Identity'?",
+                "opciones": ["Que tiene nombre", "Que es autoincremental (se llena sola)", "Que es secreta"],
+                "correcta": "Que es autoincremental (se llena sola)",
+                "explicacion": "IDENTITY(1,1) empieza en 1 y suma 1 en cada inserción.",
+                "traduccion": "Identidad / Autoincremental."
+            },
+            {
+                "pregunta": "69. ¿Cómo reinicias el contador de una columna Identity?",
+                "opciones": ["DELETE TABLE", "DBCC CHECKIDENT('Tabla', RESEED, 0)", "RESET IDENTITY"],
+                "correcta": "DBCC CHECKIDENT('Tabla', RESEED, 0)",
+                "explicacion": "Reinicia la semilla al valor especificado.",
+                "traduccion": "Reiniciar identidad."
+            },
+            {
+                "pregunta": "70. ¿Qué hace la función JSON_VALUE (en versiones modernas)?",
+                "opciones": ["Crea un JSON", "Extrae un valor escalar de una cadena JSON", "Borra JSON"],
+                "correcta": "Extrae un valor escalar de una cadena JSON",
+                "explicacion": "Permite parsear datos JSON almacenados como texto.",
+                "traduccion": "Valor JSON."
+            },
+            {
+                "pregunta": "71. ¿Qué es 'Partitioning' (Particionamiento)?",
+                "opciones": ["Romper el disco duro", "Dividir una tabla grande en partes más pequeñas físicamente para mejorar manejo", "Duplicar la tabla"],
+                "correcta": "Dividir una tabla grande en partes más pequeñas físicamente para mejorar manejo",
+                "explicacion": "Se suele particionar por fecha (ej. una partición por año).",
+                "traduccion": "Particionamiento."
+            },
+            {
+                "pregunta": "72. ¿Qué es un ataque de 'Denegación de Servicio' (DoS) en BD?",
+                "opciones": ["Borrar datos", "Sobrecargar el servidor con peticiones para que no pueda responder", "Robar contraseñas"],
+                "correcta": "Sobrecargar el servidor con peticiones para que no pueda responder",
+                "explicacion": "Afecta la disponibilidad del servicio.",
+                "traduccion": "Denegación de Servicio."
+            },
+            {
+                "pregunta": "73. ¿Qué hace la cláusula OUTPUT en un INSERT/DELETE?",
+                "opciones": ["Muestra los datos que acaban de ser insertados o borrados", "Imprime en papel", "Exporta a Excel"],
+                "correcta": "Muestra los datos que acaban de ser insertados o borrados",
+                "explicacion": "OUTPUT INSERTED.ID permite recuperar el ID generado inmediatamente.",
+                "traduccion": "Salida."
+            },
+            {
+                "pregunta": "74. ¿Qué es el principio de 'Mínimo Privilegio'?",
+                "opciones": ["Dar todos los permisos a todos", "Dar a los usuarios solo los permisos estrictamente necesarios", "No dar permisos"],
+                "correcta": "Dar a los usuarios solo los permisos estrictamente necesarios",
+                "explicacion": "Es la regla de oro en seguridad de bases de datos.",
+                "traduccion": "Mínimo privilegio."
+            },
+            {
+                "pregunta": "75. ¿Qué hace la función NEWID()?",
+                "opciones": ["Crea un usuario nuevo", "Genera un GUID (Identificador Único Global) aleatorio", "Devuelve el último ID"],
+                "correcta": "Genera un GUID (Identificador Único Global) aleatorio",
+                "explicacion": "Devuelve algo como '6F9619FF-8B86-D011-B42D-00C04FC964FF'.",
+                "traduccion": "Nuevo ID / GUID."
+            },]
+        }       
+}
