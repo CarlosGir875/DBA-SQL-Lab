@@ -1,34 +1,25 @@
 # -*- coding: utf-8 -*-
 """
 ========================================================================================================================
-  IRONCLAD TITAN v19.0 — THE LEVIATHAN BUILD (MAXIMUM VERBOSITY EDITION)
+  IRONCLAD TITAN v20.0 — THE MODULAR LEVIATHAN (LMS ARCHITECTURE)
   Authorized Personnel: ADMINISTRATOR (SY)
   System Status: ONLINE & OPTIMIZED
   Location: Port of San Jose, Escuintla, Guatemala
-  Timestamp: 2026-02-04 | 22:30 CST
+  Timestamp: 2026-02-05 | 09:00 CST
   
-  [SYSTEM MANIFEST & ARCHITECTURE]
+  [SYSTEM ARCHITECTURE]
   ----------------------------------------------------------------------------------------------------------------------
-  1. CORE KERNEL        : Python 3.10+ Streamlit State Machine.
-  2. UI ENGINE          : 'Aegis-Glass' v19. 
-                          - Deep Space Particles Background (CSS Animation).
-                          - Interactive Tooltips with [Word](Translation) logic.
-                          - Dynamic 'Slide' Learning Mode (Step-by-step).
-  3. DATA ENGINE        : Omni-Parser v10. 
-                          - Robust Import System: Detects errors in external files and switches to Internal Backup 
-                            without crashing the UI.
-  4. SQL ENGINE         : Hyper-Mock v9 (The Data Factory).
-                          - 4 MASSIVE TABLES: Employees, Customers, Products, Sales.
-                          - 300+ Rows each with high entropy (Names, Emails, Dates, Categories).
-                          - Relational Integrity for COMPLEX JOINs.
-  5. NAVIGATION         : Dashboard -> Academy (Slides) -> Training (Quiz) -> SQL Lab.
-  
-  [CHANGELOG v19.0]
-  - EXPANSION: Code fully expanded to maximize line count and readability.
-  - NEW: 'Slide Learning' Mode in Academy. No more text walls. Click 'Next' to learn.
-  - NEW: 4th SQL Table 'Sales' added for advanced queries.
-  - FIX: Dashboard completely cleaned. No red tracebacks.
-  - VISUAL: Enhanced glassmorphism and animations.
+  1. KERNEL             : Python 3.10+ Streamlit State Machine.
+  2. UI ENGINE          : 'Aegis-Glass' v20. 
+                          - Deep Space Particles (CSS).
+                          - Step-by-Step 'Slide' Learning Mode.
+  3. DATA LAYER         : MODULAR IMPORT SYSTEM.
+                          - Imports 'preguntas.py' for Quiz logic.
+                          - Imports 'academia_content.py' for Theory logic.
+  4. SQL ENGINE         : 'Hyper-Mock' v10.
+                          - 4 RELATIONAL TABLES: Employees, Customers, Products, Sales.
+                          - 300+ Realistic Rows per table for complex JOINs.
+  5. ERROR HANDLING     : Silent Fail-Safe. No more ugly red boxes on the Dashboard.
   
   [COPYRIGHT]
   © 2026 IronClad Analytics Corp. All rights reserved.
@@ -49,32 +40,54 @@ import sqlite3
 import traceback
 import re
 from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
-from typing import Dict, Any, List
+
+# --- IMPORTACIÓN MODULAR (TUS ARCHIVOS EXTERNOS) ---
+# Intentamos conectar con tus archivos de base de datos.
+try:
+    from academia_content import Codex
+    ACADEMIA_STATUS = "ONLINE"
+except ImportError:
+    ACADEMIA_STATUS = "OFFLINE"
+    # Fallback silencioso para no romper la UI si el archivo no está listo
+    class Codex:
+        @staticmethod
+        def get_lesson_slides(mid): return [{"title": "Error de Conexión", "content": "No se encontró academia_content.py"}]
+        @staticmethod
+        def get_irregular_verbs(): return {}
+        @staticmethod
+        def get_regular_verbs(): return []
+        @staticmethod
+        def get_idioms(): return []
+
+try:
+    from preguntas import temas as DB_QUIZ
+    QUIZ_STATUS = "ONLINE"
+except ImportError:
+    QUIZ_STATUS = "OFFLINE"
+    DB_QUIZ = {}
+except SyntaxError:
+    QUIZ_STATUS = "SYNTAX ERROR"
+    DB_QUIZ = {}
 
 # --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(
-    page_title="IronClad Titan // v19.0",
+    page_title="IronClad Titan // v20.0",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded",
-    menu_items={
-        'About': "IronClad Analytics v19.0. Enterprise Edition."
-    }
+    menu_items={'About': "IronClad Analytics v20.0."}
 )
 
 # ======================================================================================================================
-# SECTION 1: VISUAL ENGINE (AEGIS-GLASS UI v19)
+# SECTION 1: VISUAL ENGINE (AEGIS-GLASS UI)
 # ======================================================================================================================
 
 class VisualAssets:
-    """
-    Repositorio de Assets y Constantes Visuales.
-    Contiene las URLs de animaciones Lottie y los iconos del sistema.
-    """
+    """Repositorio de Assets Visuales."""
     ANIM_HOME = "https://lottie.host/embed/9863db83-4940-4ce0-8e18-60914fb499cb/pYM5sC8O3e.json"
     ANIM_VICTORY = "https://lottie.host/embed/a8c62c96-0365-4d76-805c-3e3518b26118/pQk5sH4O1e.json"
-    ANIM_SQL = "https://lottie.host/embed/4279261f-9e6a-464a-939e-21443d3b7661/gS82r9vL1s.json"
     
     ICON_DASH = "🏠"
     ICON_ACADEMY = "🎓"
@@ -82,26 +95,20 @@ class VisualAssets:
     ICON_SQL = "💾"
     ICON_BACK = "⬅️"
     ICON_NEXT = "➡️"
-    ICON_CHECK = "✅"
 
 class AegisUI:
     """
-    Motor Gráfico: Estilos, Animaciones y Componentes UI.
-    Implementa el diseño 'Frost Glass' (Vidrio Esmerilado) sin neón.
+    Motor Gráfico: Define la estética completa de la aplicación.
+    No toca datos, solo dibuja píxeles.
     """
     
     @staticmethod
     def inject_css():
-        """
-        Inyecta el CSS global para la aplicación.
-        Define variables de color, fuentes, animaciones y estilos de componentes.
-        """
+        """Inyecta el CSS masivo para el estilo visual."""
         st.markdown("""
         <style>
-        /* IMPORTACIÓN DE FUENTES */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
         
-        /* VARIABLES DE COLOR */
         :root {
             --bg-dark: #020617;
             --glass-bg: rgba(30, 41, 59, 0.4);
@@ -109,13 +116,11 @@ class AegisUI:
             --primary: #3b82f6;
             --secondary: #6366f1;
             --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
             --text: #f8fafc;
             --text-muted: #94a3b8;
         }
 
-        /* --- FONDO ANIMADO --- */
+        /* --- FONDO DE PARTÍCULAS --- */
         .stApp {
             background-color: var(--bg-dark);
             background-image: 
@@ -130,21 +135,16 @@ class AegisUI:
         }
         
         @keyframes particleAnim {
-            from { 
-                background-position: 0 0, 40px 60px, 130px 270px; 
-            }
-            to { 
-                background-position: 550px 550px, 390px 410px, 680px 820px; 
-            }
+            from { background-position: 0 0, 40px 60px, 130px 270px; }
+            to { background-position: 550px 550px, 390px 410px, 680px 820px; }
         }
 
-        /* --- SIDEBAR --- */
         section[data-testid="stSidebar"] {
             background-color: rgba(2, 6, 23, 0.95) !important;
             border-right: 1px solid var(--glass-border);
         }
 
-        /* --- TARJETAS DE VIDRIO (Cards) --- */
+        /* --- TARJETAS DE VIDRIO --- */
         .aegis-card {
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
             backdrop-filter: blur(20px);
@@ -165,14 +165,14 @@ class AegisUI:
             transform: translateY(-5px);
             box-shadow: 0 20px 50px -10px rgba(59, 130, 246, 0.3);
         }
-        
+
         /* --- BOTONES --- */
         .stButton > button {
             background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
             color: white;
             border: 1px solid var(--glass-border);
             border-radius: 12px;
-            padding: 0.75rem 1.5rem;
+            padding: 0.8rem 1.5rem;
             font-weight: 600;
             letter-spacing: 0.5px;
             transition: all 0.3s ease;
@@ -187,7 +187,7 @@ class AegisUI:
             transform: scale(1.02);
         }
 
-        /* --- TOOLTIPS INTELIGENTES --- */
+        /* --- TOOLTIPS --- */
         .tooltip {
             border-bottom: 2px dashed var(--primary);
             cursor: help !important;
@@ -223,43 +223,25 @@ class AegisUI:
             opacity: 1;
         }
 
-        /* --- INPUTS SQL --- */
+        /* --- INPUTS --- */
         .stTextArea textarea {
             background-color: #020617 !important;
             border: 1px solid #334155 !important;
-            color: #a5f3fc !important; /* Cyan claro para código */
+            color: #a5f3fc !important;
             font-family: 'JetBrains Mono', monospace !important;
             border-radius: 12px !important;
         }
-        
-        /* --- PROGRESS BAR --- */
-        .stProgress > div > div > div > div {
-            background-color: var(--success);
-            box-shadow: 0 0 10px var(--success);
-        }
-        
-        /* --- TITULOS --- */
-        h1, h2, h3 {
-            font-family: 'Inter', sans-serif;
-            font-weight: 800;
-            color: white;
-            letter-spacing: -0.5px;
-        }
+
+        h1, h2, h3 { font-weight: 800; letter-spacing: -0.5px; color: white; }
         </style>
         """, unsafe_allow_html=True)
 
     @staticmethod
     def render_lottie(url: str, height: int = 300):
-        """Renderiza una animación Lottie en un contenedor centrado."""
-        st.markdown(f"""
-            <div style="display: flex; justify-content: center; margin: 20px 0;">
-                <iframe src="{url}" width="100%" height="{height}px" style="border:none; background:transparent;"></iframe>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f'<div style="display: flex; justify-content: center; margin: 20px 0;"><iframe src="{url}" width="100%" height="{height}px" style="border:none; background:transparent;"></iframe></div>', unsafe_allow_html=True)
 
     @staticmethod
     def render_header(title: str, subtitle: str):
-        """Renderiza un encabezado estandarizado con estilo Aegis."""
         st.markdown(f"""
         <div style="margin-bottom: 40px; border-left: 6px solid #3b82f6; padding-left: 25px; background: linear-gradient(90deg, rgba(59,130,246,0.1), transparent);">
             <h1 style="margin:0; font-size: 3rem; color: white;">{title}</h1>
@@ -269,9 +251,7 @@ class AegisUI:
 
     @staticmethod
     def parse_tooltips(text: str) -> str:
-        """
-        Analiza el texto buscando el patrón [Palabra](Traducción) y lo convierte en HTML.
-        """
+        """Convierte [Palabra](Traducción) a HTML."""
         if not isinstance(text, str): return str(text)
         return re.sub(
             r'\[(.*?)]\((.*?)\)', 
@@ -280,327 +260,14 @@ class AegisUI:
         )
 
 # ======================================================================================================================
-# SECTION 2: CODEX OMEGA (Base de Datos de Conocimiento)
-# ======================================================================================================================
-
-class Codex:
-    """
-    ENCICLOPEDIA CENTRALIZADA.
-    Contiene la teoría paso a paso (Slides) y los diccionarios de datos.
-    """
-    
-    @staticmethod
-    def get_lesson_slides(module_id: str) -> list:
-        """Retorna una lista de 'Diapositivas' para el aprendizaje paso a paso."""
-        
-        if module_id == "TO_BE":
-            return [
-                {
-                    "title": "1. ¿Qué es el Verbo To Be?", 
-                    "content": "Es el verbo más importante. Significa **Ser** (identidad) o **Estar** (ubicación/estado).\n\nEjemplo: I [am](soy) a doctor. / I [am](estoy) happy."
-                },
-                {
-                    "title": "2. Estructura Afirmativa", 
-                    "content": "I **am** (Yo soy)\nYou **are** (Tú eres)\nHe/She/It **is** (Él/Ella/Eso es)\nWe/They **are** (Nosotros/Ellos son)"
-                },
-                {
-                    "title": "3. Contracciones (Truco)", 
-                    "content": "Los nativos no dicen 'I am', dicen **I'm**.\nYou are -> **You're**\nHe is -> **He's**\nIt is -> **It's**"
-                },
-                {
-                    "title": "4. Negaciones", 
-                    "content": "Solo agrega **NOT** después del verbo.\nI am **not** sad.\nShe is **not** here.\nThey are **not** ready."
-                },
-                {
-                    "title": "5. Preguntas", 
-                    "content": "Invierte el orden.\n**Am** I late?\n**Are** you sure?\n**Is** she nice?"
-                }
-            ]
-        
-        elif module_id == "PRESENT_CONT":
-            return [
-                {
-                    "title": "1. ¿Cuándo se usa?", 
-                    "content": "Para acciones que están ocurriendo **AHORA MISMO**. No ayer, no mañana, AHORA."
-                },
-                {
-                    "title": "2. La Fórmula", 
-                    "content": "**Sujeto + Verbo To Be + Verbo con ING**\n\nEjemplo: She [is](está) [eating](comiendo)."
-                },
-                {
-                    "title": "3. Regla de la 'E'", 
-                    "content": "Si el verbo termina en 'e' muda, elimínala.\nDance -> Dancing (NO Danceing)\nMake -> Making"
-                },
-                {
-                    "title": "4. Regla CVC", 
-                    "content": "Si el verbo es corto y termina en Consonante-Vocal-Consonante, duplica la última letra.\nRun -> Running\nSwim -> Swimming"
-                },
-                {
-                    "title": "5. Práctica", 
-                    "content": "I am [reading](leyendo) this slide.\nYou are [learning](aprendiendo) English."
-                }
-            ]
-            
-        elif module_id == "FUTURE":
-            return [
-                {
-                    "title": "1. Dos Futuros", 
-                    "content": "En inglés hay dos formas principales: **Will** y **Going To**."
-                },
-                {
-                    "title": "2. Will (Espontáneo)", 
-                    "content": "Úsalo para decisiones tomadas **en el momento**.\n*Suena el teléfono* -> I [will](voy a) answer it!"
-                },
-                {
-                    "title": "3. Going To (Planificado)", 
-                    "content": "Úsalo para planes ya decididos.\nI am [going to](voy a) fly to Paris next week. (Ya tengo el boleto)."
-                },
-                {
-                    "title": "4. Predicciones", 
-                    "content": "Si ves evidencia (nubes negras), usa Going To.\nIt is [going to](va a) rain."
-                }
-            ]
-
-        elif module_id == "SQL_BASICS":
-            return [
-                {
-                    "title": "1. ¿Qué es SQL?", 
-                    "content": "Structured Query Language. Es el idioma para hablar con bases de datos."
-                },
-                {
-                    "title": "2. SELECT (Leer)", 
-                    "content": "El comando para recuperar datos.\n`SELECT * FROM Empleados;` (Trae todo)."
-                },
-                {
-                    "title": "3. WHERE (Filtrar)", 
-                    "content": "Para traer solo lo que te interesa.\n`SELECT * FROM Empleados WHERE Salario > 5000;`"
-                },
-                {
-                    "title": "4. INSERT (Crear)", 
-                    "content": "Para meter datos nuevos.\n`INSERT INTO Clientes (Nombre) VALUES ('Juan');`"
-                },
-                {
-                    "title": "5. UPDATE & DELETE", 
-                    "content": "Para modificar o borrar. **CUIDADO**: Siempre usa WHERE o borrarás toda la tabla."
-                }
-            ]
-            
-        elif module_id == "JOINS":
-            return [
-                {
-                    "title": "1. El Poder de los Joins", 
-                    "content": "Las bases de datos reales separan la info en tablas. Los Joins las unen."
-                },
-                {
-                    "title": "2. INNER JOIN", 
-                    "content": "La Intersección. Solo trae filas que coinciden en AMBAS tablas.\n(Solo clientes que compraron)."
-                },
-                {
-                    "title": "3. LEFT JOIN", 
-                    "content": "Prioridad Izquierda. Trae TODO de la tabla A, y si hay algo en B, lo pega. Si no, pone NULL."
-                },
-                {
-                    "title": "4. Ejemplo Visual", 
-                    "content": "Tabla Empleados (Left) --- Tabla Deptos (Right).\nLeft Join mostrará empleados sin departamento."
-                }
-            ]
-            
-        elif module_id == "ACID":
-            return [
-                {
-                    "title": "1. Transacciones",
-                    "content": "Una transacción es un grupo de operaciones que se ejecutan como una sola unidad."
-                },
-                {
-                    "title": "2. Atomicidad (A)",
-                    "content": "Todo o nada. Si falla una parte, se deshace todo (ROLLBACK)."
-                },
-                {
-                    "title": "3. Consistencia (C)",
-                    "content": "La base de datos siempre respeta las reglas."
-                },
-                {
-                    "title": "4. Aislamiento (I)",
-                    "content": "Las transacciones no se interfieren entre sí."
-                },
-                {
-                    "title": "5. Durabilidad (D)",
-                    "content": "Una vez guardado (COMMIT), es permanente."
-                }
-            ]
-
-        return [{"title": "Error", "content": "Contenido no disponible."}]
-
-    @staticmethod
-    def get_irregular_verbs():
-        """Diccionario completo de verbos irregulares clasificados."""
-        return {
-            "🥷 Ninjas (No Cambian)": [
-                {"verb": "Bet", "past": "Bet", "participle": "Bet", "meaning": "Apostar", "example": "I [bet](apuesto) on red."},
-                {"verb": "Burst", "past": "Burst", "participle": "Burst", "meaning": "Reventar", "example": "It [burst](reventó)."},
-                {"verb": "Cost", "past": "Cost", "participle": "Cost", "meaning": "Costar", "example": "It [cost](costó) $5."},
-                {"verb": "Cut", "past": "Cut", "participle": "Cut", "meaning": "Cortar", "example": "I [cut](corté) it."},
-                {"verb": "Hit", "past": "Hit", "participle": "Hit", "meaning": "Golpear", "example": "He [hit](golpeó) me."},
-                {"verb": "Hurt", "past": "Hurt", "participle": "Hurt", "meaning": "Doler", "example": "It [hurt](dolió)."},
-                {"verb": "Let", "past": "Let", "participle": "Let", "meaning": "Dejar", "example": "[Let](deja) me go."},
-                {"verb": "Put", "past": "Put", "participle": "Put", "meaning": "Poner", "example": "[Put](pon) it there."},
-                {"verb": "Quit", "past": "Quit", "participle": "Quit", "meaning": "Renunciar", "example": "I [quit](renuncié)."},
-                {"verb": "Read", "past": "Read", "participle": "Read", "meaning": "Leer", "example": "I [read](leí) it."},
-                {"verb": "Set", "past": "Set", "participle": "Set", "meaning": "Fijar", "example": "[Set](fija) the time."},
-                {"verb": "Shut", "past": "Shut", "participle": "Shut", "meaning": "Cerrar", "example": "[Shut](cierra) it."},
-                {"verb": "Spread", "past": "Spread", "participle": "Spread", "meaning": "Esparcir", "example": "It [spread](se esparció)."}
-            ],
-            "👯 Gemelos (Pasado=Part)": [
-                {"verb": "Bring", "past": "Brought", "participle": "Brought", "meaning": "Traer", "example": "She [brought](trajo) it."},
-                {"verb": "Build", "past": "Built", "participle": "Built", "meaning": "Construir", "example": "They [built](construyeron) it."},
-                {"verb": "Buy", "past": "Bought", "participle": "Bought", "meaning": "Comprar", "example": "I [bought](compré) it."},
-                {"verb": "Catch", "past": "Caught", "participle": "Caught", "meaning": "Atrapar", "example": "He [caught](atrapó) it."},
-                {"verb": "Feel", "past": "Felt", "participle": "Felt", "meaning": "Sentir", "example": "I [felt](sentí) bad."},
-                {"verb": "Fight", "past": "Fought", "participle": "Fought", "meaning": "Pelear", "example": "They [fought](pelearon)."},
-                {"verb": "Find", "past": "Found", "participle": "Found", "meaning": "Encontrar", "example": "I [found](encontré) it."},
-                {"verb": "Get", "past": "Got", "participle": "Got", "meaning": "Obtener", "example": "I [got](obtuve) it."},
-                {"verb": "Have", "past": "Had", "participle": "Had", "meaning": "Tener", "example": "I [had](tuve) time."},
-                {"verb": "Hear", "past": "Heard", "participle": "Heard", "meaning": "Oír", "example": "I [heard](oí) that."},
-                {"verb": "Hold", "past": "Held", "participle": "Held", "meaning": "Sostener", "example": "[Hold](sostén) this."},
-                {"verb": "Keep", "past": "Kept", "participle": "Kept", "meaning": "Guardar", "example": "[Keep](guarda) it."},
-                {"verb": "Leave", "past": "Left", "participle": "Left", "meaning": "Salir", "example": "He [left](salió)."},
-                {"verb": "Lose", "past": "Lost", "participle": "Lost", "meaning": "Perder", "example": "We [lost](perdimos)."},
-                {"verb": "Make", "past": "Made", "participle": "Made", "meaning": "Hacer", "example": "She [made](hizo) it."},
-                {"verb": "Meet", "past": "Met", "participle": "Met", "meaning": "Conocer", "example": "We [met](nos conocimos)."},
-                {"verb": "Pay", "past": "Paid", "participle": "Paid", "meaning": "Pagar", "example": "I [paid](pagué)."},
-                {"verb": "Say", "past": "Said", "participle": "Said", "meaning": "Decir", "example": "He [said](dijo) no."},
-                {"verb": "Sell", "past": "Sold", "participle": "Sold", "meaning": "Vender", "example": "He [sold](vendió) it."},
-                {"verb": "Send", "past": "Sent", "participle": "Sent", "meaning": "Enviar", "example": "I [sent](envié) it."},
-                {"verb": "Sit", "past": "Sat", "participle": "Sat", "meaning": "Sentarse", "example": "[Sit](siéntate)."},
-                {"verb": "Sleep", "past": "Slept", "participle": "Slept", "meaning": "Dormir", "example": "I [slept](dormí)."},
-                {"verb": "Spend", "past": "Spent", "participle": "Spent", "meaning": "Gastar", "example": "He [spent](gastó) it."},
-                {"verb": "Stand", "past": "Stood", "participle": "Stood", "meaning": "Pararse", "example": "[Stand](párate)."},
-                {"verb": "Teach", "past": "Taught", "participle": "Taught", "meaning": "Enseñar", "example": "He [taught](enseñó)."},
-                {"verb": "Tell", "past": "Told", "participle": "Told", "meaning": "Contar", "example": "She [told](contó) me."},
-                {"verb": "Think", "past": "Thought", "participle": "Thought", "meaning": "Pensar", "example": "I [thought](pensé) so."},
-                {"verb": "Understand", "past": "Understood", "participle": "Understood", "meaning": "Entender", "example": "I [understood](entendí)."},
-                {"verb": "Win", "past": "Won", "participle": "Won", "meaning": "Ganar", "example": "We [won](ganamos)."}
-            ],
-            "👽 Mutantes (Cambian)": [
-                {"verb": "Be", "past": "Was/Were", "participle": "Been", "meaning": "Ser/Estar", "example": "I [was](fui)."},
-                {"verb": "Begin", "past": "Began", "participle": "Begun", "meaning": "Empezar", "example": "It [began](empezó)."},
-                {"verb": "Break", "past": "Broke", "participle": "Broken", "meaning": "Romper", "example": "It [broke](rompió)."},
-                {"verb": "Choose", "past": "Chose", "participle": "Chosen", "meaning": "Elegir", "example": "I [chose](elegí)."},
-                {"verb": "Come", "past": "Came", "participle": "Come", "meaning": "Venir", "example": "He [came](vino)."},
-                {"verb": "Do", "past": "Did", "participle": "Done", "meaning": "Hacer", "example": "I [did](hice) it."},
-                {"verb": "Drink", "past": "Drank", "participle": "Drunk", "meaning": "Beber", "example": "He [drank](bebió)."},
-                {"verb": "Drive", "past": "Drove", "participle": "Driven", "meaning": "Conducir", "example": "I [drove](manejé)."},
-                {"verb": "Eat", "past": "Ate", "participle": "Eaten", "meaning": "Comer", "example": "I [ate](comí)."},
-                {"verb": "Fall", "past": "Fell", "participle": "Fallen", "meaning": "Caer", "example": "He [fell](cayó)."},
-                {"verb": "Fly", "past": "Flew", "participle": "Flown", "meaning": "Volar", "example": "It [flew](voló)."},
-                {"verb": "Forget", "past": "Forgot", "participle": "Forgotten", "meaning": "Olvidar", "example": "I [forgot](olvidé)."},
-                {"verb": "Give", "past": "Gave", "participle": "Given", "meaning": "Dar", "example": "She [gave](dio)."},
-                {"verb": "Go", "past": "Went", "participle": "Gone", "meaning": "Ir", "example": "He [went](fue)."},
-                {"verb": "Know", "past": "Knew", "participle": "Known", "meaning": "Saber", "example": "I [knew](sabía)."},
-                {"verb": "Ride", "past": "Rode", "participle": "Ridden", "meaning": "Montar", "example": "I [rode](monté)."},
-                {"verb": "Run", "past": "Ran", "participle": "Run", "meaning": "Correr", "example": "He [ran](corrió)."},
-                {"verb": "See", "past": "Saw", "participle": "Seen", "meaning": "Ver", "example": "I [saw](vi)."},
-                {"verb": "Sing", "past": "Sang", "participle": "Sung", "meaning": "Cantar", "example": "She [sang](cantó)."},
-                {"verb": "Speak", "past": "Spoke", "participle": "Spoken", "meaning": "Hablar", "example": "He [spoke](habló)."},
-                {"verb": "Swim", "past": "Swam", "participle": "Swum", "meaning": "Nadar", "example": "We [swam](nadamos)."},
-                {"verb": "Take", "past": "Took", "participle": "Taken", "meaning": "Tomar", "example": "He [took](tomó)."},
-                {"verb": "Wake", "past": "Woke", "participle": "Woken", "meaning": "Despertar", "example": "I [woke](desperté)."},
-                {"verb": "Wear", "past": "Wore", "participle": "Worn", "meaning": "Usar", "example": "She [wore](usó)."},
-                {"verb": "Write", "past": "Wrote", "participle": "Written", "meaning": "Escribir", "example": "I [wrote](escribí)."}
-            ]
-        }
-
-    @staticmethod
-    def get_regular_verbs():
-        # Lista condensada para 50 verbos
-        verbs = ["Ask", "Answer", "Arrive", "Believe", "Call", "Clean", "Close", "Cook", "Cry", "Dance", "Decide", "Enjoy", "Explain", "Finish", "Help", "Hope", "Jump", "Kiss", "Laugh", "Learn", "Like", "Listen", "Live", "Look", "Love", "Miss", "Move", "Need", "Open", "Paint", "Play", "Rain", "Remember", "Smile", "Start", "Stop", "Study", "Talk", "Travel", "Try", "Use", "Visit", "Wait", "Walk", "Want", "Watch", "Work", "Worry", "Wash", "Wish"]
-        return [{"verb": v, "past": f"{v}ed", "meaning": "Verbo Regular", "example": f"I [{v.lower()}ed]({v.lower()}é) yesterday."} for v in verbs]
-
-    @staticmethod
-    def get_idioms():
-        return [
-            {"idiom": "Piece of cake", "meaning": "Pan comido"},
-            {"idiom": "Break a leg", "meaning": "Buena suerte"},
-            {"idiom": "Hit the sack", "meaning": "Irse a dormir"},
-            {"idiom": "Under the weather", "meaning": "Sentirse enfermo"},
-            {"idiom": "Spill the beans", "meaning": "Contar el secreto"},
-            {"idiom": "Once in a blue moon", "meaning": "Rara vez"},
-            {"idiom": "See eye to eye", "meaning": "Estar de acuerdo"},
-            {"idiom": "Kill two birds with one stone", "meaning": "Matar dos pájaros de un tiro"},
-            {"idiom": "Feeling blue", "meaning": "Estar triste"},
-            {"idiom": "Time flies", "meaning": "El tiempo vuela"},
-            {"idiom": "Speak of the devil", "meaning": "Hablando del rey de Roma"},
-            {"idiom": "Call it a day", "meaning": "Terminar por hoy"},
-            {"idiom": "Better late than never", "meaning": "Más vale tarde que nunca"},
-            {"idiom": "So far so good", "meaning": "Hasta ahora todo bien"},
-            {"idiom": "No pain, no gain", "meaning": "Sin dolor no hay ganancia"},
-            {"idiom": "Hang in there", "meaning": "¡No te rindas!"},
-            {"idiom": "Make a long story short", "meaning": "Resumiendo"},
-            {"idiom": "Miss the boat", "meaning": "Perder la oportunidad"},
-            {"idiom": "It's not rocket science", "meaning": "No es tan difícil"},
-            {"idiom": "Get out of hand", "meaning": "Salirse de control"},
-            {"idiom": "Easy does it", "meaning": "Hazlo con cuidado"},
-            {"idiom": "A penny for your thoughts", "meaning": "¿En qué piensas?"},
-            {"idiom": "Actions speak louder than words", "meaning": "Los hechos valen más que palabras"},
-            {"idiom": "Add insult to injury", "meaning": "Empeorar las cosas"},
-            {"idiom": "Ball is in your court", "meaning": "Te toca decidir"},
-            {"idiom": "Barking up the wrong tree", "meaning": "Equivocarse de persona"},
-            {"idiom": "Beat around the bush", "meaning": "Andarse con rodeos"},
-            {"idiom": "Best thing since sliced bread", "meaning": "Una gran invención"},
-            {"idiom": "Bite the bullet", "meaning": "Afrontarlo con valor"},
-            {"idiom": "Blessing in disguise", "meaning": "Algo bueno que parecía malo"},
-            {"idiom": "Burn bridges", "meaning": "Cortar relaciones"},
-            {"idiom": "Cut corners", "meaning": "Hacer algo mal para ahorrar"},
-            {"idiom": "Cut the mustard", "meaning": "Dar la talla"},
-            {"idiom": "Devil's advocate", "meaning": "Abogado del diablo"},
-            {"idiom": "Don't count your chickens", "meaning": "No cantes victoria antes"},
-            {"idiom": "Don't put all your eggs in one basket", "meaning": "No te arriesgues todo a una carta"},
-            {"idiom": "Drastic times call for drastic measures", "meaning": "A grandes males, grandes remedios"},
-            {"idiom": "Elvis has left the building", "meaning": "El espectáculo terminó"},
-            {"idiom": "Every cloud has a silver lining", "meaning": "No hay mal que por bien no venga"},
-            {"idiom": "Far cry from", "meaning": "Muy diferente de"},
-            {"idiom": "Feel a bit under the weather", "meaning": "Sentirse un poco mal"},
-            {"idiom": "Give the benefit of the doubt", "meaning": "Creer en alguien"},
-            {"idiom": "Hear it on the grapevine", "meaning": "Oír un rumor"},
-            {"idiom": "Hit the nail on the head", "meaning": "Dar en el clavo"},
-            {"idiom": "In the heat of the moment", "meaning": "Sin pensar"},
-            {"idiom": "It takes two to tango", "meaning": "La culpa es de los dos"},
-            {"idiom": "Jump on the bandwagon", "meaning": "Seguir la moda"},
-            {"idiom": "Keep something at bay", "meaning": "Mantener a raya"}
-        ]
-
-    @staticmethod
-    def get_quiz_data():
-        """BANCO DE PREGUNTAS INTEGRADO."""
-        return {
-            "Inglés - Verbos": {
-                "Nivel 1": [
-                    {"pregunta": "Past of 'Go'?", "opciones": ["Went", "Gone"], "correcta": "Went", "explicacion": "Irregular", "traduccion": "Ir"},
-                    {"pregunta": "Past of 'Buy'?", "opciones": ["Bought", "Buyed"], "correcta": "Bought", "explicacion": "Irregular", "traduccion": "Comprar"},
-                    {"pregunta": "Past of 'See'?", "opciones": ["Saw", "Seen"], "correcta": "Saw", "explicacion": "Irregular", "traduccion": "Ver"},
-                    {"pregunta": "Past of 'Work'?", "opciones": ["Worked", "Work"], "correcta": "Worked", "explicacion": "Regular (+ed)", "traduccion": "Trabajar"}
-                ]
-            },
-            "Inglés - Tiempos": {
-                "Básico": [
-                    {"pregunta": "She ___ eating.", "opciones": ["is", "are"], "correcta": "is", "explicacion": "She is", "traduccion": "Ella está comiendo"},
-                    {"pregunta": "I ___ going to the park.", "opciones": ["am", "is"], "correcta": "am", "explicacion": "I am", "traduccion": "Voy al parque"}
-                ]
-            },
-            "SQL - Fundamentos": {
-                "Básico": [
-                    {"pregunta": "Comando para leer datos?", "opciones": ["SELECT", "GET"], "correcta": "SELECT", "explicacion": "SELECT * FROM...", "traduccion": "Seleccionar"},
-                    {"pregunta": "Filtrar resultados?", "opciones": ["WHERE", "FILTER"], "correcta": "WHERE", "explicacion": "WHERE ID=1", "traduccion": "Donde"},
-                    {"pregunta": "Unir tablas?", "opciones": ["JOIN", "MERGE"], "correcta": "JOIN", "explicacion": "INNER JOIN...", "traduccion": "Unir"}
-                ]
-            }
-        }
-
-# ======================================================================================================================
-# SECTION 3: SQL ENGINE (HYPER-MOCK v8) - 4 TABLES, 300+ ROWS
+# SECTION 2: SQL ENGINE (HYPER-MOCK v10) - 4 TABLES
 # ======================================================================================================================
 
 class SQLSimulator:
+    """
+    Simulador de Base de Datos en Memoria.
+    Genera 4 tablas relacionadas masivas cada vez que se inicia la sesión.
+    """
     _DB_CONNECTION = None
 
     @classmethod
@@ -613,39 +280,52 @@ class SQLSimulator:
 
     @staticmethod
     def _seed_massive_data(conn):
+        """Generación de datos de alta entropía (no repetitivos)."""
         cursor = conn.cursor()
         
-        # --- DATA POOLS ---
-        names = ["Carlos", "Ana", "Luis", "Maria", "Jorge", "Sofia", "Miguel", "Lucia", "Diego", "Elena", "Javier", "Carmen"]
-        lastnames = ["Lopez", "Garcia", "Perez", "Martinez", "Sanchez", "Diaz", "Rodriguez", "Hernandez", "Gomez"]
-        cities = ["Guatemala City", "Escuintla", "Quetzaltenango", "Peten", "Izabal", "Sacatepequez", "Zacapa"]
-        depts = ["IT", "Sales", "HR", "Logistics", "Finance"]
-        prods = ["Laptop", "Mouse", "Monitor", "Keyboard", "Server", "Router", "Switch", "Tablet", "Printer"]
-
-        # 1. EMPLOYEES (350)
-        data = []
+        names = ["Carlos", "Sofia", "Miguel", "Lucia", "Diego", "Elena", "Javier", "Carmen", "Roberto", "Isabel", "Fernando", "Patricia", "Ricardo", "Teresa", "Daniel", "Beatriz", "Hugo", "Valentina", "Camila", "Mateo"]
+        lastnames = ["Lopez", "Garcia", "Perez", "Martinez", "Sanchez", "Diaz", "Rodriguez", "Hernandez", "Gomez", "Fernandez", "Torres", "Ramirez", "Flores", "Rivera", "Guzman", "Reyes", "Morales", "Ortega", "Castillo", "Mendoza"]
+        cities = ["Guatemala City", "Escuintla", "Quetzaltenango", "Peten", "Izabal", "Sacatepequez", "Chiquimula", "Zacapa", "Coban", "Puerto Barrios"]
+        depts = ["IT", "Sales", "HR", "Logistics", "Finance", "Legal", "Operations", "Marketing"]
+        
+        # 1. EMPLOYEES (350 Rows)
+        data_emp = []
         for i in range(1, 351):
-            data.append((i, random.choice(names), random.choice(lastnames), random.choice(depts), random.randint(3500, 25000), random.choice(cities)))
-        pd.DataFrame(data, columns=["ID", "FirstName", "LastName", "Dept", "Salary", "City"]).to_sql("Employees", conn, index=False)
+            fname, lname = random.choice(names), random.choice(lastnames)
+            dept = random.choice(depts)
+            role = f"{dept} {'Manager' if i % 10 == 0 else 'Specialist'}"
+            salary = random.randint(4000, 45000)
+            data_emp.append((i, fname, lname, dept, role, salary, random.choice(cities)))
+        pd.DataFrame(data_emp, columns=["ID", "FirstName", "LastName", "Department", "JobTitle", "Salary", "Location"]).to_sql("Employees", conn, index=False)
 
-        # 2. CUSTOMERS (350)
-        data = []
+        # 2. CUSTOMERS (350 Rows)
+        data_cust = []
         for i in range(1, 351):
-            fn, ln = random.choice(names), random.choice(lastnames)
-            data.append((i, fn, ln, f"{fn}.{ln}{i}@mail.com".lower(), random.choice(cities), "Active"))
-        pd.DataFrame(data, columns=["CustomerID", "FirstName", "LastName", "Email", "City", "Status"]).to_sql("Customers", conn, index=False)
+            fname, lname = random.choice(names), random.choice(lastnames)
+            email = f"{fname.lower()}.{lname.lower()}{i}@mail.com"
+            data_cust.append((i, fname, lname, email, random.choice(cities), "Active"))
+        pd.DataFrame(data_cust, columns=["CustomerID", "FirstName", "LastName", "Email", "City", "Status"]).to_sql("Customers", conn, index=False)
 
-        # 3. PRODUCTS (350)
-        data = []
+        # 3. PRODUCTS (350 Rows)
+        data_prod = []
+        adjectives = ["Pro", "Ultra", "Max", "Gaming", "Office", "Smart", "Eco"]
+        nouns = ["Laptop", "Mouse", "Keyboard", "Monitor", "Headset", "Server", "Router", "Switch", "Tablet", "Printer"]
         for i in range(1, 351):
-            data.append((i, f"{random.choice(['Pro', 'Max', 'Ultra'])} {random.choice(prods)} {i}", "Tech", random.randint(50, 5000), random.randint(0, 500)))
-        pd.DataFrame(data, columns=["ProductID", "ProductName", "Category", "Price", "Stock"]).to_sql("Products", conn, index=False)
+            pname = f"{random.choice(adjectives)} {random.choice(nouns)} {random.randint(100, 999)}"
+            price = random.randint(50, 5000)
+            stock = random.randint(0, 500)
+            data_prod.append((i, pname, "Tech", price, stock))
+        pd.DataFrame(data_prod, columns=["ProductID", "ProductName", "Category", "Price", "Stock"]).to_sql("Products", conn, index=False)
 
-        # 4. SALES (350)
-        data = []
+        # 4. SALES (350 Rows - Relational)
+        data_sales = []
         for i in range(1, 351):
-            data.append((i, random.randint(1, 350), random.randint(1, 350), random.randint(1, 10), "2026-02-01"))
-        pd.DataFrame(data, columns=["SaleID", "CustomerID", "ProductID", "Quantity", "SaleDate"]).to_sql("Sales", conn, index=False)
+            cid = random.randint(1, 350)
+            pid = random.randint(1, 350)
+            qty = random.randint(1, 10)
+            date = (datetime.now() - timedelta(days=random.randint(0, 365))).strftime("%Y-%m-%d")
+            data_sales.append((i, cid, pid, qty, date))
+        pd.DataFrame(data_sales, columns=["SaleID", "CustomerID", "ProductID", "Quantity", "SaleDate"]).to_sql("Sales", conn, index=False)
 
     @classmethod
     def execute(cls, query: str):
@@ -658,7 +338,7 @@ class SQLSimulator:
             return None, f"Error SQL: {str(e)}"
 
 # ======================================================================================================================
-# SECTION 4: APP STATE
+# SECTION 3: APP STATE & NAVIGATION
 # ======================================================================================================================
 
 @dataclass
@@ -669,27 +349,43 @@ class UserProfile:
     streak: int = 12
 
 class AppState:
-    KEY = "TITAN_V18"
+    KEY = "TITAN_V20"
+    
     @classmethod
     def get(cls):
         if cls.KEY not in st.session_state:
             st.session_state[cls.KEY] = {
                 "view": "DASHBOARD",
                 "user": UserProfile(),
-                "quiz": {"active": False, "deck": [], "q_index": 0, "score": 0},
-                "acad": {"nav": "MENU", "slides": [], "slide_idx": 0},
+                "quiz": {"active": False, "deck": [], "q_index": 0, "score": 0, "feedback": False},
+                "acad": {"nav": "MENU", "lesson_slides": [], "slide_index": 0},
                 "train_nav": "TOPIC"
             }
         return st.session_state[cls.KEY]
 
 # ======================================================================================================================
-# SECTION 5: VIEW CONTROLLERS
+# SECTION 4: VIEW CONTROLLERS (LOGIC)
 # ======================================================================================================================
 
 def render_dashboard():
     user = AppState.get()["user"]
     st.markdown("<br>", unsafe_allow_html=True)
-    AegisUI.render_header("IRONCLAD TITAN v18.0", "Centro de Comando")
+    AegisUI.render_header("IRONCLAD TITAN v20.0", "Centro de Comando")
+    
+    # Status Check
+    status_col1, status_col2 = st.columns(2)
+    with status_col1:
+        if ACADEMIA_STATUS == "ONLINE":
+            st.success("✅ Módulo Academia: Conectado")
+        else:
+            st.error("❌ Módulo Academia: No encontrado")
+    with status_col2:
+        if QUIZ_STATUS == "ONLINE":
+            st.success("✅ Módulo Quiz: Conectado")
+        else:
+            st.error("❌ Módulo Quiz: Error de carga")
+            
+    st.markdown("---")
     
     col1, col2 = st.columns([2, 1])
     with col1:
@@ -698,13 +394,13 @@ def render_dashboard():
         m2.markdown(f"""<div class="aegis-card" style="text-align:center;"><h3 style="color:#10b981;">XP</h3><h1>{user.xp}</h1></div>""", unsafe_allow_html=True)
         m3.markdown(f"""<div class="aegis-card" style="text-align:center;"><h3 style="color:#f59e0b;">Racha</h3><h1>{user.streak}</h1></div>""", unsafe_allow_html=True)
         
-        st.markdown("### 🚀 Accesos")
+        st.markdown("### 🚀 Accesos Directos")
         b1, b2 = st.columns(2)
-        if b1.button("🎓 ACADEMIA", use_container_width=True):
+        if b1.button("🎓 Ir a la Academia", use_container_width=True):
             AppState.get()["view"] = "ACADEMY"
             AppState.get()["acad"]["nav"] = "MENU"
             st.rerun()
-        if b2.button("🧠 TRAINING", use_container_width=True):
+        if b2.button("🧠 Entrenamiento", use_container_width=True):
             AppState.get()["view"] = "TRAINING"
             st.rerun()
             
@@ -712,9 +408,11 @@ def render_dashboard():
         AegisUI.render_lottie(VisualAssets.ANIM_HOME)
 
 def render_academy():
+    """Lógica de la Academia (Conectada a academia_content.py)."""
     state = AppState.get()
     acad = state["acad"]
     
+    # --- MENÚ PRINCIPAL ---
     if acad["nav"] == "MENU":
         AegisUI.render_header("Academia", "Selecciona tu ruta.")
         if st.button("⬅️ Volver"): state["view"] = "DASHBOARD"; st.rerun()
@@ -722,61 +420,88 @@ def render_academy():
         c1, c2 = st.columns(2)
         with c1:
             st.markdown("""<div class="aegis-card" style="text-align:center; border-top:4px solid #3b82f6;"><h1>🇬🇧</h1><h3>Inglés</h3></div>""", unsafe_allow_html=True)
-            if st.button("Inglés", use_container_width=True): acad["nav"] = "ENGLISH"; st.rerun()
+            if st.button("Ver Módulos Inglés", use_container_width=True): acad["nav"] = "ENGLISH"; st.rerun()
         with c2:
             st.markdown("""<div class="aegis-card" style="text-align:center; border-top:4px solid #6366f1;"><h1>💾</h1><h3>SQL</h3></div>""", unsafe_allow_html=True)
-            if st.button("SQL", use_container_width=True): acad["nav"] = "SQL"; st.rerun()
+            if st.button("Ver Módulos SQL", use_container_width=True): acad["nav"] = "SQL"; st.rerun()
 
+    # --- SUB-MENÚ INGLÉS ---
     elif acad["nav"] == "ENGLISH":
-        AegisUI.render_header("Inglés", "Temas")
+        AegisUI.render_header("Módulos Inglés", "Elige un tema.")
         if st.button("⬅️ Atrás"): acad["nav"] = "MENU"; st.rerun()
         
-        if st.button("📘 Verbo To Be (Paso a Paso)", use_container_width=True): start_lesson("TO_BE")
-        if st.button("🏃 Presente Continuo", use_container_width=True): start_lesson("PRESENT_CONT")
-        if st.button("🔮 Futuro (Will/Going To)", use_container_width=True): start_lesson("FUTURE")
-        if st.button("🔥 Verbos Irregulares (Lista)", use_container_width=True): acad["nav"] = "LIST_IRREGULAR"; st.rerun()
-        if st.button("✅ Verbos Regulares (Lista)", use_container_width=True): acad["nav"] = "LIST_REGULAR"; st.rerun()
-        if st.button("🗣️ Modismos (Lista)", use_container_width=True): acad["nav"] = "LIST_IDIOMS"; st.rerun()
+        st.markdown("### 📚 Lecciones Interactivas (Paso a Paso)")
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            if st.button("📘 Verbo To Be", use_container_width=True): start_lesson("TO_BE")
+        with c2:
+            if st.button("🏃 Presente Continuo", use_container_width=True): start_lesson("PRESENT_CONT")
+        with c3:
+            if st.button("🔮 Futuro (Will/Going To)", use_container_width=True): start_lesson("FUTURE")
+            
+        st.markdown("### 📋 Listas de Referencia")
+        l1, l2, l3 = st.columns(3)
+        with l1:
+            if st.button("🔥 Verbos Irregulares", use_container_width=True): acad["nav"] = "LIST_IRREGULAR"; st.rerun()
+        with l2:
+            if st.button("✅ Verbos Regulares", use_container_width=True): acad["nav"] = "LIST_REGULAR"; st.rerun()
+        with l3:
+            if st.button("🗣️ Modismos", use_container_width=True): acad["nav"] = "LIST_IDIOMS"; st.rerun()
 
+    # --- SUB-MENÚ SQL ---
     elif acad["nav"] == "SQL":
-        AegisUI.render_header("SQL", "Temas")
+        AegisUI.render_header("Módulos SQL", "Elige un tema.")
         if st.button("⬅️ Atrás"): acad["nav"] = "MENU"; st.rerun()
+        
         if st.button("🧱 Fundamentos (Slides)", use_container_width=True): start_lesson("SQL_BASICS")
         if st.button("🤝 Joins (Slides)", use_container_width=True): start_lesson("JOINS")
         if st.button("🛡️ ACID (Slides)", use_container_width=True): start_lesson("ACID")
 
+    # --- VISOR DE SLIDES (MODO APRENDIZAJE) ---
     elif acad["nav"] == "SLIDE_VIEW":
-        # MODO DE APRENDIZAJE PASO A PASO (SLIDE MODE)
-        slides = acad["slides"]
-        idx = acad["slide_idx"]
-        st.progress((idx + 1) / len(slides))
+        slides = acad["lesson_slides"]
+        idx = acad["slide_index"]
         
+        # Barra de progreso
+        progress = (idx + 1) / len(slides)
+        st.progress(progress)
+        
+        # Contenido
         slide = slides[idx]
         st.markdown(f"""
-        <div class="aegis-card" style="border-left: 5px solid #10b981; min-height: 350px;">
-            <h2 style="color: #10b981;">{slide['title']}</h2>
-            <hr>
-            <div style="font-size: 1.2rem; line-height: 1.6;">{AegisUI.parse_tooltips(slide['content'])}</div>
+        <div class="aegis-card" style="border-left: 5px solid #10b981; min-height: 300px;">
+            <h2 style="color: #10b981;">{slide.get('title', 'Sin Título')}</h2>
+            <hr style="border-color: rgba(255,255,255,0.1);">
+            <div style="font-size: 1.1rem; line-height: 1.6;">
+                {AegisUI.parse_tooltips(slide.get('content', '...'))}
+            </div>
         </div>
         """, unsafe_allow_html=True)
         
-        c1, c2, c3 = st.columns([1, 2, 1])
-        with c1:
-            if idx > 0: 
-                if st.button("⬅️ Anterior"): acad["slide_idx"] -= 1; st.rerun()
-        with c3:
+        # Navegación
+        c_prev, c_count, c_next = st.columns([1, 2, 1])
+        with c_prev:
+            if idx > 0:
+                if st.button("⬅️ Anterior"): acad["slide_index"] -= 1; st.rerun()
+        with c_count:
+            st.markdown(f"<div style='text-align:center; padding-top:10px; color:#94a3b8;'>Paso {idx + 1} de {len(slides)}</div>", unsafe_allow_html=True)
+        with c_next:
             if idx < len(slides) - 1:
-                if st.button("Siguiente ➡️"): acad["slide_idx"] += 1; st.rerun()
+                if st.button("Siguiente ➡️"): acad["slide_index"] += 1; st.rerun()
             else:
                 if st.button("✅ Finalizar"): acad["nav"] = "MENU"; st.rerun()
 
+    # --- VISORES DE LISTAS ---
     elif acad["nav"] == "LIST_IRREGULAR":
-        AegisUI.render_header("Verbos Irregulares", "Lista.")
+        AegisUI.render_header("Verbos Irregulares", "Lista Maestra.")
         if st.button("⬅️ Volver"): acad["nav"] = "ENGLISH"; st.rerun()
-        for cat, v_list in Codex.get_irregular_verbs().items():
+        
+        verbs = Codex.get_irregular_verbs()
+        for cat, v_list in verbs.items():
             with st.expander(cat, expanded=True):
                 for v in v_list:
-                    st.markdown(f"**{v['verb']}** -> `{v['past']}` | {AegisUI.parse_tooltips(v['example'])}")
+                    ex = AegisUI.parse_tooltips(v.get('example', ''))
+                    st.markdown(f"**{v['verb']}** -> `{v['past']}` | {ex}")
 
     elif acad["nav"] == "LIST_REGULAR":
         AegisUI.render_header("Verbos Regulares", "Lista.")
@@ -790,91 +515,183 @@ def render_academy():
         for i in Codex.get_idioms():
              st.info(f"**{i['idiom']}** = {i['meaning']}")
 
-def start_lesson(mid):
+def start_lesson(module_id):
+    """Inicia una lección. Si la función get_lesson_content devuelve un dict, lo convierte a lista."""
     state = AppState.get()
-    state["acad"]["slides"] = Codex.get_lesson_slides(mid)
-    state["acad"]["slide_idx"] = 0
+    
+    # Obtenemos el contenido crudo desde el archivo externo
+    raw = Codex.get_lesson_content(module_id)
+    
+    # Normalización: Si es Diccionario, lo hacemos lista de 1 slide. Si es lista, lo dejamos igual.
+    if isinstance(raw, dict):
+        slides = [{"title": raw.get("title", "Info"), "content": raw.get("content", "...")}]
+    elif isinstance(raw, list):
+        slides = raw
+    else:
+        slides = [{"title": "Error", "content": "Formato de lección no válido."}]
+        
+    state["acad"]["lesson_slides"] = slides
+    state["acad"]["slide_index"] = 0
     state["acad"]["nav"] = "SLIDE_VIEW"
     st.rerun()
 
 def render_training():
+    """Lógica del Quiz (Conectada a preguntas.py)."""
     state = AppState.get()
     quiz = state["quiz"]
-    repo = Codex.get_quiz_data()
     
     if not quiz["active"]:
-        AegisUI.render_header("Training", "Quiz Time.")
+        AegisUI.render_header("Entrenamiento", "Elige un tema.")
         if st.button("⬅️ Salir"): state["view"] = "DASHBOARD"; st.rerun()
         
-        cols = st.columns(2)
-        for i, theme in enumerate(repo.keys()):
-            with cols[i%2]:
-                st.markdown(f"""<div class="aegis-card" style="text-align:center;"><h3>{theme}</h3></div>""", unsafe_allow_html=True)
-                if st.button(f"Start {theme}", key=theme, use_container_width=True):
-                    # Load first level for demo
-                    lvl = list(repo[theme].keys())[0]
-                    quiz["deck"] = repo[theme][lvl]
+        if not DB_QUIZ:
+            st.warning("⚠️ No hay preguntas cargadas. Revisa 'preguntas.py'.")
+            return
+
+        topics = list(DB_QUIZ.keys())
+        cols = st.columns(3)
+        for i, tema in enumerate(topics):
+            with cols[i%3]:
+                st.markdown(f"""<div class="aegis-card" style="text-align:center;"><h3>{tema}</h3></div>""", unsafe_allow_html=True)
+                if st.button(f"Entrar {tema}", key=tema, use_container_width=True):
+                    # Cargar el primer nivel disponible
+                    first_lvl = list(DB_QUIZ[tema].keys())[0]
+                    raw = DB_QUIZ[tema][first_lvl]
+                    
+                    # Normalizar si viene envuelto en dict
+                    if isinstance(raw, dict): raw = list(raw.values())[0]
+                    
+                    quiz["deck"] = raw
                     random.shuffle(quiz["deck"])
                     quiz["active"] = True
                     quiz["score"] = 0
                     quiz["q_index"] = 0
+                    quiz["feedback"] = False
                     st.rerun()
     else:
+        # Gameplay
         deck = quiz["deck"]
         idx = quiz["q_index"]
-        if idx >= len(deck):
-            st.success(f"Final Score: {quiz['score']}")
-            if st.button("Finish"): quiz["active"] = False; st.rerun()
-            return
-            
-        q = deck[idx]
-        st.progress((idx+1)/len(deck))
-        st.markdown(f"""<div class="aegis-card"><h3>{AegisUI.parse_tooltips(q['pregunta'])}</h3></div>""", unsafe_allow_html=True)
         
-        opts = q['opciones']
-        sel = st.radio("Respuesta:", opts, key=idx)
-        if st.button("Confirmar"):
-            if sel == q['correcta']:
-                quiz["score"] += 1
-                st.balloons()
+        if idx >= len(deck):
+            st.success(f"¡Terminado! Score: {quiz['score']}")
+            if st.button("Finalizar"): quiz["active"] = False; st.rerun()
+            return
+
+        q = deck[idx]
+        # Auto-heal para preguntas tipo string
+        if isinstance(q, str): q = {'pregunta': q, 'opciones': ['Ver', 'Saltar'], 'correcta': 'Ver'}
+        
+        st.progress((idx+1)/len(deck))
+        st.markdown(f"""<div class="aegis-card"><h3>{AegisUI.parse_tooltips(q.get('pregunta','ERROR'))}</h3></div>""", unsafe_allow_html=True)
+        
+        opts = q.get('opciones', ['A', 'B'])
+        if isinstance(opts, str): opts = [opts]
+        
+        if not quiz["feedback"]:
+            sel = st.radio("Respuesta:", opts, key=idx)
+            if st.button("Confirmar", type="primary"):
+                quiz["last_sel"] = sel
+                quiz["feedback"] = True
+                if sel == q.get('correcta'):
+                    quiz["score"] += 1
+                    st.balloons()
+                st.rerun()
+        else:
+            sel = quiz["last_sel"]
+            corr = q.get('correcta')
+            if sel == corr:
+                st.success(f"✅ Correcto! {corr}")
             else:
-                st.error(f"Mal. Era: {q['correcta']}")
-            time.sleep(1.5)
-            quiz["q_index"] += 1
-            st.rerun()
+                st.error(f"❌ Incorrecto. Era: {corr}")
+            
+            with st.expander("Explicación"):
+                st.write(q.get('explicacion', ''))
+                st.caption(q.get('traduccion', ''))
+                
+            if st.button("Siguiente ➡"):
+                quiz["q_index"] += 1
+                quiz["feedback"] = False
+                st.rerun()
 
 def render_sql():
-    AegisUI.render_header("SQL Lab", "4 Tablas Masivas.")
-    c1, c2 = st.columns([3, 1])
-    with c1:
-        q = st.text_area("SQL:", "SELECT * FROM Employees LIMIT 5;", height=250)
-        if st.button("Ejecutar", type="primary"):
-            df, err = SQLSimulator.execute(q)
-            if err: st.error(err)
-            else: st.dataframe(df, use_container_width=True)
-    with c2:
-        st.markdown("### Esquema")
-        with st.expander("Employees"): st.code("ID, Name, Dept, Salary, City")
-        with st.expander("Customers"): st.code("ID, Name, Email, City")
-        with st.expander("Products"): st.code("ID, Name, Category, Price")
-        with st.expander("Sales"): st.code("SaleID, CustID, ProdID, Qty")
-    if st.button("Volver"): AppState.get()["view"] = "DASHBOARD"; st.rerun()
+    """SQL Lab con 4 Tablas."""
+    AegisUI.render_header("SQL Lab", "4 Tablas Masivas (Solo Lectura).")
+    
+    col_editor, col_schema = st.columns([3, 1])
+    
+    with col_editor:
+        query = st.text_area("Consulta SQL:", "SELECT * FROM Employees LIMIT 5;", height=300)
+        c1, c2 = st.columns(2)
+        if c1.button("▶ EJECUTAR", type="primary", use_container_width=True):
+            df, err = SQLSimulator.execute(query)
+            if err:
+                st.error(err)
+            else:
+                st.success(f"Consulta Exitosa: {len(df)} filas.")
+                st.dataframe(df, use_container_width=True)
+        if c2.button("🧹 LIMPIAR", use_container_width=True):
+            pass
 
-# --- MAIN ---
+    with col_schema:
+        st.markdown("### 🗄️ Esquema DB")
+        with st.expander("👤 Employees (350+)", expanded=True):
+            st.code("ID, FirstName, LastName, Department, JobTitle, Salary, Location")
+        with st.expander("🌍 Customers (350+)"):
+            st.code("CustomerID, FirstName, LastName, Email, City, Status")
+        with st.expander("📦 Products (350+)"):
+            st.code("ProductID, ProductName, Category, Price, Stock")
+        with st.expander("💰 Sales (350+)"):
+            st.code("SaleID, CustomerID, ProductID, Quantity, SaleDate")
+
+    if st.button("⬅️ Volver al Dashboard"):
+        AppState.get()["view"] = "DASHBOARD"
+        st.rerun()
+
+# ======================================================================================================================
+# MAIN EXECUTION ROOT
+# ======================================================================================================================
+
+def render_sidebar():
+    user = AppState.get()["user"]
+    with st.sidebar:
+        st.markdown(f"""
+        <div style="text-align:center; padding:20px 0;">
+            <div style="width:80px; height:80px; margin:0 auto; background:linear-gradient(135deg, #3b82f6, #6366f1); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:bold; color:white; border: 3px solid rgba(255,255,255,0.1);">
+                {user.username[0]}
+            </div>
+            <h3 style="margin-top:15px; color:white;">{user.username}</h3>
+            <p style="color:#94a3b8; font-size:0.9rem;">{user.role}</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        if st.button(f"{VisualAssets.ICON_DASH} Dashboard", use_container_width=True):
+            AppState.get()["view"] = "DASHBOARD"; st.rerun()
+        if st.button(f"{VisualAssets.ICON_ACADEMY} Academia", use_container_width=True):
+            AppState.get()["view"] = "ACADEMY"; AppState.get()["acad"]["nav"] = "MENU"; st.rerun()
+        if st.button(f"{VisualAssets.ICON_TRAIN} Training", use_container_width=True):
+            AppState.get()["view"] = "TRAINING"; st.rerun()
+        if st.button(f"{VisualAssets.ICON_SQL} SQL Lab", use_container_width=True):
+            AppState.get()["view"] = "SQL"; st.rerun()
+            
+        st.markdown("---")
+        st.caption("© 2026 IronClad Analytics")
+
 def main():
     AegisUI.inject_css()
-    with st.sidebar:
-        st.title("TITAN v18")
-        if st.button("🏠 Dashboard"): AppState.get()["view"] = "DASHBOARD"; st.rerun()
+    render_sidebar()
     
-    v = AppState.get()["view"]
+    view = AppState.get()["view"]
     try:
-        if v == "DASHBOARD": render_dashboard()
-        elif v == "ACADEMY": render_academy()
-        elif v == "TRAINING": render_training()
-        elif v == "SQL": render_sql()
+        if view == "DASHBOARD": render_dashboard()
+        elif view == "ACADEMY": render_academy()
+        elif view == "TRAINING": render_training()
+        elif view == "SQL": render_sql()
     except Exception:
-        st.error("⚠️ Error inesperado. Reiniciando...")
+        # Dashboard Limpio: No mostramos errores técnicos al usuario final
+        st.error("⚠️ Ocurrió un error inesperado. El sistema se ha reiniciado.")
         st.session_state.clear()
         if st.button("Recargar"): st.rerun()
 
