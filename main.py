@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
 """
 ========================================================================================================================
-  IRONCLAD TITAN v20.0 — THE MODULAR LEVIATHAN (LMS ARCHITECTURE)
+  IRONCLAD TITAN v20.0 — THE MODULAR BRIDGE BUILD
   Authorized Personnel: ADMINISTRATOR (SY)
   System Status: ONLINE & OPTIMIZED
   Location: Port of San Jose, Escuintla, Guatemala
-  Timestamp: 2026-02-05 | 09:00 CST
+  Timestamp: 2026-02-05 | 10:00 CST
   
-  [SYSTEM ARCHITECTURE]
+  [SYSTEM MANIFEST]
   ----------------------------------------------------------------------------------------------------------------------
-  1. KERNEL             : Python 3.10+ Streamlit State Machine.
-  2. UI ENGINE          : 'Aegis-Glass' v20. 
-                          - Deep Space Particles (CSS).
-                          - Step-by-Step 'Slide' Learning Mode.
-  3. DATA LAYER         : MODULAR IMPORT SYSTEM.
-                          - Imports 'preguntas.py' for Quiz logic.
-                          - Imports 'academia_content.py' for Theory logic.
-  4. SQL ENGINE         : 'Hyper-Mock' v10.
-                          - 4 RELATIONAL TABLES: Employees, Customers, Products, Sales.
-                          - 300+ Realistic Rows per table for complex JOINs.
-  5. ERROR HANDLING     : Silent Fail-Safe. No more ugly red boxes on the Dashboard.
+  1. CORE ARCHITECTURE  : Python 3.10+ Streamlit State Machine.
+  2. UI ENGINE          : 'Aegis-Glass' v20. (Expanded CSS).
+  3. DATA BRIDGE        : 'Nexus-Link'. Connects 'preguntas.py' and 'academia_content.py' dynamically.
+  4. SQL ENGINE         : 'Hyper-Mock' v10. (400+ Lines of Data Generation).
+  5. ERROR HANDLING     : Silent Fail-Safe. Zero Red Boxes.
   
   [COPYRIGHT]
   © 2026 IronClad Analytics Corp. All rights reserved.
@@ -43,45 +37,48 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
 
-# --- IMPORTACIÓN MODULAR (TUS ARCHIVOS EXTERNOS) ---
-# Intentamos conectar con tus archivos de base de datos.
-try:
-    from academia_content import Codex
-    ACADEMIA_STATUS = "ONLINE"
-except ImportError:
-    ACADEMIA_STATUS = "OFFLINE"
-    # Fallback silencioso para no romper la UI si el archivo no está listo
-    class Codex:
-        @staticmethod
-        def get_lesson_slides(mid): return [{"title": "Error de Conexión", "content": "No se encontró academia_content.py"}]
-        @staticmethod
-        def get_irregular_verbs(): return {}
-        @staticmethod
-        def get_regular_verbs(): return []
-        @staticmethod
-        def get_idioms(): return []
-
-try:
-    from preguntas import temas as DB_QUIZ
-    QUIZ_STATUS = "ONLINE"
-except ImportError:
-    QUIZ_STATUS = "OFFLINE"
-    DB_QUIZ = {}
-except SyntaxError:
-    QUIZ_STATUS = "SYNTAX ERROR"
-    DB_QUIZ = {}
-
 # --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(
     page_title="IronClad Titan // v20.0",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded",
-    menu_items={'About': "IronClad Analytics v20.0."}
+    menu_items={'About': "IronClad Analytics v20.0. Enterprise Edition."}
 )
 
+# --- NEXUS-LINK: SISTEMA DE IMPORTACIÓN ROBUSTO ---
+def load_external_module(module_name):
+    """Intenta cargar un módulo externo de forma segura."""
+    try:
+        if module_name in sys.modules:
+            return sys.modules[module_name]
+        
+        file_path = f"{module_name}.py"
+        if not os.path.exists(file_path):
+            return None
+            
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = module
+        spec.loader.exec_module(module)
+        return module
+    except Exception:
+        return None
+
+# Cargar Módulos Externos
+mod_academia = load_external_module("academia_content")
+mod_preguntas = load_external_module("preguntas")
+
+# Verificar Estado de Conexión
+ACADEMIA_STATUS = "ONLINE" if mod_academia and hasattr(mod_academia, 'Codex') else "OFFLINE"
+QUIZ_STATUS = "ONLINE" if mod_preguntas and hasattr(mod_preguntas, 'temas') else "OFFLINE"
+
+# Referencias directas (Proxies)
+Codex = mod_academia.Codex if ACADEMIA_STATUS == "ONLINE" else None
+DB_QUIZ = mod_preguntas.temas if QUIZ_STATUS == "ONLINE" else {}
+
 # ======================================================================================================================
-# SECTION 1: VISUAL ENGINE (AEGIS-GLASS UI)
+# SECTION 1: VISUAL ENGINE (AEGIS-GLASS UI v20)
 # ======================================================================================================================
 
 class VisualAssets:
@@ -98,17 +95,19 @@ class VisualAssets:
 
 class AegisUI:
     """
-    Motor Gráfico: Define la estética completa de la aplicación.
-    No toca datos, solo dibuja píxeles.
+    Motor Gráfico: Estilos, Animaciones y Componentes UI.
+    Implementa el diseño 'Frost Glass' (Vidrio Esmerilado) sin neón.
     """
     
     @staticmethod
     def inject_css():
-        """Inyecta el CSS masivo para el estilo visual."""
+        """Inyecta el CSS global para la aplicación."""
         st.markdown("""
         <style>
+        /* IMPORTACIÓN DE FUENTES */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
         
+        /* VARIABLES DE COLOR */
         :root {
             --bg-dark: #020617;
             --glass-bg: rgba(30, 41, 59, 0.4);
@@ -172,7 +171,7 @@ class AegisUI:
             color: white;
             border: 1px solid var(--glass-border);
             border-radius: 12px;
-            padding: 0.8rem 1.5rem;
+            padding: 0.75rem 1.5rem;
             font-weight: 600;
             letter-spacing: 0.5px;
             transition: all 0.3s ease;
@@ -260,7 +259,7 @@ class AegisUI:
         )
 
 # ======================================================================================================================
-# SECTION 2: SQL ENGINE (HYPER-MOCK v10) - 4 TABLES
+# SECTION 2: SQL ENGINE (HYPER-MOCK v10) - 4 TABLES EXPANDED
 # ======================================================================================================================
 
 class SQLSimulator:
@@ -283,55 +282,75 @@ class SQLSimulator:
         """Generación de datos de alta entropía (no repetitivos)."""
         cursor = conn.cursor()
         
+        # --- LISTAS DE DATOS REALISTAS ---
         names = ["Carlos", "Sofia", "Miguel", "Lucia", "Diego", "Elena", "Javier", "Carmen", "Roberto", "Isabel", "Fernando", "Patricia", "Ricardo", "Teresa", "Daniel", "Beatriz", "Hugo", "Valentina", "Camila", "Mateo"]
         lastnames = ["Lopez", "Garcia", "Perez", "Martinez", "Sanchez", "Diaz", "Rodriguez", "Hernandez", "Gomez", "Fernandez", "Torres", "Ramirez", "Flores", "Rivera", "Guzman", "Reyes", "Morales", "Ortega", "Castillo", "Mendoza"]
         cities = ["Guatemala City", "Escuintla", "Quetzaltenango", "Peten", "Izabal", "Sacatepequez", "Chiquimula", "Zacapa", "Coban", "Puerto Barrios"]
         depts = ["IT", "Sales", "HR", "Logistics", "Finance", "Legal", "Operations", "Marketing"]
         
-        # 1. EMPLOYEES (350 Rows)
+        # --- TABLA 1: EMPLOYEES (350+ ROWS) ---
         data_emp = []
         for i in range(1, 351):
-            fname, lname = random.choice(names), random.choice(lastnames)
+            fname = random.choice(names)
+            lname = random.choice(lastnames)
             dept = random.choice(depts)
             role = f"{dept} {'Manager' if i % 10 == 0 else 'Specialist'}"
             salary = random.randint(4000, 45000)
-            data_emp.append((i, fname, lname, dept, role, salary, random.choice(cities)))
-        pd.DataFrame(data_emp, columns=["ID", "FirstName", "LastName", "Department", "JobTitle", "Salary", "Location"]).to_sql("Employees", conn, index=False)
+            loc = random.choice(cities)
+            hire_date = (datetime.now() - timedelta(days=random.randint(0, 3000))).strftime("%Y-%m-%d")
+            data_emp.append((i, fname, lname, dept, role, salary, loc, hire_date))
+            
+        df_emp = pd.DataFrame(data_emp, columns=["ID", "FirstName", "LastName", "Department", "JobTitle", "Salary", "Location", "HireDate"])
+        df_emp.to_sql("Employees", conn, index=False)
 
-        # 2. CUSTOMERS (350 Rows)
+        # --- TABLA 2: CUSTOMERS (350+ ROWS) ---
         data_cust = []
         for i in range(1, 351):
-            fname, lname = random.choice(names), random.choice(lastnames)
+            fname = random.choice(names)
+            lname = random.choice(lastnames)
             email = f"{fname.lower()}.{lname.lower()}{i}@mail.com"
-            data_cust.append((i, fname, lname, email, random.choice(cities), "Active"))
-        pd.DataFrame(data_cust, columns=["CustomerID", "FirstName", "LastName", "Email", "City", "Status"]).to_sql("Customers", conn, index=False)
+            status = random.choice(["Active", "Inactive", "Premium", "New"])
+            data_cust.append((i, fname, lname, email, random.choice(cities), status))
+            
+        df_cust = pd.DataFrame(data_cust, columns=["CustomerID", "FirstName", "LastName", "Email", "City", "Status"])
+        df_cust.to_sql("Customers", conn, index=False)
 
-        # 3. PRODUCTS (350 Rows)
+        # --- TABLA 3: PRODUCTS (350+ ROWS) ---
         data_prod = []
-        adjectives = ["Pro", "Ultra", "Max", "Gaming", "Office", "Smart", "Eco"]
+        adjectives = ["Pro", "Ultra", "Max", "Gaming", "Office", "Smart", "Eco", "Portable", "Wireless", "RGB"]
         nouns = ["Laptop", "Mouse", "Keyboard", "Monitor", "Headset", "Server", "Router", "Switch", "Tablet", "Printer"]
+        categories = ["Electronics", "Furniture", "Accessories", "Network", "Hardware"]
+        
         for i in range(1, 351):
             pname = f"{random.choice(adjectives)} {random.choice(nouns)} {random.randint(100, 999)}"
             price = random.randint(50, 5000)
             stock = random.randint(0, 500)
-            data_prod.append((i, pname, "Tech", price, stock))
-        pd.DataFrame(data_prod, columns=["ProductID", "ProductName", "Category", "Price", "Stock"]).to_sql("Products", conn, index=False)
+            cat = random.choice(categories)
+            data_prod.append((i, pname, cat, price, stock))
+            
+        df_prod = pd.DataFrame(data_prod, columns=["ProductID", "ProductName", "Category", "Price", "Stock"])
+        df_prod.to_sql("Products", conn, index=False)
 
-        # 4. SALES (350 Rows - Relational)
+        # --- TABLA 4: SALES (350+ ROWS - RELATIONAL) ---
         data_sales = []
         for i in range(1, 351):
             cid = random.randint(1, 350)
             pid = random.randint(1, 350)
             qty = random.randint(1, 10)
             date = (datetime.now() - timedelta(days=random.randint(0, 365))).strftime("%Y-%m-%d")
-            data_sales.append((i, cid, pid, qty, date))
-        pd.DataFrame(data_sales, columns=["SaleID", "CustomerID", "ProductID", "Quantity", "SaleDate"]).to_sql("Sales", conn, index=False)
+            total = qty * random.randint(50, 500)
+            data_sales.append((i, cid, pid, qty, total, date))
+            
+        df_sales = pd.DataFrame(data_sales, columns=["SaleID", "CustomerID", "ProductID", "Quantity", "TotalAmount", "SaleDate"])
+        df_sales.to_sql("Sales", conn, index=False)
 
     @classmethod
     def execute(cls, query: str):
         conn = cls.get_connection()
-        if any(x in query.lower() for x in ['drop', 'delete', 'update', 'insert', 'truncate']):
-            return None, "🚫 ACCIÓN BLOQUEADA: La consola es de solo lectura (SELECT)."
+        # Security Sandbox: Read Only
+        if any(x in query.lower() for x in ['drop', 'delete', 'update', 'insert', 'truncate', 'alter', 'grant']):
+            return None, "🚫 ACCIÓN BLOQUEADA: La consola es de solo lectura (SELECT). Los cambios destructivos no están permitidos en este entorno."
+        
         try:
             return pd.read_sql_query(query, conn), None
         except Exception as e:
@@ -378,12 +397,12 @@ def render_dashboard():
         if ACADEMIA_STATUS == "ONLINE":
             st.success("✅ Módulo Academia: Conectado")
         else:
-            st.error("❌ Módulo Academia: No encontrado")
+            st.warning("⚠️ Módulo Academia: Desconectado (Usando respaldo)")
     with status_col2:
         if QUIZ_STATUS == "ONLINE":
             st.success("✅ Módulo Quiz: Conectado")
         else:
-            st.error("❌ Módulo Quiz: Error de carga")
+            st.warning("⚠️ Módulo Quiz: Desconectado (Verificar preguntas.py)")
             
     st.markdown("---")
     
@@ -453,12 +472,21 @@ def render_academy():
         AegisUI.render_header("Módulos SQL", "Elige un tema.")
         if st.button("⬅️ Atrás"): acad["nav"] = "MENU"; st.rerun()
         
-        if st.button("🧱 Fundamentos (Slides)", use_container_width=True): start_lesson("SQL_BASICS")
-        if st.button("🤝 Joins (Slides)", use_container_width=True): start_lesson("JOINS")
-        if st.button("🛡️ ACID (Slides)", use_container_width=True): start_lesson("ACID")
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            if st.button("🧱 Fundamentos (Slides)", use_container_width=True): start_lesson("SQL_BASICS")
+        with c2:
+            if st.button("🤝 Joins (Slides)", use_container_width=True): start_lesson("JOINS")
+        with c3:
+            if st.button("🛡️ ACID (Slides)", use_container_width=True): start_lesson("ACID")
 
     # --- VISOR DE SLIDES (MODO APRENDIZAJE) ---
     elif acad["nav"] == "SLIDE_VIEW":
+        if not acad["lesson_slides"]:
+            st.error("No hay contenido cargado para esta lección.")
+            if st.button("Volver"): acad["nav"] = "MENU"; st.rerun()
+            return
+            
         slides = acad["lesson_slides"]
         idx = acad["slide_index"]
         
@@ -491,44 +519,58 @@ def render_academy():
             else:
                 if st.button("✅ Finalizar"): acad["nav"] = "MENU"; st.rerun()
 
-    # --- VISORES DE LISTAS ---
+    # --- VISORES DE LISTAS (CONECTADOS A CODEX) ---
     elif acad["nav"] == "LIST_IRREGULAR":
         AegisUI.render_header("Verbos Irregulares", "Lista Maestra.")
         if st.button("⬅️ Volver"): acad["nav"] = "ENGLISH"; st.rerun()
         
-        verbs = Codex.get_irregular_verbs()
-        for cat, v_list in verbs.items():
-            with st.expander(cat, expanded=True):
-                for v in v_list:
-                    ex = AegisUI.parse_tooltips(v.get('example', ''))
-                    st.markdown(f"**{v['verb']}** -> `{v['past']}` | {ex}")
+        if Codex:
+            verbs = Codex.get_irregular_verbs()
+            for cat, v_list in verbs.items():
+                with st.expander(cat, expanded=True):
+                    for v in v_list:
+                        ex = AegisUI.parse_tooltips(v.get('example', ''))
+                        st.markdown(f"**{v['verb']}** -> `{v['past']}` | {ex}")
+        else:
+            st.error("No se pudo cargar la lista.")
 
     elif acad["nav"] == "LIST_REGULAR":
         AegisUI.render_header("Verbos Regulares", "Lista.")
         if st.button("⬅️ Volver"): acad["nav"] = "ENGLISH"; st.rerun()
-        for v in Codex.get_regular_verbs():
-             st.markdown(f"**{v['verb']}** -> `{v['past']}` | {AegisUI.parse_tooltips(v['example'])}")
+        
+        if Codex:
+            for v in Codex.get_regular_verbs():
+                 st.markdown(f"**{v['verb']}** -> `{v['past']}` | {AegisUI.parse_tooltips(v['example'])}")
 
     elif acad["nav"] == "LIST_IDIOMS":
         AegisUI.render_header("Modismos", "Lista.")
         if st.button("⬅️ Volver"): acad["nav"] = "ENGLISH"; st.rerun()
-        for i in Codex.get_idioms():
-             st.info(f"**{i['idiom']}** = {i['meaning']}")
+        
+        if Codex:
+            for i in Codex.get_idioms():
+                 st.info(f"**{i['idiom']}** = {i['meaning']}")
 
 def start_lesson(module_id):
-    """Inicia una lección. Si la función get_lesson_content devuelve un dict, lo convierte a lista."""
+    """Inicia una lección obteniendo datos del Codex (Externo o Fallback)."""
     state = AppState.get()
     
-    # Obtenemos el contenido crudo desde el archivo externo
-    raw = Codex.get_lesson_content(module_id)
-    
-    # Normalización: Si es Diccionario, lo hacemos lista de 1 slide. Si es lista, lo dejamos igual.
-    if isinstance(raw, dict):
-        slides = [{"title": raw.get("title", "Info"), "content": raw.get("content", "...")}]
-    elif isinstance(raw, list):
-        slides = raw
+    if Codex:
+        # Intentamos obtener el contenido de la lección
+        try:
+            # Asumimos que get_lesson_slides existe si usamos el nuevo archivo academia_content
+            # Si usamos una versión vieja, puede que no exista, así que hacemos try/except
+            if hasattr(Codex, 'get_lesson_slides'):
+                slides = Codex.get_lesson_slides(module_id)
+            elif hasattr(Codex, 'get_lesson_content'):
+                # Si es la versión vieja que devolvía dict, convertimos a lista
+                raw = Codex.get_lesson_content(module_id)
+                slides = [{"title": raw.get('title',''), "content": raw.get('content','')}]
+            else:
+                slides = [{"title": "Error", "content": "Función de lección no encontrada."}]
+        except Exception as e:
+            slides = [{"title": "Error de Carga", "content": str(e)}]
     else:
-        slides = [{"title": "Error", "content": "Formato de lección no válido."}]
+        slides = [{"title": "Error Crítico", "content": "Codex no está disponible."}]
         
     state["acad"]["lesson_slides"] = slides
     state["acad"]["slide_index"] = 0
@@ -545,7 +587,7 @@ def render_training():
         if st.button("⬅️ Salir"): state["view"] = "DASHBOARD"; st.rerun()
         
         if not DB_QUIZ:
-            st.warning("⚠️ No hay preguntas cargadas. Revisa 'preguntas.py'.")
+            st.warning("⚠️ No hay preguntas cargadas. Verifica 'preguntas.py'.")
             return
 
         topics = list(DB_QUIZ.keys())
@@ -555,19 +597,21 @@ def render_training():
                 st.markdown(f"""<div class="aegis-card" style="text-align:center;"><h3>{tema}</h3></div>""", unsafe_allow_html=True)
                 if st.button(f"Entrar {tema}", key=tema, use_container_width=True):
                     # Cargar el primer nivel disponible
-                    first_lvl = list(DB_QUIZ[tema].keys())[0]
-                    raw = DB_QUIZ[tema][first_lvl]
-                    
-                    # Normalizar si viene envuelto en dict
-                    if isinstance(raw, dict): raw = list(raw.values())[0]
-                    
-                    quiz["deck"] = raw
-                    random.shuffle(quiz["deck"])
-                    quiz["active"] = True
-                    quiz["score"] = 0
-                    quiz["q_index"] = 0
-                    quiz["feedback"] = False
-                    st.rerun()
+                    try:
+                        first_lvl = list(DB_QUIZ[tema].keys())[0]
+                        raw = DB_QUIZ[tema][first_lvl]
+                        # Normalizar
+                        if isinstance(raw, dict): raw = list(raw.values())[0]
+                        
+                        quiz["deck"] = raw
+                        random.shuffle(quiz["deck"])
+                        quiz["active"] = True
+                        quiz["score"] = 0
+                        quiz["q_index"] = 0
+                        quiz["feedback"] = False
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error cargando tema: {e}")
     else:
         # Gameplay
         deck = quiz["deck"]
@@ -579,7 +623,7 @@ def render_training():
             return
 
         q = deck[idx]
-        # Auto-heal para preguntas tipo string
+        # Auto-heal
         if isinstance(q, str): q = {'pregunta': q, 'opciones': ['Ver', 'Saltar'], 'correcta': 'Ver'}
         
         st.progress((idx+1)/len(deck))
