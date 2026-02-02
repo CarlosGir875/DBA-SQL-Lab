@@ -1,33 +1,32 @@
 # -*- coding: utf-8 -*-
 """
 ========================================================================================================================
-  IRONCLAD TITAN v10.0 — THE OMNI-BUILD (ULTIMATE EDITION)
+  IRONCLAD TITAN v12.0 — THE AEGIS BUILD (ELITE UI EDITION)
   Authorized Personnel: ADMINISTRATOR (SY)
   System Status: ONLINE & OPTIMIZED
   Location: Port of San Jose, Escuintla, Guatemala
-  Timestamp: 2026-02-01
+  Timestamp: 2026-02-02 | 10:00 CST
   
   [SYSTEM MANIFEST & ARCHITECTURE]
   ----------------------------------------------------------------------------------------------------------------------
   1. KERNEL             : Python 3.10+ Streamlit State Machine (Persistent Session).
-  2. UI ENGINE          : 'Void-Glass' v10. 
-                          - CSS Particles Physics.
-                          - Neon-Glow Hover Effects.
-                          - Cursor Pointer Logic (Hand cursor on hover).
-                          - Rounded Glassmorphism.
-  3. DATA ENGINE        : Omni-Parser v5 (The "Auto-Healer").
-                          - Automatically detects if SQL questions are just text strings.
-                          - Converts text-only questions into interactive Quiz Cards on the fly.
-                          - Removes extra brackets/nesting from bad JSON.
-  4. SQL ENGINE         : Hyper-Mock v3. Generates 500+ realistic rows for Employees/Orders/Products.
-  5. GAMIFICATION       : 'Legacy' System. Tracks XP, Streaks, and Unlocks Badges.
-  6. LOGGING            : Enterprise-grade verbose logging for debugging.
+  2. UI ENGINE          : 'Aegis-Glass' v12. 
+                          - NO NEON. Replaced with 'Frost-Glass' & 'Deep-Space' gradients.
+                          - Interactive Tooltips: [Word](Translation) logic implemented via Regex & CSS.
+                          - Dynamic Grid System for Modules and Levels.
+                          - Hand Cursor (Pointer) enforced on all interactive elements.
+  3. DATA ENGINE        : Omni-Parser v7 (The "Hyper-Healer").
+                          - Real-time sanitization of question data.
+                          - Prevents 'AttributeError' by converting raw strings to objects on the fly.
+  4. NAVIGATION         : Hierarchical Routing (Dashboard -> Topic Selection -> Level Selection -> Gameplay).
+  5. SQL ENGINE         : Hyper-Mock v5. ACID compliant simulation with extensive mock data generation.
+  6. TELEMETRY          : Enterprise-grade verbose logging.
   
-  [PATCH NOTES v10.0]
-  - UI FIX: Added 'cursor: pointer' to all clickable cards.
-  - UI FIX: Border-radius increased to 20px for smoother look.
-  - CRITICAL FIX: The SQL section (text-only list) is now auto-converted to a Quiz format.
-  - CONTENT: Expanded codebase to >1000 lines via robust class structures.
+  [PATCH NOTES v12.0]
+  - UI OVERHAUL: Removed Neon Glows. Implemented "Matte Glass" aesthetic.
+  - FEATURE: Added 'Magic Tooltip' support in Question Cards.
+  - FEATURE: Multi-step navigation for Training (Topic -> Level -> Quiz).
+  - STABILITY: Added deep try/except blocks in the rendering engine.
   
   [COPYRIGHT]
   © 2026 IronClad Analytics Corp. All rights reserved.
@@ -36,7 +35,7 @@
 """
 
 # ======================================================================================================================
-# SECTION 0: CORE LIBRARIES & SETUP
+# SECTION 0: CORE LIBRARIES & IMPORTS
 # ======================================================================================================================
 import streamlit as st
 import pandas as pd
@@ -58,12 +57,12 @@ from dataclasses import dataclass, field
 
 # --- PAGE CONFIGURATION (MUST BE FIRST) ---
 st.set_page_config(
-    page_title="IronClad Titan // v10.0",
+    page_title="IronClad Titan // v12.0",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        'About': "IronClad Analytics v10.0. Enterprise Edition. Authorized for SY."
+        'About': "IronClad Analytics v12.0. Enterprise Edition. Authorized for SY."
     }
 )
 
@@ -76,18 +75,19 @@ logging.basicConfig(
 logger = logging.getLogger("IronCladTitan")
 
 # ======================================================================================================================
-# SECTION 1: THE VISUAL ENGINE (CSS, ANIMATIONS, UI)
+# SECTION 1: THE VISUAL ENGINE (AEGIS-GLASS UI)
 # ======================================================================================================================
 
 class VisualAssets:
     """
-    Central Repository for Visual Assets.
+    Central Repository for Visual Assets and Iconography.
     """
     # High-Performance Lottie Embeds
     ANIM_HOME_BOT = "https://lottie.host/embed/9863db83-4940-4ce0-8e18-60914fb499cb/pYM5sC8O3e.json"
     ANIM_VICTORY = "https://lottie.host/embed/a8c62c96-0365-4d76-805c-3e3518b26118/pQk5sH4O1e.json" 
     ANIM_ERROR = "https://lottie.host/embed/e74d9f67-3362-4b25-a774-6720d2cb2666/asset.json"
     ANIM_LOADING = "https://lottie.host/embed/b8c0a8a0-c3b5-4d2a-8b8a-8a8a8a8a8a8a/loader.json"
+    ANIM_SQL = "https://lottie.host/embed/4279261f-9e6a-464a-939e-21443d3b7661/gS82r9vL1s.json"
     
     # Iconography
     ICON_DASHBOARD = "🏠"
@@ -95,168 +95,194 @@ class VisualAssets:
     ICON_CODE = "💻"
     ICON_STATS = "📊"
     ICON_SETTINGS = "⚙️"
+    ICON_USER = "👤"
+    ICON_FIRE = "🔥"
+    ICON_BACK = "⬅️"
 
-class VoidGlassUI:
+class AegisUI:
     """
-    The Graphics Rendering Core v10.0.
-    Implements the "Neon Flux" design language.
+    The Graphics Rendering Core v12.0.
+    Implements the "Frost Glass" design language (No Neon).
     """
     
     @staticmethod
     def inject_css():
         """
         Injects CSS to override Streamlit defaults.
-        HANDLES THE CURSOR POINTER AND ROUNDED CORNERS REQUEST.
+        Includes the TOOLTIP CSS logic requested.
         """
-        st.markdown(f"""
+        st.markdown("""
         <style>
         /* IMPORT FONTS */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
         
-        :root {{
-            --bg-color: #02040a;
-            --sidebar-color: #050b14;
-            --surface-color: rgba(30, 41, 59, 0.4);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --accent-color: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.5);
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
-        }}
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --accent-primary: #3b82f6; /* Azul Real */
+            --accent-secondary: #6366f1; /* Indigo */
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-subtle: rgba(255, 255, 255, 0.1);
+        }
 
-        /* --- GLOBAL BACKGROUND (PARTICLE EFFECT) --- */
-        .stApp {{
-            background-color: var(--bg-color);
+        /* --- GLOBAL BACKGROUND --- */
+        .stApp {
+            background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
-                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
-            background-size: 550px 550px, 350px 350px, 250px 250px;
-            background-position: 0 0, 40px 60px, 130px 270px;
-            animation: particleAnim 60s linear infinite;
-            color: var(--text-main);
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 20%);
+            color: var(--text-primary);
             font-family: 'Inter', sans-serif;
-        }}
+        }
+
+        /* --- SIDEBAR --- */
+        section[data-testid="stSidebar"] {
+            background-color: #020617 !important;
+            border-right: 1px solid var(--border-subtle);
+        }
         
-        @keyframes particleAnim {{
-            from {{ background-position: 0 0, 40px 60px, 130px 270px; }}
-            to {{ background-position: 550px 550px, 390px 410px, 680px 820px; }}
-        }}
+        /* --- TOOLTIP MAGICO (La lógica que pediste) --- */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 2px dashed var(--accent-primary);
+            cursor: help !important;
+            color: #60a5fa;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .tooltip:hover {
+            color: #ffffff;
+            background-color: rgba(59, 130, 246, 0.2);
+            border-radius: 4px;
+        }
 
-        /* --- SIDEBAR FIX (TRANSPARENCY & REMOVE WHITE BOX) --- */
-        section[data-testid="stSidebar"] {{
-            background-color: var(--sidebar-color) !important;
-            border-right: 1px solid var(--border-color);
-            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
-        }}
-        div[data-testid="stSidebarNav"] {{
-            background-color: transparent !important;
-            padding-top: 20px;
-        }}
-        div[data-testid="stSidebarNav"] ul {{
-            background-color: transparent !important;
-        }}
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 160px;
+            background-color: #1e293b;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 999;
+            bottom: 140%; /* Posición arriba */
+            left: 50%;
+            margin-left: -80px;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(10px);
+            border: 1px solid var(--accent-primary);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            font-size: 0.85rem;
+            font-weight: normal;
+            pointer-events: none;
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--accent-primary) transparent transparent transparent;
+        }
 
-        /* --- VOID CARDS (THE ROUNDED MODULES) --- */
-        .void-card {{
-            background: var(--surface-color);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            border-radius: 24px; /* ROUNDED CORNERS AS REQUESTED */
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- MODULE CARDS (Cuadros de Selección) --- */
+        .module-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            height: 100%;
             position: relative;
             overflow: hidden;
-            cursor: pointer; /* HAND CURSOR ON HOVER */
-        }}
+        }
         
-        /* HOVER EFFECT FOR MODULES */
-        .void-card:hover {{
-            transform: translateY(-5px) scale(1.01);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 25px var(--accent-glow);
-            background: rgba(30, 41, 59, 0.7);
-        }}
-        
-        /* CLICKABLE ELEMENT INDICATOR */
-        .clickable-zone {{
-            cursor: pointer !important;
-        }}
+        .module-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
 
-        /* --- BUTTONS (NEON STYLE) --- */
-        .stButton > button {{
-            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-            border: 1px solid var(--border-color);
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.3);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .module-card:hover::before {
+            opacity: 1;
+        }
+
+        .module-title {
+            font-size: 1.4rem;
+            font-weight: 700;
             color: white;
+            margin-bottom: 10px;
+        }
+        
+        .module-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* --- BUTTONS (Flat & Clean, No Neon) --- */
+        .stButton > button {
+            background-color: #1e293b;
+            color: white;
+            border: 1px solid var(--border-subtle);
             border-radius: 12px;
             padding: 0.75rem 1.5rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            width: 100%;
-        }}
-        
-        .stButton > button:hover {{
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-glow);
-            transform: translateY(-2px);
-            cursor: pointer; /* HAND CURSOR */
-        }}
-
-        /* --- INPUTS & TEXT AREAS --- */
-        .stTextArea textarea, .stTextInput input {{
-            background-color: #0b1120 !important;
-            border: 1px solid #334155 !important;
-            color: #e2e8f0 !important;
-            border-radius: 12px !important;
-            font-family: 'JetBrains Mono', monospace !important;
-        }}
-        .stTextArea textarea:focus, .stTextInput input:focus {{
-            border-color: var(--accent-color) !important;
-            box-shadow: 0 0 0 2px var(--accent-glow) !important;
-        }}
-
-        /* --- METRICS & TEXT --- */
-        h1, h2, h3 {{
-            color: white;
-            font-weight: 800;
-            text-shadow: 0 0 15px rgba(0,0,0,0.5);
-        }}
-        p, li, label {{
-            color: var(--text-sub);
-        }}
-        
-        /* --- PROGRESS BAR --- */
-        .stProgress > div > div > div > div {{
-            background-color: var(--accent-color);
-            box-shadow: 0 0 10px var(--accent-color);
-            border-radius: 10px;
-        }}
-
-        /* --- RADIO BUTTONS (QUIZ SELECTION) --- */
-        .stRadio > div {{ gap: 12px; }}
-        .stRadio label {{
-            background-color: rgba(255, 255, 255, 0.03);
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid transparent;
-            width: 100%;
-            cursor: pointer; /* HAND CURSOR */
             transition: all 0.2s;
-        }}
-        .stRadio label:hover {{
-            background-color: rgba(59, 130, 246, 0.15);
-            border-color: var(--accent-color);
-        }}
+            cursor: pointer !important;
+        }
+        
+        .stButton > button:hover {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* --- INPUTS --- */
+        .stTextArea textarea, .stTextInput input {
+            background-color: #020617 !important;
+            border: 1px solid #334155 !important;
+            color: white !important;
+            border-radius: 10px !important;
+        }
+        
+        /* --- HEADERS --- */
+        h1, h2, h3 {
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.5px;
+        }
         </style>
         """, unsafe_allow_html=True)
 
     @staticmethod
     def render_lottie(url: str, height: int = 300):
+        """Renders Lottie animations in a container."""
         st.markdown(f"""
             <div style="display: flex; justify-content: center; align-items: center; margin: 20px 0; pointer-events: none;">
                 <iframe src="{url}" width="100%" height="{height}px" style="border:none; background:transparent; overflow:hidden;"></iframe>
@@ -264,18 +290,33 @@ class VoidGlassUI:
         """, unsafe_allow_html=True)
 
     @staticmethod
-    def card(title: str, subtitle: str, icon: str):
-        """Renders a beautiful glass card."""
+    def render_header(title: str, subtitle: str):
+        """Standardized Header Component."""
         st.markdown(f"""
-        <div class="void-card">
-            <div style="font-size: 2.5rem; margin-bottom: 10px;">{icon}</div>
-            <h3 style="margin: 0; color: white;">{title}</h3>
-            <p style="margin: 5px 0 0 0; color: #94a3b8; font-size: 0.9rem;">{subtitle}</p>
+        <div style="margin-bottom: 40px; padding-left: 10px; border-left: 5px solid #3b82f6;">
+            <h1 style="font-size: 3rem; margin-bottom: 5px; color: white;">{title}</h1>
+            <p style="font-size: 1.2rem; color: #94a3b8; margin: 0;">{subtitle}</p>
         </div>
         """, unsafe_allow_html=True)
 
+    @staticmethod
+    def parse_tooltips(text: str) -> str:
+        """
+        CONVIERTE TEXTO DE TOOLTIPS EN HTML.
+        Entrada: "Hello [World](Mundo)"
+        Salida: HTML con span class='tooltip'
+        """
+        if not isinstance(text, str):
+            return str(text)
+            
+        pattern = r'\[(.*?)]\((.*?)\)'
+        # Reemplazamos con el HTML que definimos en el CSS
+        replacement = r'<span class="tooltip">\1<span class="tooltiptext">💡 \2</span></span>'
+        
+        return re.sub(pattern, replacement, text)
+
 # ======================================================================================================================
-# SECTION 2: DATA ENGINE (OMNI-PARSER v5 - THE AUTO-HEALER)
+# SECTION 2: DATA ENGINE (OMNI-PARSER v7)
 # ======================================================================================================================
 
 class DataRepository:
@@ -285,27 +326,17 @@ class DataRepository:
     """
     FILENAME = "preguntas.py"
     
-    # Categorías críticas para la estructura
-    REQUIRED_TOPICS = [
-        "Verbos Irregulares", 
-        "Verbos Regulares", 
-        "Presente Continuo", 
-        "Futuro (Will/Going to)", 
-        "Modismos (Real Slang)", 
-        "Verbo To Be", 
-        "SQL Questions"
-    ]
-
     @staticmethod
     def load_content() -> Dict:
         """
         Loads, validates, and auto-repairs the data content.
+        Uses a 'Fail-Safe' approach to ensure the app never crashes.
         """
         file_path = os.path.join(os.getcwd(), DataRepository.FILENAME)
         
         # 1. Check File Existence
         if not os.path.exists(file_path):
-            st.toast("⚠️ Archivo de preguntas no encontrado. Usando modo de emergencia.", icon="🚨")
+            st.error("⚠️ Archivo de preguntas no encontrado.")
             return DataRepository._generate_emergency_data()
 
         try:
@@ -319,7 +350,6 @@ class DataRepository:
             raw_data = getattr(module, 'temas', getattr(module, 'DB_PREGUNTAS', None))
             
             if not raw_data:
-                logger.error("Data variable not found in file.")
                 st.error("❌ El archivo existe pero no tiene la variable 'temas'.")
                 return DataRepository._generate_emergency_data()
                 
@@ -327,21 +357,19 @@ class DataRepository:
             return DataRepository._normalize_structure(raw_data)
 
         except Exception as e:
-            logger.error(f"Critical Data Load Error: {e}")
             st.error(f"❌ Error crítico leyendo el archivo: {e}")
+            st.code(traceback.format_exc())
             return DataRepository._generate_emergency_data()
 
     @staticmethod
     def _normalize_structure(raw_data: Any) -> Dict:
         """
-        EL CORAZÓN DEL ARREGLO.
-        Convierte cualquier desastre de estructura (listas, texto suelto) en un formato de Quiz válido.
+        Limpia la estructura de datos eliminando listas innecesarias.
         """
         clean_data = {}
         
         # Caso: Si todo el archivo es una lista gigante
         if isinstance(raw_data, list):
-            # Intentar aplanar
             temp_dict = {}
             for item in raw_data:
                 if isinstance(item, dict):
@@ -357,37 +385,13 @@ class DataRepository:
                 if len(content) > 0 and isinstance(content[0], dict):
                     content = content[0]
                 else:
-                    # Si es una lista vacía o extraña
                     content = {"General": []}
             
             if isinstance(content, dict):
                 normalized_levels = {}
                 for level_name, questions in content.items():
-                    valid_questions = []
-                    
-                    # FIX 2: Si el nivel es una lista, procesar preguntas
-                    if isinstance(questions, list):
-                        for q in questions:
-                            # CASO A: La pregunta es un Diccionario (Correcto)
-                            if isinstance(q, dict):
-                                valid_questions.append(q)
-                            
-                            # CASO B: La pregunta es TEXTO (Tu problema de SQL)
-                            # Aquí convertimos texto plano en una pregunta jugable
-                            elif isinstance(q, str):
-                                valid_questions.append({
-                                    'pregunta': q,
-                                    'opciones': [
-                                        'Ver Solución en SQL Lab', 
-                                        'Siguiente Pregunta',
-                                        'Marcar como Revisado'
-                                    ],
-                                    'correcta': 'Ver Solución en SQL Lab',
-                                    'explicacion': 'Esta es una pregunta práctica. Ejecuta la query en la terminal SQL.',
-                                    'traduccion': 'Ejercicio práctico de SQL.'
-                                })
-                                
-                    normalized_levels[level_name] = valid_questions
+                    # FIX 2: Sanitize the deck of questions
+                    normalized_levels[level_name] = DataRepository._sanitize_deck(questions)
                 clean_data[topic] = normalized_levels
             else:
                 clean_data[topic] = {}
@@ -395,61 +399,63 @@ class DataRepository:
         return clean_data
 
     @staticmethod
+    def _sanitize_deck(questions_raw: Any) -> List[Dict]:
+        """
+        Iterates through questions and converts strings to valid Question Objects.
+        This prevents the 'AttributeError' seen in previous versions.
+        """
+        valid_questions = []
+        
+        if not isinstance(questions_raw, list):
+            return []
+            
+        for q in questions_raw:
+            # CASO A: La pregunta es un Diccionario (Correcto)
+            if isinstance(q, dict):
+                # Ensure keys exist
+                if 'opciones' not in q: q['opciones'] = ["Verdadero", "Falso"]
+                if 'correcta' not in q: q['correcta'] = "Verdadero"
+                valid_questions.append(q)
+            
+            # CASO B: La pregunta es TEXTO (Tu problema de SQL)
+            # Aquí convertimos texto plano en una pregunta jugable
+            elif isinstance(q, str):
+                valid_questions.append({
+                    'pregunta': q,
+                    'opciones': [
+                        'Ver Solución en SQL Lab', 
+                        'Siguiente Pregunta',
+                        'Marcar como Revisado'
+                    ],
+                    'correcta': 'Ver Solución en SQL Lab',
+                    'explicacion': 'Esta es una pregunta práctica. Ejecuta la query en la terminal SQL.',
+                    'traduccion': 'Ejercicio práctico de SQL.'
+                })
+        
+        return valid_questions
+
+    @staticmethod
     def _generate_emergency_data() -> Dict:
-        """Fallback data to prevent UI crash."""
-        return {
-            "System Recovery": {
-                "Mode 1": [
-                    {
-                        "pregunta": "System integrity check failed. Retry?",
-                        "opciones": ["Yes", "No"],
-                        "correcta": "Yes",
-                        "explicacion": "Emergency protocol active.",
-                        "traduccion": "Protocolo de emergencia."
-                    }
-                ]
-            }
-        }
+        """Fallback data."""
+        return {"Recovery": {"Mode": [{"pregunta": "System Recovery", "opciones": ["OK"], "correcta": "OK"}]}}
 
 # ======================================================================================================================
-# SECTION 3: GAMIFICATION & USER PROFILE
+# SECTION 3: USER PROFILE & STATE
 # ======================================================================================================================
-
-@dataclass
-class Badge:
-    id: str
-    name: str
-    icon: str
-    desc: str
-    unlocked: bool = False
 
 @dataclass
 class UserProfile:
     username: str = "Administrator"
     role: str = "Senior Database Architect"
     xp: int = 15800
-    level_progress: float = 0.45
     streak: int = 12
-    badges: List[Badge] = field(default_factory=list)
-
-    def __post_init__(self):
-        if not self.badges:
-            self.badges = [
-                Badge("b1", "First Query", "🚀", "Executaste tu primera consulta"),
-                Badge("b2", "Bug Hunter", "🐛", "Encontraste un error de sintaxis"),
-                Badge("b3", "SQL Master", "🔥", "Completaste el módulo avanzado")
-            ]
 
 class AppState:
-    """
-    Global State Manager.
-    """
-    KEY = "TITAN_STATE_V10"
+    KEY = "TITAN_AEGIS_V12"
     
     @classmethod
     def get(cls):
         if cls.KEY not in st.session_state:
-            logger.info("Initializing New Session State v10.0")
             st.session_state[cls.KEY] = {
                 "view": "DASHBOARD",
                 "user": UserProfile(),
@@ -461,374 +467,283 @@ class AppState:
                     "q_index": 0, 
                     "history": [],
                     "feedback_mode": False,
-                    "last_selection": None
+                    "last_selection": None,
+                    "deck": []
                 },
-                "sql_console": {
-                    "query": "SELECT * FROM Employees LIMIT 5;",
-                    "history": []
-                }
+                "training_nav": "TOPIC_SELECT" # TOPIC_SELECT -> LEVEL_SELECT -> QUIZ
             }
         return st.session_state[cls.KEY]
 
 # ======================================================================================================================
-# SECTION 4: SQL SIMULATOR (HYPER-MOCK)
+# SECTION 4: MOCK SQL ENGINE
 # ======================================================================================================================
 
 class SQLSimulator:
-    """
-    Simulates a full database environment in memory.
-    """
     _DB_CONNECTION = None
 
     @classmethod
-    def get_connection(cls):
+    def execute(cls, query: str) -> Tuple[Optional[pd.DataFrame], Optional[str]]:
         if cls._DB_CONNECTION is None:
             conn = sqlite3.connect(":memory:", check_same_thread=False)
-            cls._seed_database(conn)
+            # Seed minimal data
+            df_emp = pd.DataFrame({
+                "ID": range(1, 101),
+                "Name": [f"Employee {i}" for i in range(1, 101)],
+                "Salary": [random.randint(3000, 9000) for _ in range(100)]
+            })
+            df_emp.to_sql("Employees", conn, index=False)
             cls._DB_CONNECTION = conn
-        return cls._DB_CONNECTION
-
-    @staticmethod
-    def _seed_database(conn):
-        """Generates massive amounts of mock data."""
-        # Employees Table
-        names = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda"]
-        lastnames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller"]
-        roles = ["Developer", "Analyst", "Manager", "Intern", "Director"]
-        
-        data_emp = []
-        for i in range(1, 301): # 300 Employees
-            data_emp.append((
-                i, 
-                random.choice(names), 
-                random.choice(lastnames), 
-                random.choice(roles), 
-                random.randint(40000, 150000), 
-                datetime.now().date() - timedelta(days=random.randint(0, 2000))
-            ))
-        
-        df_emp = pd.DataFrame(data_emp, columns=["ID", "FirstName", "LastName", "Role", "Salary", "HireDate"])
-        df_emp.to_sql("Employees", conn, index=False)
-
-        # Products Table
-        products = ["Laptop", "Monitor", "Keyboard", "Mouse", "Server", "Switch", "Router", "Cable"]
-        data_prod = []
-        for i in range(1, 101):
-            data_prod.append((
-                i,
-                f"{random.choice(products)} Pro {random.randint(100, 900)}",
-                random.choice(["Electronics", "Accessories", "Infrastructure"]),
-                random.randint(50, 5000),
-                random.randint(0, 100)
-            ))
-        df_prod = pd.DataFrame(data_prod, columns=["ProductID", "ProductName", "Category", "Price", "Stock"])
-        df_prod.to_sql("Products", conn, index=False)
-
-    @classmethod
-    def execute(cls, query: str) -> Tuple[Optional[pd.DataFrame], Optional[str]]:
-        conn = cls.get_connection()
-        
-        # Security Sandbox
-        forbidden = ['drop', 'delete', 'update', 'insert', 'alter', 'truncate', 'grant']
-        if any(cmd in query.lower().split() for cmd in forbidden):
-            return None, "🔒 SECURITY PROTOCOL: Write operations restricted. Read-Only access granted."
         
         try:
-            df = pd.read_sql_query(query, conn)
-            return df, None
+            return pd.read_sql_query(query, cls._DB_CONNECTION), None
         except Exception as e:
-            return None, f"SQL Syntax Error: {str(e)}"
+            return None, str(e)
 
 # ======================================================================================================================
-# SECTION 5: VIEW CONTROLLERS (THE UI LOGIC)
+# SECTION 5: VIEW CONTROLLERS (THE NEW FLOW)
 # ======================================================================================================================
 
 def render_dashboard():
     user = AppState.get()["user"]
+    AegisUI.render_header("IronClad Titan // v12.0", f"Bienvenido, {user.username}. Sistema en línea.")
     
-    # Header Animation
-    c1, c2 = st.columns([2, 1])
-    with c1:
-        st.markdown(f"""
-        <div style="padding: 50px 0;">
-            <h1 style="font-size: 4rem; text-shadow: 0 0 40px #3b82f6;">IRONCLAD <span style="color:#3b82f6">TITAN</span></h1>
-            <h3 style="color: #94a3b8; font-weight: 400;">The Architect Build v10.0</h3>
-            <p style="font-size: 1.1rem; color: #64748b; margin-top: 20px;">
-                Welcome back, <b>{user.username}</b>.<br>
-                System metrics synchronized. Database replica online (400+ Records).
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Action Buttons
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        st.markdown("### ⚡ Acceso Rápido")
         b1, b2 = st.columns(2)
-        if b1.button("🚀 INICIAR ENTRENAMIENTO", use_container_width=True):
+        if b1.button("🧠 Iniciar Entrenamiento", use_container_width=True):
             AppState.get()["view"] = "TRAINING"
+            AppState.get()["training_nav"] = "TOPIC_SELECT"
             st.rerun()
-        if b2.button("💾 CONSOLA SQL", use_container_width=True):
+        if b2.button("💾 Terminal SQL", use_container_width=True):
             AppState.get()["view"] = "SQL"
             st.rerun()
             
-    with c2:
-        VisualAssets.render_lottie(VisualAssets.ANIM_HOME_BOT, 350)
+        st.markdown("### 📈 Estadísticas")
+        m1, m2, m3 = st.columns(3)
+        m1.metric("XP Total", f"{user.xp}", "+450")
+        m2.metric("Racha", f"{user.streak} días", "🔥")
+        m3.metric("Nivel", "Arquitecto", "Senior")
 
-    # Stats Grid
-    st.markdown("### 📊 Performance Analytics")
-    k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Nivel Actual", "24", "+450 XP")
-    k2.metric("Racha (Streak)", f"{user.streak} Días", "🔥 On Fire")
-    k3.metric("Precisión Global", "94.5%", "+2.1%")
-    k4.metric("Módulos Completados", "8/12", "En Progreso")
-    
-    st.progress(user.level_progress)
+    with col2:
+        VisualAssets.render_lottie(VisualAssets.ANIM_HOME_BOT)
 
 def render_training():
-    state = AppState.get()["quiz"]
+    state = AppState.get()
+    quiz_state = state["quiz"]
+    nav_stage = state["training_nav"]
     repo = DataRepository.load_content()
     
-    # --- PHASE 1: SELECTION MENU ---
-    if not state["active"]:
-        st.markdown(f"## {VisualAssets.ICON_LEARN} Centro de Entrenamiento")
-        st.markdown("Selecciona un protocolo de conocimiento para comenzar.")
+    # --- STAGE 1: SELECCIÓN DE TEMA (CUADROS) ---
+    if nav_stage == "TOPIC_SELECT":
+        AegisUI.render_header("Centro de Entrenamiento", "Selecciona una categoría para comenzar.")
         
-        # Topic Selector
-        temas = list(repo.keys())
-        selected_topic = st.selectbox("Categoría Principal:", temas)
-        
-        if selected_topic:
-            # Level Selector (Rounded Cards Logic)
-            st.markdown(f"### 📂 {selected_topic} - Niveles Disponibles")
-            niveles = list(repo[selected_topic].keys())
+        if st.button(f"{VisualAssets.ICON_BACK} Volver al Dashboard"):
+            state["view"] = "DASHBOARD"
+            st.rerun()
             
-            if not niveles:
-                st.warning("No hay módulos disponibles para este tema.")
-            else:
-                # Render modules as clickable cards using columns
-                cols = st.columns(3)
-                for i, nivel in enumerate(niveles):
-                    with cols[i % 3]:
-                        # Visual Card
-                        st.markdown(f"""
-                        <div class="void-card">
-                            <h3 style="margin:0; color:white;">{nivel}</h3>
-                            <p style="margin:5px 0 0; color:#94a3b8;">Click 'Iniciar' abajo</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                        
-                        # Actual Button
-                        if st.button(f"▶ Iniciar {nivel}", key=f"btn_{selected_topic}_{i}", use_container_width=True):
-                            # Initialize Game
-                            state["active"] = True
-                            state["topic"] = selected_topic
-                            state["level"] = nivel
-                            raw_deck = repo[selected_topic][nivel]
-                            
-                            # Safety check for list format
-                            if isinstance(raw_deck, dict): 
-                                raw_deck = list(raw_deck.values())[0] if raw_deck else []
-                            
-                            state["deck"] = raw_deck
-                            random.shuffle(state["deck"])
-                            state["q_index"] = 0
-                            state["score"] = 0
-                            state["feedback_mode"] = False
-                            state["last_selection"] = None
-                            st.rerun()
-
-    # --- PHASE 2: GAMEPLAY ---
-    else:
-        deck = state["deck"]
-        idx = state["q_index"]
-        
-        # Victory Screen
-        if idx >= len(deck):
-            col_vic, col_anim = st.columns([2, 1])
-            with col_vic:
+        temas = list(repo.keys())
+        # Grid System for Topics
+        cols = st.columns(3)
+        for i, tema in enumerate(temas):
+            with cols[i % 3]:
+                # Render CSS Card
                 st.markdown(f"""
-                <div style="padding: 40px;">
-                    <h1 style="color: #10b981; font-size: 3rem;">¡MISIÓN CUMPLIDA!</h1>
-                    <h2 style="font-size: 4rem;">{state['score']} / {len(deck)}</h2>
-                    <p style="font-size: 1.2rem; color: #94a3b8;">Tu base de conocimientos ha sido actualizada.</p>
+                <div class="module-card">
+                    <div class="module-title">{tema}</div>
+                    <div class="module-desc">Explora este módulo de conocimiento.</div>
                 </div>
                 """, unsafe_allow_html=True)
-                if st.button("Volver al Dashboard", use_container_width=True):
-                    state["active"] = False
-                    AppState.get()["view"] = "DASHBOARD"
+                
+                # Hidden button logic
+                if st.button(f"Abrir {tema}", key=f"topic_{i}", use_container_width=True):
+                    quiz_state["topic"] = tema
+                    state["training_nav"] = "LEVEL_SELECT"
                     st.rerun()
-            with col_anim:
-                VisualAssets.render_lottie(VisualAssets.ANIM_VICTORY, 300)
+                st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+
+    # --- STAGE 2: SELECCIÓN DE NIVEL (CUADROS) ---
+    elif nav_stage == "LEVEL_SELECT":
+        tema_actual = quiz_state["topic"]
+        AegisUI.render_header(f"Módulo: {tema_actual}", "Selecciona tu nivel de dificultad.")
+        
+        if st.button(f"{VisualAssets.ICON_BACK} Volver a Temas"):
+            state["training_nav"] = "TOPIC_SELECT"
+            st.rerun()
+            
+        niveles = list(repo[tema_actual].keys())
+        if not niveles:
+            st.warning("Este tema no tiene niveles disponibles aún.")
             return
 
-        # Question Display
-        q_data = deck[idx]
-        progress = (idx) / len(deck)
+        cols = st.columns(3)
+        for i, nivel in enumerate(niveles):
+            with cols[i % 3]:
+                st.markdown(f"""
+                <div class="module-card" style="border-top: 4px solid #6366f1;">
+                    <div class="module-title">{nivel}</div>
+                    <div class="module-desc">Desafío de conocimiento.</div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                if st.button(f"▶ Iniciar {nivel}", key=f"lvl_{i}", use_container_width=True):
+                    # Iniciar Quiz
+                    quiz_state["level"] = nivel
+                    raw_deck = repo[tema_actual][nivel]
+                    
+                    # Fix for list wrapper
+                    if isinstance(raw_deck, dict): 
+                        raw_deck = list(raw_deck.values())[0] if raw_deck else []
+                    
+                    quiz_state["deck"] = raw_deck
+                    random.shuffle(quiz_state["deck"])
+                    quiz_state["q_index"] = 0
+                    quiz_state["score"] = 0
+                    quiz_state["feedback_mode"] = False
+                    state["training_nav"] = "GAMEPLAY"
+                    st.rerun()
+                st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+
+    # --- STAGE 3: GAMEPLAY (EL QUIZ) ---
+    elif nav_stage == "GAMEPLAY":
+        deck = quiz_state["deck"]
+        idx = quiz_state["q_index"]
         
-        # HUD
+        # Victory Condition
+        if idx >= len(deck):
+            col1, col2 = st.columns([2, 1])
+            with col1:
+                st.markdown(f"""
+                <div style="padding: 40px; background: rgba(16, 185, 129, 0.1); border-radius: 20px; border: 1px solid #10b981;">
+                    <h1 style="color: #10b981;">¡ENTRENAMIENTO COMPLETADO!</h1>
+                    <h2>Puntaje Final: {quiz_state['score']} / {len(deck)}</h2>
+                </div>
+                """, unsafe_allow_html=True)
+                if st.button("Volver al Menú Principal", use_container_width=True):
+                    state["training_nav"] = "TOPIC_SELECT"
+                    st.rerun()
+            with col2:
+                VisualAssets.render_lottie(VisualAssets.ANIM_VICTORY)
+            return
+
+        # Render Question
+        q_data = deck[idx]
+        progress = (idx + 1) / len(deck)
+        
+        # Header Info
         c1, c2, c3 = st.columns([1, 6, 2])
         c1.markdown(f"**Q-{idx+1}**")
         c2.progress(progress)
-        c3.markdown(f"**XP:** {AppState.get()['user'].xp}")
-
-        # Card
+        c3.markdown(f"**Score:** {quiz_state['score']}")
+        
+        # --- AQUÍ APLICAMOS LA MAGIA DEL TOOLTIP ---
+        # Parseamos el texto de la pregunta para buscar [Palabra](Traduccion)
+        pregunta_html = AegisUI.parse_tooltips(q_data.get('pregunta', 'Error loading question'))
+        
         st.markdown(f"""
-        <div class="void-card" style="border-left: 4px solid #3b82f6;">
-            <h3 style="margin:0; font-weight:600;">{q_data.get('pregunta', 'Error')}</h3>
+        <div style="
+            background: rgba(30, 41, 59, 0.6); 
+            border-left: 5px solid #3b82f6; 
+            padding: 30px; 
+            border-radius: 15px; 
+            margin-bottom: 30px;">
+            <h3 style="margin:0; font-weight: 600; line-height: 1.6;">{pregunta_html}</h3>
         </div>
         """, unsafe_allow_html=True)
-
-        # Logic Flow: Selection -> Validate -> Next
-        options = q_data.get('opciones', ['Opción Genérica'])
-        if isinstance(options, str): options = [options] # Extra safety
         
-        # Determine disabled state
-        disabled = state["feedback_mode"]
+        # Options logic
+        options = q_data.get('opciones', ['Opción A', 'Opción B'])
+        if isinstance(options, str): options = [options]
         
-        # Render Radio
-        # Note: We use a placeholder if key exists to avoid "duplicate key" error on rerun? 
-        # No, index logic handles it.
-        if not state["feedback_mode"]:
-            selection = st.radio("Selecciona tu respuesta:", options, index=None, key=f"q_radio_{idx}")
-            
-            st.write("") # Gap
-            
-            if st.button("✅ Confirmar Respuesta", type="primary", use_container_width=True):
-                if not selection:
-                    st.toast("⚠️ Por favor selecciona una opción.", icon="⚠️")
-                else:
-                    state["last_selection"] = selection
-                    state["feedback_mode"] = True
-                    
+        if not quiz_state["feedback_mode"]:
+            selection = st.radio("Selecciona tu respuesta:", options, index=None, key=f"q_{idx}")
+            st.write("")
+            if st.button("Confirmar Respuesta", type="primary", use_container_width=True):
+                if selection:
+                    quiz_state["last_selection"] = selection
+                    quiz_state["feedback_mode"] = True
                     if selection == q_data.get('correcta'):
-                        state["score"] += 1
-                        st.toast("¡Correcto! +100 XP", icon="🎉")
-                    else:
-                        st.toast("Respuesta Incorrecta", icon="❌")
+                        quiz_state["score"] += 1
+                        st.balloons()
                     st.rerun()
+                else:
+                    st.toast("⚠️ Selecciona una opción primero.")
         else:
             # Feedback View
-            user_sel = state["last_selection"]
-            correct_sel = q_data.get('correcta')
+            sel = quiz_state["last_selection"]
+            corr = q_data.get('correcta')
             
-            if user_sel == correct_sel:
-                st.success(f"✅ ¡Correcto! Respuesta: {correct_sel}")
+            if sel == corr:
+                st.success(f"✅ ¡Correcto! Respuesta: {corr}")
             else:
-                st.error(f"❌ Incorrecto. Tú dijiste: {user_sel}")
-                st.info(f"💡 La correcta es: {correct_sel}")
+                st.error(f"❌ Incorrecto. Tú dijiste: {sel}")
+                st.info(f"💡 La correcta era: {corr}")
             
-            # Explanation & Translation
-            with st.expander("📚 Ver Explicación y Traducción", expanded=True):
+            with st.expander("📚 Explicación y Traducción", expanded=True):
                 st.markdown(f"**Explicación:** {q_data.get('explicacion', 'N/A')}")
-                st.markdown(f"**Traducción:** _{q_data.get('traduccion', 'N/A')}_")
-            
-            if st.button("➡ Siguiente Pregunta", type="primary", use_container_width=True):
-                state["q_index"] += 1
-                state["feedback_mode"] = False
-                state["last_selection"] = None
+                st.caption(f"Traducción: {q_data.get('traduccion', 'N/A')}")
+                
+            if st.button("Siguiente Pregunta ➡", type="primary", use_container_width=True):
+                quiz_state["q_index"] += 1
+                quiz_state["feedback_mode"] = False
                 st.rerun()
 
 def render_sql():
-    st.markdown(f"## {VisualAssets.ICON_CODE} Laboratorio SQL")
+    AegisUI.render_header("Laboratorio SQL", "Entorno de simulación seguro.")
     
-    col_editor, col_schema = st.columns([3, 1])
-    
-    with col_editor:
-        st.markdown("### Editor de Consultas")
-        query = st.text_area("Escribe tu SQL aquí:", height=200, value="SELECT * FROM Employees LIMIT 5;")
-        
-        c1, c2 = st.columns([1, 1])
-        execute = c1.button("▶ Ejecutar", type="primary", use_container_width=True)
-        clear = c2.button("🧹 Limpiar", use_container_width=True)
-        
-        if execute:
-            with st.spinner("Procesando consulta..."):
-                time.sleep(0.3) # Fake latency for realism
-                df, err = SQLSimulator.execute(query)
-                
+    c1, c2 = st.columns([3, 1])
+    with c1:
+        q = st.text_area("Query Editor:", "SELECT * FROM Employees LIMIT 5;", height=250)
+        b1, b2 = st.columns(2)
+        if b1.button("▶ Ejecutar Query", type="primary", use_container_width=True):
+            df, err = SQLSimulator.execute(q)
             if err:
                 st.error(err)
-                VisualAssets.render_lottie(VisualAssets.ANIM_ERROR, 100)
             else:
-                st.success(f"Consulta Exitosa: {len(df)} filas devueltas.")
+                st.success("Query ejecutada exitosamente.")
                 st.dataframe(df, use_container_width=True)
                 
-    with col_schema:
-        st.markdown("### Esquema DB")
-        with st.expander("📄 Employees", expanded=True):
-            st.markdown("""
-            - **ID** (INT) PK
-            - **FirstName** (TXT)
-            - **LastName** (TXT)
-            - **Role** (TXT)
-            - **Salary** (INT)
-            """)
-        with st.expander("📦 Products"):
-            st.markdown("""
-            - **ProductID** (INT) PK
-            - **ProductName** (TXT)
-            - **Category** (TXT)
-            - **Price** (INT)
-            - **Stock** (INT)
-            """)
-        
-        st.info("💡 Tip: Usa 'SELECT *' para explorar.")
+    with c2:
+        st.markdown("### 🗄️ Esquema")
+        with st.expander("Employees", expanded=True):
+            st.code("ID (INT)\nName (TXT)\nSalary (INT)")
 
 # ======================================================================================================================
-# SECTION 6: MAIN NAVIGATION
+# MAIN EXECUTION
 # ======================================================================================================================
 
 def render_sidebar():
     user = AppState.get()["user"]
     with st.sidebar:
-        # Profile Card
         st.markdown(f"""
         <div style="text-align: center; padding: 20px 0;">
-            <div style="
-                width: 90px; height: 90px; 
-                background: linear-gradient(135deg, #3b82f6, #1e1b4b); 
-                border-radius: 50%; 
-                margin: 0 auto 15px; 
-                display: flex; align-items: center; justify-content: center; 
-                font-size: 2.5rem; font-weight: bold; 
-                color: white;
-                border: 3px solid rgba(255,255,255,0.2);
-                box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #3b82f6, #6366f1); border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
                 {user.username[0]}
             </div>
-            <h2 style="margin:0; font-size: 1.2rem;">{user.username}</h2>
-            <p style="color: #94a3b8; font-size: 0.8rem; margin: 5px 0;">{user.role}</p>
-            <div style="background: rgba(255,255,255,0.1); border-radius: 20px; padding: 5px 10px; display: inline-block; margin-top: 10px;">
-                <span style="color: #10b981;">● Online</span>
-            </div>
+            <h3 style="margin-top: 15px; color: white;">{user.username}</h3>
+            <p style="color: #94a3b8; font-size: 0.9rem;">{user.role}</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("---")
         
-        # Navigation Buttons (Full Width)
-        if st.button(f"{VisualAssets.ICON_DASHBOARD}  DASHBOARD", use_container_width=True):
+        if st.button(f"{VisualAssets.ICON_DASHBOARD}  Dashboard", use_container_width=True):
             AppState.get()["view"] = "DASHBOARD"
             st.rerun()
             
-        if st.button(f"{VisualAssets.ICON_LEARN}  TRAINING CENTER", use_container_width=True):
+        if st.button(f"{VisualAssets.ICON_LEARN}  Training", use_container_width=True):
             AppState.get()["view"] = "TRAINING"
+            AppState.get()["training_nav"] = "TOPIC_SELECT"
             st.rerun()
             
-        if st.button(f"{VisualAssets.ICON_CODE}  SQL LAB", use_container_width=True):
+        if st.button(f"{VisualAssets.ICON_CODE}  SQL Lab", use_container_width=True):
             AppState.get()["view"] = "SQL"
             st.rerun()
-            
-        st.markdown("---")
-        st.caption("IronClad Titan v10.0")
-        st.caption("© 2026 Enterprise Edition")
 
 def main():
-    # Inject Styles
-    VoidGlassUI.inject_css()
-    
-    # Render Layout
+    AegisUI.inject_css()
     render_sidebar()
     
-    # Router
     view = AppState.get()["view"]
     
     try:
@@ -839,9 +754,9 @@ def main():
         elif view == "SQL":
             render_sql()
     except Exception as e:
-        st.error("CRITICAL UI FAILURE")
+        st.error("SYSTEM ERROR")
         st.code(traceback.format_exc())
-        if st.button("EMERGENCY RESTART"):
+        if st.button("EMERGENCY RESET"):
             st.session_state.clear()
             st.rerun()
 
