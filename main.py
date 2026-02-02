@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 ========================================================================================================================
-  IRONCLAD TITAN v13.0 — THE OMEGA-LEARNER BUILD (EDUCATION & DATA EDITION)
+  IRONCLAD TITAN v13.0 — THE OMEGA-LEARNER BUILD (LMS EDITION)
   Authorized Personnel: ADMINISTRATOR (SY)
   System Status: ONLINE & OPTIMIZED
   Location: Port of San Jose, Escuintla, Guatemala
-  Timestamp: 2026-02-03 | 08:00 CST
+  Timestamp: 2026-02-03 | 08:30 CST
   
   [SYSTEM MANIFEST & ARCHITECTURE]
   ----------------------------------------------------------------------------------------------------------------------
@@ -13,10 +13,11 @@
   2. UI ENGINE          : 'Aegis-Glass' v13. (NO NEON - PURE FROST DESIGN).
                           - Deep Space Particles Background (CSS Animation).
                           - Frost-Glass Cards with 24px border-radius.
-                          - Interactive Tooltips & Hover Effects.
-  3. DATA ENGINE        : Omni-Parser v8. Handles external quiz data safely.
+                          - Interactive Tooltips & Hover Effects via Regex.
+  3. DATA ENGINE        : Omni-Parser v8. Handles external quiz data safely with fail-safes.
   4. EDUCATION ENGINE   : 'Codex-Titan'. Built-in encyclopedia for SQL & English theory.
                           - Contains full lesson plans for Verb To Be, Tenses, and SQL commands.
+                          - This ensures the app works even if external files are missing.
   5. SQL ENGINE         : Hyper-Mock v6. 
                           - Generates 3 Tables (Employees, Products, Customers).
                           - 350+ Rows each with high entropy (low repetition).
@@ -248,6 +249,15 @@ class AegisUI:
         st.markdown(f'<div style="display: flex; justify-content: center;"><iframe src="{url}" width="100%" height="{height}px" style="border:none; background:transparent;"></iframe></div>', unsafe_allow_html=True)
 
     @staticmethod
+    def render_header(title: str, subtitle: str):
+        st.markdown(f"""
+        <div style="margin-bottom: 40px; border-left: 6px solid #3b82f6; padding-left: 20px;">
+            <h1 style="margin:0;">{title}</h1>
+            <p style="font-size: 1.2rem; color: #94a3b8; margin:0;">{subtitle}</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    @staticmethod
     def parse_tooltips(text: str) -> str:
         """Converts [Word](Trans) to HTML Tooltip."""
         if not isinstance(text, str): return str(text)
@@ -413,6 +423,60 @@ class Codex:
             
         return {"title": "Error", "desc": "Módulo no encontrado", "content": "N/A"}
 
+    @staticmethod
+    def get_english_lessons():
+        return [
+            {"verb": "Be", "past": "Was/Were", "participle": "Been", "meaning": "Ser / Estar", "example": "I [was](estaba) here yesterday."},
+            {"verb": "Become", "past": "Became", "participle": "Become", "meaning": "Convertirse / Llegar a ser", "example": "He [became](se convirtió) a doctor."},
+            {"verb": "Begin", "past": "Began", "participle": "Begun", "meaning": "Empezar", "example": "The show [began](empezó) at 8 PM."},
+            {"verb": "Break", "past": "Broke", "participle": "Broken", "meaning": "Romper", "example": "Who [broke](rompió) the window?"},
+            {"verb": "Bring", "past": "Brought", "participle": "Brought", "meaning": "Traer", "example": "She [brought](trajo) cake."},
+            {"verb": "Buy", "past": "Bought", "participle": "Bought", "meaning": "Comprar", "example": "I [bought](compré) a new car."},
+            {"verb": "Catch", "past": "Caught", "participle": "Caught", "meaning": "Atrapar", "example": "He [caught](atrapó) the ball."},
+            {"verb": "Choose", "past": "Chose", "participle": "Chosen", "meaning": "Elegir", "example": "I [chose](elegí) the red one."},
+            {"verb": "Come", "past": "Came", "participle": "Come", "meaning": "Venir", "example": "They [came](vinieron) home late."},
+            {"verb": "Do", "past": "Did", "participle": "Done", "meaning": "Hacer", "example": "I [did](hice) my homework."},
+            {"verb": "Drink", "past": "Drank", "participle": "Drunk", "meaning": "Beber", "example": "He [drank](bebió) too much water."},
+            {"verb": "Drive", "past": "Drove", "participle": "Driven", "meaning": "Conducir", "example": "We [drove](condujimos) all night."},
+            {"verb": "Eat", "past": "Ate", "participle": "Eaten", "meaning": "Comer", "example": "Who [ate](se comió) my pizza?"},
+            {"verb": "Fall", "past": "Fell", "participle": "Fallen", "meaning": "Caer", "example": "The leaves [fell](cayeron) down."},
+            {"verb": "Feel", "past": "Felt", "participle": "Felt", "meaning": "Sentir", "example": "I [felt](sentí) sick yesterday."},
+            {"verb": "Find", "past": "Found", "participle": "Found", "meaning": "Encontrar", "example": "I [found](encontré) my keys."},
+            {"verb": "Fly", "past": "Flew", "participle": "Flown", "meaning": "Volar", "example": "The bird [flew](voló) away."},
+            {"verb": "Forget", "past": "Forgot", "participle": "Forgotten", "meaning": "Olvidar", "example": "I [forgot](olvidé) your name."},
+            {"verb": "Get", "past": "Got", "participle": "Got/Gotten", "meaning": "Obtener / Conseguir", "example": "I [got](conseguí) a new job."},
+            {"verb": "Give", "past": "Gave", "participle": "Given", "meaning": "Dar", "example": "She [gave](dio) me a gift."},
+            {"verb": "Go", "past": "Went", "participle": "Gone", "meaning": "Ir", "example": "We [went](fuimos) to the beach."},
+            {"verb": "Have", "past": "Had", "participle": "Had", "meaning": "Tener", "example": "I [had](tuve) a dream."},
+            {"verb": "Hear", "past": "Heard", "participle": "Heard", "meaning": "Oír", "example": "I [heard](oí) a noise."},
+            {"verb": "Know", "past": "Knew", "participle": "Known", "meaning": "Saber / Conocer", "example": "I [knew](sabía) the answer."},
+            {"verb": "Leave", "past": "Left", "participle": "Left", "meaning": "Irse / Dejar", "example": "He [left](se fue) early."},
+            {"verb": "Lose", "past": "Lost", "participle": "Lost", "meaning": "Perder", "example": "We [lost](perdimos) the game."},
+            {"verb": "Make", "past": "Made", "participle": "Made", "meaning": "Hacer (crear)", "example": "She [made](hizo) a cake."},
+            {"verb": "Meet", "past": "Met", "participle": "Met", "meaning": "Conocer / Encontrarse", "example": "I [met](conocí) him there."},
+            {"verb": "Pay", "past": "Paid", "participle": "Paid", "meaning": "Pagar", "example": "I [paid](pagué) the bill."},
+            {"verb": "Put", "past": "Put", "participle": "Put", "meaning": "Poner", "example": "He [put](puso) it on the table."},
+            {"verb": "Read", "past": "Read", "participle": "Read", "meaning": "Leer", "example": "I [read](leí) that book."},
+            {"verb": "Run", "past": "Ran", "participle": "Run", "meaning": "Correr", "example": "He [ran](corrió) fast."},
+            {"verb": "Say", "past": "Said", "participle": "Said", "meaning": "Decir", "example": "She [said](dijo) yes."},
+            {"verb": "See", "past": "Saw", "participle": "Seen", "meaning": "Ver", "example": "I [saw](vi) a movie."},
+            {"verb": "Sell", "past": "Sold", "participle": "Sold", "meaning": "Vender", "example": "He [sold](vendió) his car."},
+            {"verb": "Send", "past": "Sent", "participle": "Sent", "meaning": "Enviar", "example": "I [sent](envié) an email."},
+            {"verb": "Sit", "past": "Sat", "participle": "Sat", "meaning": "Sentarse", "example": "We [sat](nos sentamos) down."},
+            {"verb": "Sleep", "past": "Slept", "participle": "Slept", "meaning": "Dormir", "example": "I [slept](dormí) well."},
+            {"verb": "Speak", "past": "Spoke", "participle": "Spoken", "meaning": "Hablar", "example": "He [spoke](habló) clearly."},
+            {"verb": "Spend", "past": "Spent", "participle": "Spent", "meaning": "Gastar / Pasar tiempo", "example": "I [spent](gasté) time there."},
+            {"verb": "Stand", "past": "Stood", "participle": "Stood", "meaning": "Estar de pie", "example": "He [stood](se paró) up."},
+            {"verb": "Take", "past": "Took", "participle": "Taken", "meaning": "Tomar / Llevar", "example": "I [took](tomé) the bus."},
+            {"verb": "Teach", "past": "Taught", "participle": "Taught", "meaning": "Enseñar", "example": "She [taught](enseñó) me math."},
+            {"verb": "Tell", "past": "Told", "participle": "Told", "meaning": "Decir / Contar", "example": "He [told](contó) a lie."},
+            {"verb": "Think", "past": "Thought", "participle": "Thought", "meaning": "Pensar", "example": "I [thought](pensé) about it."},
+            {"verb": "Understand", "past": "Understood", "participle": "Understood", "meaning": "Entender", "example": "I [understood](entendí) the lesson."},
+            {"verb": "Wear", "past": "Wore", "participle": "Worn", "meaning": "Usar (ropa)", "example": "She [wore](usó) a red dress."},
+            {"verb": "Win", "past": "Won", "participle": "Won", "meaning": "Ganar", "example": "We [won](ganamos)!"},
+            {"verb": "Write", "past": "Wrote", "participle": "Written", "meaning": "Escribir", "example": "He [wrote](escribió) a letter."}
+        ]
+
 # ======================================================================================================================
 # SECTION 3: DATA ENGINE (OMNI-PARSER v8)
 # ======================================================================================================================
@@ -424,7 +488,7 @@ class DataRepository:
     def load_content() -> Dict:
         file_path = os.path.join(os.getcwd(), DataRepository.FILENAME)
         if not os.path.exists(file_path):
-            st.warning("⚠️ No se detectó archivo de preguntas. Usando modo demostración.")
+            st.warning("⚠️ No se detectó archivo de preguntas externo. Usando modo demostración.")
             return {} 
 
         try:
